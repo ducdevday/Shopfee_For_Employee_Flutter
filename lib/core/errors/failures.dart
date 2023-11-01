@@ -10,22 +10,23 @@ abstract class Failure extends Equatable {
 }
 
 class ServerFailure extends Failure {
-  ServerFailure({super.message});
+  final bool isNotLoaded;
 
+  ServerFailure({
+    super.message,
+    this.isNotLoaded = false,
+  });
 }
+
 class NetworkFailure extends Failure {
-  NetworkFailure({message = "No internet connection. Please check your network."});
+  NetworkFailure(
+      {message = "No internet connection. Please check your network."});
 }
 
 class UnknownFailure extends Failure {
   UnknownFailure({message = "Something went wrong. Please try again"});
 }
 
-class EmptyResultFailure extends Failure {
-  EmptyResultFailure({super.message});
-}
-
 class InvalidInputFailure extends Failure {
   InvalidInputFailure({super.message});
 }
-

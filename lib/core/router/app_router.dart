@@ -3,6 +3,7 @@ import 'package:shopfeeforemployee/features/account/presentation/page/account_pa
 import 'package:shopfeeforemployee/features/change_password/presentation/page/change_password_page.dart';
 import 'package:shopfeeforemployee/features/home/presentation/page/home_page.dart';
 import 'package:shopfeeforemployee/features/login/presentation/page/login_page.dart';
+import 'package:shopfeeforemployee/features/order_detail/presentation/page/order_detail_page.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/page/personal_information_page.dart';
 import 'package:shopfeeforemployee/features/shipping_order/presentation/page/shipping_order_page.dart';
 
@@ -12,9 +13,9 @@ class AppRouter {
   static const String accountRoute = "/account";
   static const String personalInformationRoute = "/personal_information";
   static const String changePasswordRoute = "/change_account";
-  static const String shippingOrder = "/shipping_order";
-  static const String takeawayOrder = "/takeaway_order";
-
+  static const String shippingOrderRoute = "/shipping_order";
+  static const String takeawayOrderRoute = "/takeaway_order";
+  static const String orderDetailRoute = "/order_detail";
   static onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case loginRoute:
@@ -27,8 +28,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (context) => const PersonalInformationPage());
       case changePasswordRoute:
         return MaterialPageRoute(builder: (context) => const ChangePasswordPage());
-      case shippingOrder:
+      case shippingOrderRoute:
         return MaterialPageRoute(builder: (context) => const ShippingOrderPage());
+      case orderDetailRoute:
+        return MaterialPageRoute(builder: (context) => OrderDetailPage(orderId: settings.arguments as String));
       default:
         return _errorRoute();
     }

@@ -4,6 +4,7 @@ import 'package:shopfeeforemployee/core/config/theme.dart';
 import 'package:shopfeeforemployee/core/global/global_data.dart';
 import 'package:shopfeeforemployee/core/router/app_router.dart';
 import 'package:shopfeeforemployee/core/utils/global_keys.dart';
+import 'package:shopfeeforemployee/features/process_timeline.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         return AppRouter.onGenerateRoute(settings);
       },
-      initialRoute: AppRouter.shippingOrder,
+      home: ProcessTimelinePage(),
+      // initialRoute: getStartRoute(),
       builder: EasyLoading.init(),
     );
   }

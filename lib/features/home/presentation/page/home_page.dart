@@ -78,7 +78,7 @@ class HomePage extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 Navigator.pushNamed(
-                                    context, AppRouter.shippingOrder);
+                                    context, AppRouter.shippingOrderRoute);
                               },
                               child: Card(
                                 shape: const RoundedRectangleBorder(
