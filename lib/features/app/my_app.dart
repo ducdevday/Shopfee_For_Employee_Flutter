@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         return AppRouter.onGenerateRoute(settings);
       },
-      home: ProcessTimelinePage(),
-      // initialRoute: getStartRoute(),
+      // home: ProcessTimelinePage(),
+      initialRoute: getStartRoute(),
       builder: EasyLoading.init(),
     );
   }

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/core/config/color.dart';
 import 'package:shopfeeforemployee/core/config/dimens.dart';
 import 'package:shopfeeforemployee/core/config/style.dart';
+import 'package:shopfeeforemployee/core/di/service_locator.dart';
 import 'package:shopfeeforemployee/core/router/app_router.dart';
 import 'package:shopfeeforemployee/core/utils/converter_util.dart';
 import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipping_order_entity.dart';
+import 'package:shopfeeforemployee/features/shipping_order/presentation/bloc/shipping_order_bloc.dart';
 
 class ShippingOrderItem extends StatelessWidget {
   final ShippingOrderEntity order;
@@ -18,7 +21,9 @@ class ShippingOrderItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, AppRouter.orderDetailRoute,
-            arguments: order.id);
+                arguments: order.id)
+            .then((value) =>
+                context.read<ShippingOrderBloc>().add(LoadShippingOrder()));
       },
       child: Container(
         color: Colors.white,
@@ -31,12 +36,15 @@ class ShippingOrderItem extends StatelessWidget {
                   padding: const EdgeInsets.only(left: AppDimen.screenPadding),
                   child: Row(
                     children: [
-                      const Icon(Icons.account_circle_outlined),
+                      const Icon(
+                        Icons.account_circle_outlined,
+                        size: 20,
+                      ),
                       const SizedBox(
                         width: 4,
                       ),
                       Text(
-                        "Nguyễn Minh Đức",
+                        order.customerName,
                         style: AppStyle.mediumTextStyleDark
                             .copyWith(color: AppColor.headingColor),
                       ),
@@ -45,7 +53,7 @@ class ShippingOrderItem extends StatelessWidget {
                         style: AppStyle.normalTextStyleDark,
                       ),
                       Text(
-                        "0334901237",
+                        order.phoneNumber,
                         style: AppStyle.normalTextStyleDark,
                       ),
                     ],
@@ -140,11 +148,14 @@ class ShippingOrderItem extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                        "${OrderStatus.orderStatusAction(order.statusLastEvent)}"),
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRouter.orderDetailRoute,
+                          arguments: order.id);
+                    },
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 30)),
+                    child: Text(
+                        "${OrderStatus.orderStatusAction(order.statusLastEvent)}"),
                   ),
                 ))
           ],

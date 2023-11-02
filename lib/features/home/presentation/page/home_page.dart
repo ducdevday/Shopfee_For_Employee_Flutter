@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
             return Scaffold(
               appBar: AppBar(
                 title: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pushNamed(context, AppRouter.accountRoute);
                   },
                   child: Row(
@@ -117,6 +117,117 @@ class HomePage extends StatelessWidget {
                                           height: 16,
                                         ),
                                         Text("Delivery Order",
+                                            style: AppStyle.mediumTextStyleDark
+                                                .copyWith(
+                                                    color:
+                                                        AppColor.headingColor,
+                                                    height: 1.2)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Navigator.pushNamed(
+                                //     context, AppRouter.shippingOrder);
+                              },
+                              child: Card(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8.0)),
+                                    side: BorderSide(
+                                        color: Color(0xfff5f5f5), width: 2)),
+                                elevation: 0.25,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: 120,
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: AppColor.primaryColor,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0,
+                                                top: 20,
+                                                right: 20,
+                                                bottom: 20),
+                                            child: Image.asset(
+                                              "assets/icons/ic_takeaway_order.png",
+                                              width: 100,
+                                              height: 100,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Text("Take Away Order",
+                                            style: AppStyle.mediumTextStyleDark
+                                                .copyWith(
+                                                    color:
+                                                        AppColor.headingColor,
+                                                    height: 1.2)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppRouter.shippingOrderRoute);
+                              },
+                              child: Card(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8.0)),
+                                    side: BorderSide(
+                                        color: Color(0xfff5f5f5), width: 2)),
+                                elevation: 0.25,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: 120,
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: AppColor.primaryColor,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(top: 26, right: 30, bottom: 26, left: 26),
+                                            child: Image.asset(
+                                              "assets/icons/ic_history_employee.png",
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Text("History",
                                             style: AppStyle.mediumTextStyleDark
                                                 .copyWith(
                                                     color:

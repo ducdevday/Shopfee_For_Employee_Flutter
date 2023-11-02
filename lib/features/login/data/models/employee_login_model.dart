@@ -6,7 +6,7 @@ part 'employee_login_model.g.dart';
 
 @JsonSerializable()
 class EmployeeLoginModel extends EmployeeLoginEntity{
-  const EmployeeLoginModel({userId, accessToken, refreshToken}) : super(userId: userId, accessToken: accessToken, refreshToken: refreshToken);
+  const EmployeeLoginModel({employeeId, accessToken, refreshToken}) : super(employeeId: employeeId, accessToken: accessToken, refreshToken: refreshToken);
   factory EmployeeLoginModel.fromJson(Map<String, dynamic> json) {
     return _$EmployeeLoginModelFromJson(json);
   }

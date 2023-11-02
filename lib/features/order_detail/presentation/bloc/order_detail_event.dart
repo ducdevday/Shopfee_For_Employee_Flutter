@@ -13,6 +13,28 @@ class LoadOrderDetail extends OrderDetailEvent {
 
   @override
   List<Object> get props => [id];
+}
 
+class AddEventLog extends OrderDetailEvent {
+  final String id;
+  final EventLogEntity eventLog;
 
+  const AddEventLog({
+    required this.id,
+    required this.eventLog,
+  });
+
+  @override
+  List<Object> get props => [id, eventLog];
+}
+
+class ChooseReasonCancel extends OrderDetailEvent {
+  final String reason;
+
+  const ChooseReasonCancel({
+    required this.reason,
+  });
+
+  @override
+  List<Object> get props => [reason];
 }

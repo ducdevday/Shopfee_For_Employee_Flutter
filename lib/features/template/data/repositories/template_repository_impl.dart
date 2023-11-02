@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:shopfeeforemployee/core/common/models/result.dart';
 import 'package:shopfeeforemployee/core/errors/failures.dart';
 import 'package:shopfeeforemployee/features/template/data/datasources/template_service.dart';
@@ -6,7 +7,7 @@ import 'package:shopfeeforemployee/features/template/data/models/template_model.
 import 'package:shopfeeforemployee/features/template/domain/repositories/template_repository.dart';
 
 class TemplateRepositoryImpl implements TemplateRepository {
-  TemplateService _templateService;
+  final TemplateService _templateService;
 
   TemplateRepositoryImpl(this._templateService);
 
@@ -23,7 +24,13 @@ class TemplateRepositoryImpl implements TemplateRepository {
 
       return Right(template);
     } catch (e) {
-      return Left(ServerFailure());
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionError) {
+          return Left(NetworkFailure());
+        }
+        return Left(UnknownFailure());
+      }
+      return Left(UnknownFailure());
     }
   }
 }

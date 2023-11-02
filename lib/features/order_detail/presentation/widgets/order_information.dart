@@ -19,21 +19,7 @@ class OrderInformation extends StatelessWidget {
             return Column(
               children: [
                 SizedBox(
-                  height: 40,
-                ),
-                Text(
-                  "Thank you!",
-                  style: AppStyle.largeTitleStylePrimary,
-                ),
-                SizedBox(
                   height: 8,
-                ),
-                Text(
-                  "Your order was successful",
-                  style: AppStyle.mediumTextStyleDark,
-                ),
-                SizedBox(
-                  height: 16,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,7 +29,7 @@ class OrderInformation extends StatelessWidget {
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(
-                      state.orderDetailEntity.id!,
+                      state.orderDetail.id!,
                       style: AppStyle.normalTextStyleDark,
                     )
                   ],
@@ -60,7 +46,7 @@ class OrderInformation extends StatelessWidget {
                     ),
                     Text(
                       ConverterUtil.formattedDate(
-                          state.orderDetailEntity.createdAt!),
+                          state.orderDetail.createdAt!),
                       style: AppStyle.normalTextStyleDark,
                     )
                   ],
@@ -77,7 +63,7 @@ class OrderInformation extends StatelessWidget {
                     ),
                     Text(
                       ConverterUtil.formattedTime(
-                          state.orderDetailEntity.createdAt!),
+                          state.orderDetail.createdAt!),
                       style: AppStyle.normalTextStyleDark,
                     )
                   ],

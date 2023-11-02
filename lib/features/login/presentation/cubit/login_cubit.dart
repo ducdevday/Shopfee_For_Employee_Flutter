@@ -49,10 +49,10 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void saveEmployee(EmployeeLoginEntity employeeLoginEntity) {
-    SharedService.setEmployeeId(employeeLoginEntity.userId);
+    SharedService.setEmployeeId(employeeLoginEntity.employeeId);
     SharedService.setAccessToken(employeeLoginEntity.accessToken);
     SharedService.setRefreshToken(employeeLoginEntity.refreshToken);
-    GlobalData.ins.employeeId = employeeLoginEntity.userId;
+    GlobalData.ins.employeeId = employeeLoginEntity.employeeId;
     GlobalData.ins.accessToken = employeeLoginEntity.accessToken;
     GlobalData.ins.refreshToken = employeeLoginEntity.refreshToken;
   }

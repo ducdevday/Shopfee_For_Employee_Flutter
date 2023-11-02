@@ -55,7 +55,7 @@ class BaseService {
             };
             try {
               var response = await dio
-                  .post("${BaseService.authPath}/refresh-token", data: body);
+                  .post("${BaseService.authPath}/employee/refresh-token", data: body);
               var result = Result(
                   success: response.data["success"],
                   message: response.data["message"],

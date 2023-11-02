@@ -32,7 +32,7 @@ class _ProductListState extends State<ProductList> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Bought list",
+                  "Item List",
                   style: AppStyle.mediumTitleStyleDark.copyWith(
                       color: AppColor.headingColor,
                       fontWeight: FontWeight.w500),
@@ -45,7 +45,7 @@ class _ProductListState extends State<ProductList> {
                 builder: (context, state) {
                   if (state is OrderDetailLoaded) {
                     productListLength =
-                        state.orderDetailEntity.products!.length;
+                        state.orderDetail.products!.length;
                     return ListView.separated(
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
@@ -121,7 +121,7 @@ class _ProductListState extends State<ProductList> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                  "${state.orderDetailEntity.products![index].quantity}x ${state.orderDetailEntity.products![index].name!}",
+                  "${state.orderDetail.products![index].quantity}x ${state.orderDetail.products![index].name!}",
                   style: AppStyle.mediumTitleStyleDark
                       .copyWith(color: AppColor.headingColor)
                       .copyWith(fontWeight: FontWeight.w500)),
@@ -129,14 +129,14 @@ class _ProductListState extends State<ProductList> {
                 height: 6,
               ),
               Text(
-                state.orderDetailEntity.products![index].size!,
+                state.orderDetail.products![index].size!,
                 style: AppStyle.normalTextStyleDark,
               ),
-              state.orderDetailEntity.products![index].toppings!.isNotEmpty
-                  ? Text(ConverterUtil.formattedArrayString(state.orderDetailEntity.products![index].toppings!.map((topping) => topping.name).toList()),
+              state.orderDetail.products![index].toppings!.isNotEmpty
+                  ? Text(ConverterUtil.formattedArrayString(state.orderDetail.products![index].toppings!.map((topping) => topping.name).toList()),
                       style: AppStyle.normalTextStyleDark)
                   : SizedBox(),
-              state.orderDetailEntity.products![index].note!.isNotEmpty
+              state.orderDetail.products![index].note!.isNotEmpty
                   ? Row(
                       children: [
                         Icon(
@@ -146,7 +146,7 @@ class _ProductListState extends State<ProductList> {
                         ),
                         Expanded(
                           child: Text(
-                            state.orderDetailEntity.products![index].note!,
+                            state.orderDetail.products![index].note!,
                             style: AppStyle.normalTextStyleDark,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -163,7 +163,7 @@ class _ProductListState extends State<ProductList> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(ConverterUtil.formattedMoney(state.orderDetailEntity.products![index].price!),
+              Text(ConverterUtil.formattedMoney(state.orderDetail.products![index].price!),
                   style: AppStyle.mediumTitleStyleDark
                       .copyWith(color: AppColor.headingColor)),
             ],

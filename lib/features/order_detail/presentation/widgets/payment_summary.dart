@@ -42,7 +42,7 @@ class PaymentSummary extends StatelessWidget {
                     ),
                     Text(
                       ConverterUtil.formattedMoney(
-                          state.orderDetailEntity.total!),
+                          state.orderDetail.total!),
                       style: AppStyle.normalTextStyleDark
                           .copyWith(fontWeight: FontWeight.w400),
                     )
@@ -103,7 +103,7 @@ class PaymentSummary extends StatelessWidget {
                     ),
                     Text(
                       ConverterUtil.formattedMoney(
-                          state.orderDetailEntity.total!),
+                          state.orderDetail.total!),
                       style: AppStyle.mediumTitleStyleDark,
                     )
                   ],
@@ -177,12 +177,12 @@ class PaymentSummary extends StatelessWidget {
   }
 
   StatelessWidget buildPaymentStatus(OrderDetailLoaded state) {
-    if (state.orderDetailEntity.transaction!.status == PaymentStatus.UNPAID) {
+    if (state.orderDetail.transaction!.status == PaymentStatus.UNPAID) {
       return MyLabel(label: "Unpaid", color: AppColor.warning);
-    } else if (state.orderDetailEntity.transaction!.status ==
+    } else if (state.orderDetail.transaction!.status ==
         PaymentStatus.PAID) {
       return MyLabel(label: "Paid", color: AppColor.success);
-    } else if (state.orderDetailEntity.transaction!.status ==
+    } else if (state.orderDetail.transaction!.status ==
         PaymentStatus.REFUNDED) {
       return MyLabel(label: "Refunded", color: AppColor.info);
     }
@@ -190,7 +190,7 @@ class PaymentSummary extends StatelessWidget {
   }
 
   Row buildPaymentMethod(OrderDetailLoaded state) {
-    if (state.orderDetailEntity.transaction!.type == PaymentType.CASHING) {
+    if (state.orderDetail.transaction!.type == PaymentType.CASHING) {
       return Row(
         children: [
           Image.asset(
