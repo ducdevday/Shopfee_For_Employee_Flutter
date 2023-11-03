@@ -8,6 +8,11 @@ import 'package:shopfeeforemployee/features/change_password/data/repositories/ch
 import 'package:shopfeeforemployee/features/change_password/domain/repositories/change_password_repository.dart';
 import 'package:shopfeeforemployee/features/change_password/domain/usecase/change_password_usecase.dart';
 import 'package:shopfeeforemployee/features/change_password/presentation/cubit/change_password_cubit.dart';
+import 'package:shopfeeforemployee/features/history/data/datasources/history_service.dart';
+import 'package:shopfeeforemployee/features/history/data/repositories/history_repository_impl.dart';
+import 'package:shopfeeforemployee/features/history/domain/repositories/history_repository.dart';
+import 'package:shopfeeforemployee/features/history/domain/usecase/history_usecase.dart';
+import 'package:shopfeeforemployee/features/history/presentation/bloc/history_bloc.dart';
 import 'package:shopfeeforemployee/features/home/data/datasources/home_service.dart';
 import 'package:shopfeeforemployee/features/home/data/repositories/home_repository_impl.dart';
 import 'package:shopfeeforemployee/features/home/domain/repositories/home_repository.dart';
@@ -45,6 +50,7 @@ class ServiceLocator {
     _changePasswordFeature();
     _shippingOrderFeature();
     _orderDetailFeature();
+    _historyDetailFeature();
   }
 
   void _loginFeature() {
@@ -102,11 +108,17 @@ class ServiceLocator {
   void _orderDetailFeature() {
     sl.registerLazySingleton(() => OrderDetailService());
     sl.registerLazySingleton<OrderDetailRepository>(
-            () => OrderDetailRepositoryImpl(sl()));
+        () => OrderDetailRepositoryImpl(sl()));
     sl.registerLazySingleton<OrderDetailUseCase>(
-            () => OrderDetailUseCaseImpl(sl()));
+        () => OrderDetailUseCaseImpl(sl()));
     sl.registerFactory<OrderDetailBloc>(() => OrderDetailBloc(sl()));
   }
 
-
+  void _historyDetailFeature() {
+    sl.registerLazySingleton(() => HistoryService());
+    sl.registerLazySingleton<HistoryRepository>(
+        () => HistoryRepositoryImpl(sl()));
+    sl.registerLazySingleton<HistoryUseCase>(() => HistoryUseCaseImpl(sl()));
+    sl.registerFactory<HistoryBloc>(() => HistoryBloc(sl()));
+  }
 }

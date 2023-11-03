@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopfeeforemployee/features/account/presentation/page/account_page.dart';
 import 'package:shopfeeforemployee/features/change_password/presentation/page/change_password_page.dart';
+import 'package:shopfeeforemployee/features/history/presentation/page/history_page.dart';
 import 'package:shopfeeforemployee/features/home/presentation/page/home_page.dart';
 import 'package:shopfeeforemployee/features/login/presentation/page/login_page.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/page/order_detail_page.dart';
@@ -16,6 +17,8 @@ class AppRouter {
   static const String shippingOrderRoute = "/shipping_order";
   static const String takeawayOrderRoute = "/takeaway_order";
   static const String orderDetailRoute = "/order_detail";
+  static const String historyRoute = "/history";
+
   static onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case loginRoute:
@@ -25,13 +28,20 @@ class AppRouter {
       case accountRoute:
         return MaterialPageRoute(builder: (context) => const AccountPage());
       case personalInformationRoute:
-        return MaterialPageRoute(builder: (context) => const PersonalInformationPage());
+        return MaterialPageRoute(
+            builder: (context) => const PersonalInformationPage());
       case changePasswordRoute:
-        return MaterialPageRoute(builder: (context) => const ChangePasswordPage());
+        return MaterialPageRoute(
+            builder: (context) => const ChangePasswordPage());
       case shippingOrderRoute:
-        return MaterialPageRoute(builder: (context) => const ShippingOrderPage());
+        return MaterialPageRoute(
+            builder: (context) => const ShippingOrderPage());
       case orderDetailRoute:
-        return MaterialPageRoute(builder: (context) => OrderDetailPage(orderId: settings.arguments as String));
+        return MaterialPageRoute(
+            builder: (context) =>
+                OrderDetailPage(orderId: settings.arguments as String));
+      case historyRoute:
+        return MaterialPageRoute(builder: (context) => const HistoryPage());
       default:
         return _errorRoute();
     }
