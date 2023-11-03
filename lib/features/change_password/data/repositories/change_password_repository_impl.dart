@@ -22,15 +22,15 @@ class ChangePasswordRepositoryImpl implements ChangePasswordRepository {
         success: response.data["success"],
         message: response.data["message"],
       );
-      if (result.success) {
         return (Right(NoResponse()));
-      }
-      return Left(ServerFailure(message: "Current Password Incorrect"));
     } catch (e) {
       print(e);
       if (e is DioException) {
         if (e.type == DioExceptionType.connectionError) {
           return Left(NetworkFailure());
+        }
+        else if(e.response?.statusCode == 500) {
+          return Left(ServerFailure(message: "Current Password Incorrect"));
         }
         return Left(UnknownFailure());
       }

@@ -20,6 +20,7 @@ class AccountPage extends StatelessWidget {
           if (state is AccountLoaded) {
             return Scaffold(
               extendBodyBehindAppBar: true,
+              backgroundColor: Theme.of(context).canvasColor,
               body: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,

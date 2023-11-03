@@ -244,8 +244,8 @@ class HomePage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // Navigator.pushNamed(
-                                //     context, AppRouter.shippingOrder);
+                                Navigator.pushNamed(
+                                    context, AppRouter.accountRoute);
                               },
                               child: Card(
                                 shape: const RoundedRectangleBorder(
@@ -269,12 +269,12 @@ class HomePage extends StatelessWidget {
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.only(
-                                                left: 20.0,
-                                                top: 20,
-                                                right: 20,
-                                                bottom: 20),
+                                                left: 26.0,
+                                                top: 26,
+                                                right: 26,
+                                                bottom: 26),
                                             child: Image.asset(
-                                              "assets/icons/ic_takeaway_order.png",
+                                              "assets/icons/ic_profile.png",
                                               width: 100,
                                               height: 100,
                                             ),
@@ -283,7 +283,7 @@ class HomePage extends StatelessWidget {
                                         const SizedBox(
                                           height: 16,
                                         ),
-                                        Text("Take Away Order",
+                                        Text("Profile",
                                             style: AppStyle.mediumTextStyleDark
                                                 .copyWith(
                                                     color:
