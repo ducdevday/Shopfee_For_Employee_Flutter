@@ -24,19 +24,16 @@ class ShippingOrderRepositoryImpl implements ShippingOrderRepository {
         message: response.data["message"],
         data: response.data["data"],
       );
-      if (result.success == true) {
         List<ShippingOrderModel> orderList =
             result.data!.map((e) => ShippingOrderModel.fromJson(e)).toList();
         return Right(orderList);
-      }
-      return Left(UnknownFailure());
     } catch (e) {
       print(e);
       if (e is DioException) {
         if (e.type == DioExceptionType.connectionError) {
           return Left(NetworkFailure());
         }
-        return Left(UnknownFailure());
+        return Left(ServerFailure(isNotLoaded: true));
       }
       return Left(UnknownFailure());
     }

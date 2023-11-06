@@ -8,6 +8,7 @@ import 'package:shopfeeforemployee/core/config/style.dart';
 import 'package:shopfeeforemployee/core/di/service_locator.dart';
 import 'package:shopfeeforemployee/features/history/presentation/bloc/history_bloc.dart';
 import 'package:shopfeeforemployee/features/history/presentation/widgets/history_listview.dart';
+import 'package:shopfeeforemployee/features/history/presentation/widgets/history_skeleton_list.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class HistoryPage extends StatelessWidget {
           body: BlocBuilder<HistoryBloc, HistoryState>(
             builder: (context, state) {
               if (state is HistoryLoading) {
-                return const MyLoading();
+                return const HistorySkeletonList();
               } else if (state is HistoryLoaded) {
                 return const TabBarView(
                   children: [

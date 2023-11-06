@@ -4,11 +4,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/core/common/models/order_type.dart';
+import 'package:shopfeeforemployee/core/errors/failures.dart';
 import 'package:shopfeeforemployee/core/utils/exception_util.dart';
 import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipping_order_entity.dart';
 import 'package:shopfeeforemployee/features/shipping_order/domain/usecase/shipping_order_usecase.dart';
 
 part 'shipping_order_event.dart';
+
 part 'shipping_order_state.dart';
 
 class ShippingOrderBloc extends Bloc<ShippingOrderEvent, ShippingOrderState> {
@@ -39,18 +41,33 @@ class ShippingOrderBloc extends Bloc<ShippingOrderEvent, ShippingOrderState> {
     // final canceledListResponse = await _shippingOrderUseCase
     //     .getOrderListByStatus(OrderType.SHIPPING, OrderStatus.CANCELED);
 
-    createdListResponse.fold((failure) => ExceptionUtil.handle(failure),
-        (orderList) {
+    createdListResponse.fold(
+        (failure) => {
+              if (failure is ServerFailure)
+                {emit(ShippingOrderError())}
+              else
+                ExceptionUtil.handle(failure)
+            }, (orderList) {
       createdOrderList.addAll(orderList);
     });
 
-    acceptedListResponse.fold((failure) => ExceptionUtil.handle(failure),
-        (orderList) {
+    acceptedListResponse.fold(
+        (failure) => {
+              if (failure is ServerFailure)
+                {emit(ShippingOrderError())}
+              else
+                ExceptionUtil.handle(failure)
+            }, (orderList) {
       acceptedOrderList.addAll(orderList);
     });
 
-    deliveringListResponse.fold((failure) => ExceptionUtil.handle(failure),
-        (orderList) {
+    deliveringListResponse.fold(
+        (failure) => {
+              if (failure is ServerFailure)
+                {emit(ShippingOrderError())}
+              else
+                ExceptionUtil.handle(failure)
+            }, (orderList) {
       deliveringOrderList.addAll(orderList);
     });
 
@@ -65,11 +82,11 @@ class ShippingOrderBloc extends Bloc<ShippingOrderEvent, ShippingOrderState> {
     // });
 
     emit(ShippingOrderLoaded(
-        createdOrderList: createdOrderList,
-        acceptedOrderList: acceptedOrderList,
-        deliveringOrderList: deliveringOrderList,
-        // succeedOrderList: succeedOrderList,
-        // canceledOrderList: canceledOrderList
+      createdOrderList: createdOrderList,
+      acceptedOrderList: acceptedOrderList,
+      deliveringOrderList: deliveringOrderList,
+      // succeedOrderList: succeedOrderList,
+      // canceledOrderList: canceledOrderList
     ));
   }
 }

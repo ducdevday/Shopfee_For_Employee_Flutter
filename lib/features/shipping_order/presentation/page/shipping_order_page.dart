@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/core/common/widgets/my_error.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_loading.dart';
 import 'package:shopfeeforemployee/core/config/color.dart';
 import 'package:shopfeeforemployee/core/config/style.dart';
 import 'package:shopfeeforemployee/core/di/service_locator.dart';
 import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipping_order_entity.dart';
 import 'package:shopfeeforemployee/features/shipping_order/presentation/bloc/shipping_order_bloc.dart';
 import 'package:shopfeeforemployee/features/shipping_order/presentation/widgets/shipping_order_item.dart';
+import 'package:shopfeeforemployee/features/shipping_order/presentation/widgets/shipping_order_skeleton.dart';
 
 class ShippingOrderPage extends StatelessWidget {
   const ShippingOrderPage({Key? key}) : super(key: key);
@@ -43,9 +43,9 @@ class ShippingOrderPage extends StatelessWidget {
           ),
           body: BlocBuilder<ShippingOrderBloc, ShippingOrderState>(
             builder: (context, state) {
-              if (state is ShippingOrderLoading)
-                return MyLoading();
-              else if (state is ShippingOrderLoaded) {
+              if (state is ShippingOrderLoading) {
+                return ShippingOrderSkeleton();
+              } else if (state is ShippingOrderLoaded) {
                 return TabBarView(
                   children: [
                     buildOrderList(
@@ -106,3 +106,4 @@ class ShippingOrderPage extends StatelessWidget {
     }
   }
 }
+

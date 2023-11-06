@@ -20,7 +20,8 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     emit(AccountLoaded(employeeEntity: employeeEntity));
   }
 
-  FutureOr<void> _onLogoutAccount(LogoutAccount event, Emitter<AccountState> emit) {
+  FutureOr<void> _onLogoutAccount(LogoutAccount event, Emitter<AccountState> emit) async {
     _accountUseCase.logout();
+    emit(AccountFinished());
   }
 }

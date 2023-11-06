@@ -48,7 +48,7 @@ class BaseService {
           //     error: "No internet connection", requestOptions: e.requestOptions,
           //   );
           // }
-          if (e.response?.statusCode == 401) {
+          if (e.response?.statusCode == 401 && GlobalData.ins.employeeId != null) {
             // If a 401 response is received, refresh the access token
             Map<String, dynamic> body = {
               "refreshToken": GlobalData.ins.refreshToken,

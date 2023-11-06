@@ -15,7 +15,13 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ServiceLocator.sl<AccountBloc>()..add(LoadAccount()),
-      child: BlocBuilder<AccountBloc, AccountState>(
+      child: BlocConsumer<AccountBloc, AccountState>(
+        listener: (context, state) {
+          if (state is AccountFinished) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRouter.loginRoute, (route) => false);
+          }
+        },
         builder: (context, state) {
           if (state is AccountLoaded) {
             return Scaffold(
