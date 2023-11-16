@@ -32,6 +32,12 @@ dependencies:
   custom_refresh_indicator: ^2.2.1
   flutter_native_splash: ^2.3.5
   shimmer: ^3.0.0
+  flutter_local_notifications: ^16.1.0
+
+#  Firebase
+  firebase_core: ^2.19.0
+  firebase_messaging: ^14.7.3
+  cloud_firestore: ^4.13.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -50,11 +56,11 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icons/ic_app.png"
+  image_path: "assets/images/img_logo_one.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
+  background_color: "#000000"
 
 flutter_native_splash:
-
   background_image: "assets/icons/ic_app.png"
 #  image: assets/icons/ic_app.png
 #  color: "#000000"

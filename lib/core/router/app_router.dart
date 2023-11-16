@@ -4,11 +4,13 @@ import 'package:shopfeeforemployee/features/change_password/presentation/page/ch
 import 'package:shopfeeforemployee/features/history/presentation/page/history_page.dart';
 import 'package:shopfeeforemployee/features/home/presentation/page/home_page.dart';
 import 'package:shopfeeforemployee/features/login/presentation/page/login_page.dart';
+import 'package:shopfeeforemployee/features/notification_permission/notify_permission_page.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/page/order_detail_page.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/page/personal_information_page.dart';
 import 'package:shopfeeforemployee/features/shipping_order/presentation/page/shipping_order_page.dart';
 
 class AppRouter {
+  static const String notifyPermissionRoute = "/notifyPermission";
   static const String loginRoute = "/login";
   static const String homeRoute = "/home";
   static const String accountRoute = "/account";
@@ -21,6 +23,8 @@ class AppRouter {
 
   static onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case notifyPermissionRoute:
+        return MaterialPageRoute(builder: (context) => const NotifyPermissionPage());
       case loginRoute:
         return MaterialPageRoute(builder: (context) => const LoginPage());
       case homeRoute:

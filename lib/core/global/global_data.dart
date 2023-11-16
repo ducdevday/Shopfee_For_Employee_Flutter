@@ -8,5 +8,6 @@ class GlobalData{
   EmployeeEntity? employeeEntity;
   String? accessToken;
   String? refreshToken;
+  bool isFirstTime = true;
 
 }

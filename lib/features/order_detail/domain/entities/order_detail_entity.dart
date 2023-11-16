@@ -14,7 +14,7 @@ class OrderDetailEntity {
   List<ProductEntity>? products;
   TransactionEntity? transaction;
   ReviewEntity? review;
-
+  String? userId;
   OrderDetailEntity({
     required this.id,
     required this.note,
@@ -25,5 +25,6 @@ class OrderDetailEntity {
     required this.products,
     required this.transaction,
     required this.review,
+    required this.userId
   });
 }

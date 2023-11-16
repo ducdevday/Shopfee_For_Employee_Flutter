@@ -7,6 +7,10 @@ class SharedService {
     _pref = await SharedPreferences.getInstance();
   }
 
+  static void setIsFirstTime(bool isFirstTime){
+    _pref.setBool("isFirstTime", isFirstTime);
+  }
+
   static void setEmployeeId(String employeeId){
     _pref.setString("employeeId", employeeId);
   }
@@ -17,6 +21,10 @@ class SharedService {
 
   static void setRefreshToken(String refreshToken){
     _pref.setString("refreshToken", refreshToken);
+  }
+
+  static bool? getIsFirstTime(){
+    return _pref.getBool("isFirstTime");
   }
 
   static String? getEmployeeId(){

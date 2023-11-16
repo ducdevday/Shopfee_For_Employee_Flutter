@@ -30,6 +30,7 @@ class OrderDetailModel extends OrderDetailEntity {
     required this.products,
     required this.transaction,
     required this.review,
+    required String? userId,
   }) : super(
             id: id,
             note: note,
@@ -39,9 +40,11 @@ class OrderDetailModel extends OrderDetailEntity {
             createdAt: createdAt,
             products: products,
             transaction: transaction,
-            review: review);
+            review: review,
+            userId: userId);
 
-  factory OrderDetailModel.fromJson(Map<String, dynamic> json) => _$OrderDetailModelFromJson(json);
+  factory OrderDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderDetailModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderDetailModelToJson(this);
 }

@@ -8,5 +8,6 @@ abstract class OrderDetailRepository {
   Future<Either<Failure, OrderDetailEntity>> getOrderDetail(String orderId);
   Future<Either<Failure, List<EventLogEntity>>> getEventLogs(String orderId);
   Future<Either<Failure, NoResponse>> addEventLog(String orderId, EventLogEntity eventLog);
-
+  Future<Either<Failure, String>> getFCMToken(String userId);
+  Future<Either<Failure, NoResponse>> sendOrderMessage(String title, String body, String destinationId, String fcmToken);
 }

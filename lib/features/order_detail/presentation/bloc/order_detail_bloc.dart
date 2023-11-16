@@ -61,7 +61,15 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
       AddEventLog event, Emitter<OrderDetailState> emit) async {
     if (state is OrderDetailLoaded) {
       final currentState = state as OrderDetailLoaded;
+      String fcmToken = "";
       EasyLoading.show();
+
+      final responseFCM = await _orderDetailUseCase
+          .getFCMToken(currentState.orderDetail.userId!);
+      responseFCM.fold((failure) => ExceptionUtil.handle(failure), (value) {
+        fcmToken = value;
+      });
+
       final response =
           await _orderDetailUseCase.addEventLog(event.id, event.eventLog);
       EasyLoading.dismiss();
@@ -80,6 +88,11 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
           // NavigationUtil.pop();
         });
       });
+
+      final responseNotify = await _orderDetailUseCase.sendOrderMessage(
+          event.eventLog.orderStatus, event.id, fcmToken);
+
+      responseNotify.fold((failure) => ExceptionUtil.handle(failure), (_) {});
     }
   }
 

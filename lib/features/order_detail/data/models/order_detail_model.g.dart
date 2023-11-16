@@ -28,6 +28,7 @@ OrderDetailModel _$OrderDetailModelFromJson(Map<String, dynamic> json) =>
       review: json['review'] == null
           ? null
           : ReviewModel.fromJson(json['review'] as Map<String, dynamic>),
+      userId: json['userId'] as String?,
     );
 
 Map<String, dynamic> _$OrderDetailModelToJson(OrderDetailModel instance) =>
@@ -37,6 +38,7 @@ Map<String, dynamic> _$OrderDetailModelToJson(OrderDetailModel instance) =>
       'total': instance.total,
       'orderType': instance.orderType,
       'createdAt': instance.createdAt?.toIso8601String(),
+      'userId': instance.userId,
       'address': instance.address,
       'products': instance.products,
       'transaction': instance.transaction,

@@ -12,5 +12,4 @@ class EventLogEntity{
     required this.description,
     this.makerByEmployee,
   });
-
 }
