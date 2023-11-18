@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
+import 'package:shopfeeforemployee/core/common/models/payment_status.dart';
 import 'package:shopfeeforemployee/core/errors/failures.dart';
 import 'package:shopfeeforemployee/core/utils/exception_util.dart';
 import 'package:shopfeeforemployee/core/utils/navigation_util.dart';
@@ -84,15 +85,21 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
           EasyLoading.showSuccess("Canceled",
               duration: Duration(milliseconds: 2000));
         }
-        Future.delayed(Duration(milliseconds: 2000), () {
-          // NavigationUtil.pop();
-        });
       });
 
       final responseNotify = await _orderDetailUseCase.sendOrderMessage(
           event.eventLog.orderStatus, event.id, fcmToken);
 
       responseNotify.fold((failure) => ExceptionUtil.handle(failure), (_) {});
+
+      if (event.eventLog.orderStatus == OrderStatus.SUCCEED &&
+          currentState.orderDetail.transaction!.status ==
+              PaymentStatus.UNPAID) {
+        final responseTransaction = await _orderDetailUseCase
+            .completeTransaction(currentState.orderDetail.transaction!.id!);
+        responseTransaction.fold(
+            (failure) => ExceptionUtil.handle(failure), (_) {});
+      }
     }
   }
 

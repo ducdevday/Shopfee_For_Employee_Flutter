@@ -15,10 +15,10 @@ class ShippingOrderRepositoryImpl implements ShippingOrderRepository {
 
   @override
   Future<Either<Failure, List<ShippingOrderModel>>> getOrderListByStatus(
-      OrderType type, OrderStatus status) async {
+      OrderType type, OrderStatus status, int page, int size) async {
     try {
       final response =
-          await _shippingOrderService.getOrderListByStatus(type, status);
+          await _shippingOrderService.getOrderListByStatus(type, status, page: page, size: size);
       final result = ResultList(
         success: response.data["success"],
         message: response.data["message"],

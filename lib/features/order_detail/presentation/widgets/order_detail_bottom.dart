@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
+import 'package:shopfeeforemployee/core/common/widgets/my_confirm_dialog.dart';
 import 'package:shopfeeforemployee/core/config/color.dart';
 import 'package:shopfeeforemployee/core/config/dimens.dart';
 import 'package:shopfeeforemployee/core/config/style.dart';
@@ -53,12 +54,27 @@ class OrderDetailBottom extends StatelessWidget {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            context.read<OrderDetailBloc>().add(AddEventLog(
-                                id: orderId,
-                                eventLog: EventLogEntity(
-                                    orderStatus: state.nextOrderStatus,
-                                    time: DateTime.now(),
-                                    description: null)));
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext contextDialog) =>
+                                    MyConfirmDialog(
+                                        title: "Confirm",
+                                        content:
+                                            "Are you sure to ${state.nextOrderStatus.name} this order",
+                                        callbackOK: () async {
+                                          context.read<OrderDetailBloc>().add(
+                                              AddEventLog(
+                                                  id: orderId,
+                                                  eventLog: EventLogEntity(
+                                                      orderStatus:
+                                                          state.nextOrderStatus,
+                                                      time: DateTime.now(),
+                                                      description: null)));
+                                          Navigator.pop(contextDialog);
+                                        },
+                                        callbackCancel: () {
+                                          Navigator.pop(contextDialog);
+                                        }));
                           },
                           style: AppStyle.elevatedButtonStylePrimary.copyWith(
                               shape: MaterialStateProperty.all(

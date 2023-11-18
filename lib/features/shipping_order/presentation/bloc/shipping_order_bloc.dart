@@ -19,74 +19,56 @@ class ShippingOrderBloc extends Bloc<ShippingOrderEvent, ShippingOrderState> {
   ShippingOrderBloc(this._shippingOrderUseCase)
       : super(ShippingOrderInitial()) {
     on<LoadShippingOrder>(_onLoadShippingOrder);
+    on<LoadMoreShippingOrder>(_onLoadMoreShippingOrder);
   }
 
   FutureOr<void> _onLoadShippingOrder(
       LoadShippingOrder event, Emitter<ShippingOrderState> emit) async {
     emit(ShippingOrderLoading());
-    List<ShippingOrderEntity> createdOrderList = [];
-    List<ShippingOrderEntity> acceptedOrderList = [];
-    List<ShippingOrderEntity> deliveringOrderList = [];
-    // List<ShippingOrderEntity> succeedOrderList = [];
-    // List<ShippingOrderEntity> canceledOrderList = [];
+    int page = 1;
+    int size = 5;
+    List<ShippingOrderEntity> orderList = [];
+    final response =  await _shippingOrderUseCase
+        .getOrderListByStatus(OrderType.SHIPPING,event.orderStatus, page, size);
 
-    final createdListResponse = await _shippingOrderUseCase
-        .getOrderListByStatus(OrderType.SHIPPING, OrderStatus.CREATED);
-    final acceptedListResponse = await _shippingOrderUseCase
-        .getOrderListByStatus(OrderType.SHIPPING, OrderStatus.ACCEPTED);
-    final deliveringListResponse = await _shippingOrderUseCase
-        .getOrderListByStatus(OrderType.SHIPPING, OrderStatus.DELIVERING);
-    // final succeedListResponse = await _shippingOrderUseCase
-    //     .getOrderListByStatus(OrderType.SHIPPING, OrderStatus.SUCCEED);
-    // final canceledListResponse = await _shippingOrderUseCase
-    //     .getOrderListByStatus(OrderType.SHIPPING, OrderStatus.CANCELED);
-
-    createdListResponse.fold(
+    response.fold(
         (failure) => {
               if (failure is ServerFailure)
                 {emit(ShippingOrderError())}
               else
                 ExceptionUtil.handle(failure)
-            }, (orderList) {
-      createdOrderList.addAll(orderList);
+            },
+            (resultList) {
+      orderList.addAll(resultList);
     });
+    emit(ShippingOrderLoaded(orderList: orderList, page: page, size: size));
+  }
 
-    acceptedListResponse.fold(
-        (failure) => {
-              if (failure is ServerFailure)
-                {emit(ShippingOrderError())}
-              else
-                ExceptionUtil.handle(failure)
-            }, (orderList) {
-      acceptedOrderList.addAll(orderList);
-    });
+  FutureOr<void> _onLoadMoreShippingOrder(LoadMoreShippingOrder event, Emitter<ShippingOrderState> emit) async{
+    if (state is ShippingOrderLoaded) {
+      final currentState = state as ShippingOrderLoaded;
+      emit(currentState.copyWith(isLoadMore: true));
+      await Future.delayed(Duration(milliseconds: 1000));
+      final response = await _shippingOrderUseCase.getOrderListByStatus(
+          OrderType.SHIPPING, event.orderStatus, currentState.page + 1, currentState.size);
 
-    deliveringListResponse.fold(
-        (failure) => {
-              if (failure is ServerFailure)
-                {emit(ShippingOrderError())}
-              else
-                ExceptionUtil.handle(failure)
-            }, (orderList) {
-      deliveringOrderList.addAll(orderList);
-    });
-
-    // succeedListResponse.fold((failure) => ExceptionUtil.handle(failure),
-    //     (orderList) {
-    //   succeedOrderList.addAll(orderList);
-    // });
-    //
-    // canceledListResponse.fold((failure) => ExceptionUtil.handle(failure),
-    //     (orderList) {
-    //   canceledOrderList.addAll(orderList);
-    // });
-
-    emit(ShippingOrderLoaded(
-      createdOrderList: createdOrderList,
-      acceptedOrderList: acceptedOrderList,
-      deliveringOrderList: deliveringOrderList,
-      // succeedOrderList: succeedOrderList,
-      // canceledOrderList: canceledOrderList
-    ));
+      response.fold((failure) {
+        if (failure is ServerFailure) {
+          emit(ShippingOrderError());
+        } else {
+          ExceptionUtil.handle(failure);
+        }
+      }, (resultList) {
+        if (resultList.isNotEmpty) {
+          emit(currentState.copyWith(
+              orderList: List.from(currentState.orderList)
+                ..addAll(resultList),
+              page: currentState.page + 1,
+              isLoadMore: false));
+        } else {
+          emit(currentState.copyWith(cannotLoadMore: true));
+        }
+      });
+    }
   }
 }

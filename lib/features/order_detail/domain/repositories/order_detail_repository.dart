@@ -10,4 +10,5 @@ abstract class OrderDetailRepository {
   Future<Either<Failure, NoResponse>> addEventLog(String orderId, EventLogEntity eventLog);
   Future<Either<Failure, String>> getFCMToken(String userId);
   Future<Either<Failure, NoResponse>> sendOrderMessage(String title, String body, String destinationId, String fcmToken);
+  Future<Either<Failure, NoResponse>> completeTransaction(String transactionId);
 }

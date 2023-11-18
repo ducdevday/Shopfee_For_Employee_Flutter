@@ -15,42 +15,37 @@ class ShippingOrderLoading extends ShippingOrderState {
 }
 
 class ShippingOrderLoaded extends ShippingOrderState {
-  final List<ShippingOrderEntity> createdOrderList;
-  final List<ShippingOrderEntity> acceptedOrderList;
-  final List<ShippingOrderEntity> deliveringOrderList;
-  // final List<ShippingOrderEntity> canceledOrderList;
-  // final List<ShippingOrderEntity> succeedOrderList;
+  final List<ShippingOrderEntity> orderList;
+  final int page;
+  final int size;
+  final bool isLoadMore;
+  final bool cannotLoadMore;
 
-  const ShippingOrderLoaded({this.createdOrderList = const [],
-    this.acceptedOrderList = const [],
-    this.deliveringOrderList = const [],
-    // this.canceledOrderList = const [],
-    // this.succeedOrderList = const []
+  const ShippingOrderLoaded({
+    required this.orderList,
+    required this.page,
+    required this.size,
+    this.isLoadMore = false,
+    this.cannotLoadMore = false,
   });
 
   @override
   List<Object> get props =>
-      [
-        createdOrderList,
-        acceptedOrderList,
-        deliveringOrderList,
-        // canceledOrderList,
-        // succeedOrderList,
-      ];
+      [orderList, page, size, isLoadMore, cannotLoadMore,];
 
   ShippingOrderLoaded copyWith({
-    List<ShippingOrderEntity>? createdOrderList,
-    List<ShippingOrderEntity>? acceptedOrderList,
-    List<ShippingOrderEntity>? deliveringOrderList,
-    List<ShippingOrderEntity>? canceledOrderList,
-    List<ShippingOrderEntity>? succeedOrderList,
+    List<ShippingOrderEntity>? orderList,
+    int? page,
+    int? size,
+    bool? isLoadMore,
+    bool? cannotLoadMore,
   }) {
     return ShippingOrderLoaded(
-      createdOrderList: createdOrderList ?? this.createdOrderList,
-      acceptedOrderList: acceptedOrderList ?? this.acceptedOrderList,
-      deliveringOrderList: deliveringOrderList ?? this.deliveringOrderList,
-      // canceledOrderList: canceledOrderList ?? this.canceledOrderList,
-      // succeedOrderList: succeedOrderList ?? this.succeedOrderList,
+      orderList: orderList ?? this.orderList,
+      page: page ?? this.page,
+      size: size ?? this.size,
+      isLoadMore: isLoadMore ?? this.isLoadMore,
+      cannotLoadMore: cannotLoadMore ?? this.cannotLoadMore,
     );
   }
 }

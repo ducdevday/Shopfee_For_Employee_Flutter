@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
+import 'package:shopfeeforemployee/core/common/widgets/my_confirm_dialog.dart';
 import 'package:shopfeeforemployee/core/config/color.dart';
 import 'package:shopfeeforemployee/core/config/dimens.dart';
 import 'package:shopfeeforemployee/core/config/style.dart';
@@ -17,12 +18,12 @@ final List<String> reasons = const [
 class ReasonCancelSheet extends StatelessWidget {
   final String orderId;
 
-    const ReasonCancelSheet({Key? key, required this.orderId}) : super(key: key);
+  const ReasonCancelSheet({Key? key, required this.orderId}) : super(key: key);
 
-    @override
-    Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
-    builder: (context, state) {
+      builder: (context, state) {
         if (state is OrderDetailLoaded) {
           return Wrap(
             // child: Column(
@@ -36,7 +37,8 @@ class ReasonCancelSheet extends StatelessWidget {
                     maintainAnimation: true,
                     maintainState: true,
                     child: IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.close_rounded)),
+                        onPressed: () {},
+                        icon: const Icon(Icons.close_rounded)),
                   ),
                   Text(
                     "Choose Reason For Cancel",
@@ -88,13 +90,28 @@ class ReasonCancelSheet extends StatelessWidget {
                   padding: const EdgeInsets.all(AppDimen.spacing),
                   child: ElevatedButton(
                     onPressed: () {
-                      context.read<OrderDetailBloc>().add(AddEventLog(
-                          id: orderId,
-                          eventLog: EventLogEntity(
-                              orderStatus: OrderStatus.CANCELED,
-                              time: DateTime.now(),
-                              description: state.reasonCancel, makerByEmployee: true)));
-                      Navigator.pop(context);
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext contextDialog) =>
+                              MyConfirmDialog(
+                                  title: "Confirm",
+                                  content:
+                                      "Are you sure to CANCEL this order",
+                                  callbackOK: () async {
+                                    context.read<OrderDetailBloc>().add(
+                                        AddEventLog(
+                                            id: orderId,
+                                            eventLog: EventLogEntity(
+                                                orderStatus:
+                                                    OrderStatus.CANCELED,
+                                                time: DateTime.now(),
+                                                description: state.reasonCancel,
+                                                makerByEmployee: true)));
+                                    Navigator.pop(contextDialog);
+                                  },
+                                  callbackCancel: () {
+                                    Navigator.pop(contextDialog);
+                                  })).then((value) => Navigator.pop(context));
                     },
                     child: const Text("Confirm Cancel"),
                     style: AppStyle.elevatedButtonStylePrimary.copyWith(

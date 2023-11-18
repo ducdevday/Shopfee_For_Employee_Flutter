@@ -25,6 +25,22 @@ enum OrderStatus {
     return null;
   }
 
+  static OrderStatus? statusPreviousEvent(OrderStatus orderStatus){
+    if(orderStatus == OrderStatus.CANCELED){
+      return OrderStatus.CREATED;
+    }
+    else if(orderStatus == OrderStatus.ACCEPTED){
+      return OrderStatus.CREATED;
+    }
+    if(orderStatus == OrderStatus.DELIVERING){
+      return OrderStatus.ACCEPTED;
+    }
+    if(orderStatus == OrderStatus.SUCCEED){
+      return OrderStatus.DELIVERING;
+    }
+    return null;
+  }
+
 
 }
 

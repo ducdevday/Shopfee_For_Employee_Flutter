@@ -69,7 +69,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     if (state is HistoryLoaded) {
       final currentState = state as HistoryLoaded;
       emit(currentState.copyWith(isSucceedLoadMore: true));
-      await Future.delayed(Duration(milliseconds: 3000));
+      await Future.delayed(Duration(milliseconds: 1000));
       final response = await _historyUseCase.getHistoryByStatus(
           currentState.pageSucceed + 1, currentState.size, OrderStatus.SUCCEED);
 
@@ -98,7 +98,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     if (state is HistoryLoaded) {
       final currentState = state as HistoryLoaded;
       emit(currentState.copyWith(isCanceledLoadMore: true));
-      await Future.delayed(Duration(milliseconds: 3000));
+      await Future.delayed(Duration(milliseconds: 1000));
       final response = await _historyUseCase.getHistoryByStatus(
           currentState.pageCanceled + 1,
           currentState.size,

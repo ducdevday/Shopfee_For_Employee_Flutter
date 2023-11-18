@@ -18,8 +18,14 @@ class OrderDetailService extends BaseService {
       "orderStatus": eventLog.orderStatus.name,
       "description": eventLog.description
     };
-    final response =
-        await dio.patch("${BaseService.orderPath}/employee/$orderId", data: body);
+    final response = await dio
+        .patch("${BaseService.orderPath}/employee/$orderId", data: body);
+    return response;
+  }
+
+  Future<Response> completeTransaction(String transactionId) async {
+    final response = await dio
+        .patch("${BaseService.transactionPath}/complete/$transactionId");
     return response;
   }
 }

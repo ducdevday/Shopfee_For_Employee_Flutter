@@ -6,5 +6,5 @@ import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipp
 
 
 abstract class ShippingOrderRepository {
-  Future<Either<Failure, List<ShippingOrderEntity>>> getOrderListByStatus(OrderType type, OrderStatus status);
+  Future<Either<Failure, List<ShippingOrderEntity>>> getOrderListByStatus(OrderType type, OrderStatus status, int page, int size);
 }

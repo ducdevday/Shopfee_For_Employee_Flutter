@@ -100,13 +100,6 @@ class OrderDetailRepositoryImpl implements OrderDetailRepository {
     try {
       final response = await _orderNotifyService.sendOrderMessage(
           title, body, destinationId, fcmToken);
-      // final result = Result(
-      //   success: response.data["success"],
-      //   message: response.data["message"],
-      // );
-      // if (result.success) {
-      //   return Right(NoResponse());
-      // }
       return Right(NoResponse());
     } catch (e) {
       if (e is DioException) {
@@ -126,6 +119,22 @@ class OrderDetailRepositoryImpl implements OrderDetailRepository {
       final data = response.data();
       final fcmToken = data!["fcmToken"];
       return Right(fcmToken);
+    } catch (e) {
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionError) {
+          return Left(NetworkFailure());
+        }
+        return Left(UnknownFailure());
+      }
+      return Left(UnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, NoResponse>> completeTransaction(String transactionId) async{
+    try {
+      final response = await _orderDetailService.completeTransaction(transactionId);
+      return Right(NoResponse());
     } catch (e) {
       if (e is DioException) {
         if (e.type == DioExceptionType.connectionError) {

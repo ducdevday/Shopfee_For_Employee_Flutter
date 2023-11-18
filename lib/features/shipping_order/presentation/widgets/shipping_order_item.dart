@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/core/config/color.dart';
 import 'package:shopfeeforemployee/core/config/dimens.dart';
 import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/di/service_locator.dart';
 import 'package:shopfeeforemployee/core/router/app_router.dart';
 import 'package:shopfeeforemployee/core/utils/converter_util.dart';
+import 'package:shopfeeforemployee/core/utils/navigation_util.dart';
 import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipping_order_entity.dart';
 import 'package:shopfeeforemployee/features/shipping_order/presentation/bloc/shipping_order_bloc.dart';
 
@@ -19,11 +18,12 @@ class ShippingOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, AppRouter.orderDetailRoute,
-                arguments: order.id)
-            .then((value) =>
-                context.read<ShippingOrderBloc>().add(LoadShippingOrder()));
+      onTap: () async{
+
+        await NavigationUtil.pushNamed(route: AppRouter.orderDetailRoute,
+            args: order.id).then((value) => print("do sth"));
+        context.read<ShippingOrderBloc>()
+            .add(LoadShippingOrder(orderStatus: order.statusLastEvent));
       },
       child: Container(
         color: Colors.white,
