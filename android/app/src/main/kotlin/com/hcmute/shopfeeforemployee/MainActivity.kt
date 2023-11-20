@@ -1,4 +1,4 @@
-package com.hcmute.shopfeeforemployee.shopfeeforemployee
+package com.hcmute.shopfeeforemployee
 
 import io.flutter.embedding.android.FlutterActivity
 

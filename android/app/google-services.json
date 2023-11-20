@@ -44,6 +44,35 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:198446900787:android:4e4585da2b17af17466546",
+        "android_client_info": {
+          "package_name": "com.hcmute.shopfeeforemployee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "198446900787-bmt5usgcvrc4qpof8gu7pnqtiheurgjv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdxWPg0qO72bdOuwqoYBkdavEMP-tV1-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "198446900787-bmt5usgcvrc4qpof8gu7pnqtiheurgjv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:198446900787:android:6a5c86abdf1859f1466546",
         "android_client_info": {
           "package_name": "com.hcmute.shopfeeforemployee.shopfeeforemployee"

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopfeeforemployee/core/config/color.dart';
 import 'package:shopfeeforemployee/core/config/dimens.dart';
 import 'package:shopfeeforemployee/core/config/style.dart';
@@ -63,14 +64,15 @@ class HomePage extends StatelessWidget {
                     Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(right: 18.0),
-                          child: Image.asset(
-                            "assets/images/img_logo_employee.png",
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: SvgPicture.asset(
+                            "assets/icons/ic_coffee_shop.svg",
                             width: 220,
                           ),
                         ),
+                        Text("Shopfee For Employee", style: AppStyle.largeTitleStyleDark,),
                         const SizedBox(
-                          height: 20,
+                          height: AppDimen.spacing,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -218,7 +220,11 @@ class HomePage extends StatelessWidget {
                                             color: AppColor.primaryColor,
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.only(top: 26, right: 30, bottom: 26, left: 26),
+                                            padding: const EdgeInsets.only(
+                                                top: 26,
+                                                right: 30,
+                                                bottom: 26,
+                                                left: 26),
                                             child: Image.asset(
                                               "assets/icons/ic_history_employee.png",
                                             ),
