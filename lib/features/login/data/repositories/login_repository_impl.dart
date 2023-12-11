@@ -31,7 +31,11 @@ class LoginRepositoryImpl implements LoginRepository {
       if (e is DioException) {
         if (e.type == DioExceptionType.connectionError) {
           return Left(NetworkFailure());
-        } else if (e.response?.statusCode == 401) {
+        }
+        else if(e.response?.statusCode == 400){
+          return Left(ServerFailure(message: "Account has been locked"));
+        }
+        else if (e.response?.statusCode == 401) {
           return Left(ServerFailure(message: "Password is incorrect"));
         }
         else if(e.response?.statusCode == 404){

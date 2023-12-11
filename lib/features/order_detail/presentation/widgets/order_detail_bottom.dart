@@ -7,6 +7,7 @@ import 'package:shopfeeforemployee/core/config/dimens.dart';
 import 'package:shopfeeforemployee/core/config/style.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
+import 'package:shopfeeforemployee/features/shipping_order/presentation/bloc/shipping_order_bloc.dart';
 
 import 'reason_cancel_sheet.dart';
 
@@ -71,6 +72,7 @@ class OrderDetailBottom extends StatelessWidget {
                                                       time: DateTime.now(),
                                                       description: null)));
                                           Navigator.pop(contextDialog);
+
                                         },
                                         callbackCancel: () {
                                           Navigator.pop(contextDialog);

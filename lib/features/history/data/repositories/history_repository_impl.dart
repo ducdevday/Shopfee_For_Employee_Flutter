@@ -16,10 +16,10 @@ class HistoryRepositoryImpl implements HistoryRepository {
 
   @override
   Future<Either<Failure, List<HistoryModel>>> getHistoryByStatus(
-      int page, int size, OrderStatus status) async {
+      int page, int size, OrderStatus status, String searchQuery) async {
     try {
       final response =
-          await _historyService.getHistoryStatus(page, size, status);
+          await _historyService.getHistoryStatus(page, size, status, searchQuery);
       final result = ResultList(
           success: response.data["success"],
           message: response.data["message"],

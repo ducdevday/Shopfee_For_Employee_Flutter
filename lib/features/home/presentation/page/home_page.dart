@@ -22,7 +22,8 @@ class HomePage extends StatelessWidget {
               appBar: AppBar(
                 title: GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, AppRouter.accountRoute);
+                    Navigator.pushNamed(context, AppRouter.accountRoute).then(
+                        (value) => context.read<HomeBloc>().add(LoadHome()));
                   },
                   child: Row(
                     children: [
@@ -70,7 +71,10 @@ class HomePage extends StatelessWidget {
                             width: 220,
                           ),
                         ),
-                        Text("Shopfee For Employee", style: AppStyle.largeTitleStyleDark,),
+                        Text(
+                          "Shopfee For Employee",
+                          style: AppStyle.largeTitleStyleDark,
+                        ),
                         const SizedBox(
                           height: AppDimen.spacing,
                         ),

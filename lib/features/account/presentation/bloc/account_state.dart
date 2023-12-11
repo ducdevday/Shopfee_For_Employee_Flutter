@@ -17,7 +17,7 @@ class AccountLoaded extends AccountState {
   });
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [employeeEntity];
 }
 
 class AccountFinished extends AccountState {

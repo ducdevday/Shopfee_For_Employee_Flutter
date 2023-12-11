@@ -12,7 +12,7 @@ class HomeInitial extends HomeState {
 class HomeLoaded extends HomeState{
   final EmployeeEntity employeeEntity;
 
-  HomeLoaded({required this.employeeEntity});
+  const HomeLoaded({required this.employeeEntity});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [employeeEntity];
 }

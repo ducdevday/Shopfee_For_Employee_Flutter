@@ -28,10 +28,10 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     int size = 5;
     emit(HistoryLoading());
     final responseHistorySuccess = await _historyUseCase.getHistoryByStatus(
-        pageSuccessInit, size, OrderStatus.SUCCEED);
+        pageSuccessInit, size, OrderStatus.SUCCEED, event.searchQuery);
 
     final responseHistoryCancel = await _historyUseCase.getHistoryByStatus(
-        pageCancelInit, size, OrderStatus.CANCELED);
+        pageCancelInit, size, OrderStatus.CANCELED, event.searchQuery);
 
     List<HistoryEntity> historiesSucceed = [];
     List<HistoryEntity> historiesCanceled = [];
@@ -61,7 +61,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
         historiesCanceled: historiesCanceled,
         pageSucceed: pageSuccessInit,
         pageCanceled: pageCancelInit,
-        size: size));
+        size: size,
+        query: event.searchQuery));
   }
 
   FutureOr<void> _onLoadHistorySucceed(
@@ -69,9 +70,9 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     if (state is HistoryLoaded) {
       final currentState = state as HistoryLoaded;
       emit(currentState.copyWith(isSucceedLoadMore: true));
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
       final response = await _historyUseCase.getHistoryByStatus(
-          currentState.pageSucceed + 1, currentState.size, OrderStatus.SUCCEED);
+          currentState.pageSucceed + 1, currentState.size, OrderStatus.SUCCEED, currentState.query);
 
       response.fold((failure) {
         if (failure is ServerFailure) {
@@ -98,11 +99,11 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     if (state is HistoryLoaded) {
       final currentState = state as HistoryLoaded;
       emit(currentState.copyWith(isCanceledLoadMore: true));
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
       final response = await _historyUseCase.getHistoryByStatus(
           currentState.pageCanceled + 1,
           currentState.size,
-          OrderStatus.CANCELED);
+          OrderStatus.CANCELED, currentState.query);
 
       response.fold((failure) {
         if (failure is ServerFailure) {

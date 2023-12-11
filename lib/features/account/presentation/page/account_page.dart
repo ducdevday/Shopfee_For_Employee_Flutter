@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopfeeforemployee/core/common/widgets/my_confirm_dialog.dart';
 import 'package:shopfeeforemployee/core/config/color.dart';
 import 'package:shopfeeforemployee/core/config/dimens.dart';
 import 'package:shopfeeforemployee/core/config/style.dart';
@@ -139,9 +140,28 @@ class AccountPage extends StatelessWidget {
                                     width: double.infinity,
                                     child: ElevatedButton.icon(
                                       onPressed: () {
-                                        context
-                                            .read<AccountBloc>()
-                                            .add(LogoutAccount());
+                                        showDialog(
+                                            context: context,
+                                            builder:
+                                                (BuildContext dialogContext) =>
+                                                    MyConfirmDialog(
+                                                      title: "Confirm",
+                                                      content:
+                                                          "Are you sure to Log out",
+                                                      callbackOK: () {
+                                                        context
+                                                            .read<AccountBloc>()
+                                                            .add(
+                                                                LogoutAccount());
+                                                        Navigator.pop(
+                                                            dialogContext);
+                                                      },
+                                                      callbackCancel: () {
+                                                        Navigator.pop(
+                                                            dialogContext);
+                                                      },
+                                                      confirmText: "Log out",
+                                                    ));
                                       },
                                       icon: const Icon(Icons.logout_rounded),
                                       label: const Text("Log out"),

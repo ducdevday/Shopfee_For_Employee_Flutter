@@ -24,6 +24,7 @@ class HistoryLoaded extends HistoryState {
   final bool cannotSucceedLoadMore;
   final bool cannotCanceledLoadMore;
   final int size;
+  final String query;
 
   const HistoryLoaded({required this.historiesSucceed,
     required this.historiesCanceled,
@@ -33,7 +34,9 @@ class HistoryLoaded extends HistoryState {
     this.isSucceedLoadMore = false,
     this.isCanceledLoadMore = false,
     this.cannotSucceedLoadMore = false,
-    this.cannotCanceledLoadMore = false});
+    this.cannotCanceledLoadMore = false,
+    this.query = ""
+  });
 
   @override
   List<Object> get props =>
@@ -47,6 +50,7 @@ class HistoryLoaded extends HistoryState {
         cannotSucceedLoadMore,
         cannotCanceledLoadMore,
         size,
+        query,
       ];
 
   HistoryLoaded copyWith({
@@ -59,6 +63,7 @@ class HistoryLoaded extends HistoryState {
     bool? cannotSucceedLoadMore,
     bool? cannotCanceledLoadMore,
     int? size,
+    String? query,
   }) {
     return HistoryLoaded(
       historiesSucceed: historiesSucceed ?? this.historiesSucceed,
@@ -72,6 +77,7 @@ class HistoryLoaded extends HistoryState {
       cannotCanceledLoadMore:
           cannotCanceledLoadMore ?? this.cannotCanceledLoadMore,
       size: size ?? this.size,
+      query: query ?? this.query,
     );
   }
 }

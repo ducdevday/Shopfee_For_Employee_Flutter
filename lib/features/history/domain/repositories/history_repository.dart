@@ -4,5 +4,5 @@ import 'package:dartz/dartz.dart';
 import 'package:shopfeeforemployee/features/history/domain/entities/history_entity.dart';
 
 abstract class HistoryRepository {
-  Future<Either<Failure, List<HistoryEntity>>> getHistoryByStatus(int page, int size, OrderStatus status);
+  Future<Either<Failure, List<HistoryEntity>>> getHistoryByStatus(int page, int size, OrderStatus status, String searchQuery);
 }

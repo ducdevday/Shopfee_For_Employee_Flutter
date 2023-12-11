@@ -18,12 +18,14 @@ class ShippingOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () async{
-
-        await NavigationUtil.pushNamed(route: AppRouter.orderDetailRoute,
-            args: order.id).then((value) => print("do sth"));
-        context.read<ShippingOrderBloc>()
-            .add(LoadShippingOrder(orderStatus: order.statusLastEvent));
+      onTap: () {
+        NavigationUtil.pushNamed(
+                route: AppRouter.orderDetailRoute, args: order.id)
+            .then((value) {
+          context
+              .read<ShippingOrderBloc>()
+              .add(LoadShippingOrder(orderStatus: order.statusLastEvent));
+        });
       },
       child: Container(
         color: Colors.white,
@@ -149,13 +151,18 @@ class ShippingOrderItem extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, AppRouter.orderDetailRoute,
-                          arguments: order.id);
+                      NavigationUtil.pushNamed(
+                              route: AppRouter.orderDetailRoute, args: order.id)
+                          .then((value) {
+                        context.read<ShippingOrderBloc>().add(LoadShippingOrder(
+                            orderStatus: order.statusLastEvent));
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 30)),
-                    child: Text(
-                        "${OrderStatus.orderStatusAction(order.statusLastEvent)}"),
+                    // child: Text(
+                    //     "${OrderStatus.orderStatusAction(order.statusLastEvent)}"),
+                    child: Text("View"),
                   ),
                 ))
           ],

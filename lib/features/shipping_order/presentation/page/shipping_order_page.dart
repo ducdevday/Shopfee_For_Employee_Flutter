@@ -14,7 +14,7 @@ class ShippingOrderPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: const Color(0xffEFEBE9),
         appBar: AppBar(
-          title: const Text("Shipping Order"),
+          title: const Text("Shipping Order Today"),
           backgroundColor: Colors.white,
           centerTitle: true,
           bottom: TabBar(

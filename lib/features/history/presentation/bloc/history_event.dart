@@ -5,6 +5,10 @@ abstract class HistoryEvent extends Equatable {
 }
 
 class InitHistory extends HistoryEvent {
+  final String searchQuery;
+
+  InitHistory({this.searchQuery = ""});
+
   @override
   List<Object> get props => [];
 }

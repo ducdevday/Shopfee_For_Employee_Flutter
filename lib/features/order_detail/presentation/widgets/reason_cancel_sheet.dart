@@ -59,26 +59,36 @@ class ReasonCancelSheet extends StatelessWidget {
               ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          children: [
-                            Expanded(child: Text(reasons[index])),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Radio<String>(
-                                activeColor: AppColor.primaryColor,
-                                value: reasons[index],
-                                groupValue: state.reasonCancel,
-                                onChanged: (String? value) {
-                                  context
-                                      .read<OrderDetailBloc>()
-                                      .add(ChooseReasonCancel(reason: value!));
-                                })
-                          ],
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: (){
+                      context
+                          .read<OrderDetailBloc>()
+                          .add(ChooseReasonCancel(reason: reasons[index]));
+                    },
+                    child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(reasons[index])),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Radio<String>(
+                                  activeColor: AppColor.primaryColor,
+                                  value: reasons[index],
+                                  groupValue: state.reasonCancel,
+                                  onChanged: (String? value) {
+                                    // context
+                                    //     .read<OrderDetailBloc>()
+                                    //     .add(ChooseReasonCancel(reason: value!));
+                                    context
+                                        .read<OrderDetailBloc>()
+                                        .add(ChooseReasonCancel(reason: reasons[index]));
+                                  })
+                            ],
+                          ),
                         ),
-                      ),
+                  ),
                   separatorBuilder: (context, index) => const Divider(
                         height: 10,
                         indent: 10,
