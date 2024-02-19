@@ -13,4 +13,18 @@ class TransactionEntity {
     required this.type,
     required this.totalPaid,
   });
+
+  TransactionEntity copyWith({
+    String? id,
+    PaymentStatus? status,
+    PaymentType? type,
+    double? totalPaid,
+  }) {
+    return TransactionEntity(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      type: type ?? this.type,
+      totalPaid: totalPaid ?? this.totalPaid,
+    );
+  }
 }

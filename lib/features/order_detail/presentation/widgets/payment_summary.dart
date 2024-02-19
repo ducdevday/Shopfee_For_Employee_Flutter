@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/core/common/models/payment_status.dart';
 import 'package:shopfeeforemployee/core/common/models/payment_type.dart';
 import 'package:shopfeeforemployee/core/common/widgets/my_label.dart';
@@ -177,6 +178,10 @@ class PaymentSummary extends StatelessWidget {
   }
 
   StatelessWidget buildPaymentStatus(OrderDetailLoaded state) {
+    // TODO: Need to fix
+    if (state.currentOrderStatus == OrderStatus.SUCCEED) {
+      return MyLabel(label: "Paid", color: AppColor.success);
+    }
     if (state.orderDetail.transaction!.status == PaymentStatus.UNPAID) {
       return MyLabel(label: "Unpaid", color: AppColor.warning);
     } else if (state.orderDetail.transaction!.status ==
