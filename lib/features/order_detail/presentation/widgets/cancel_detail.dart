@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/utils/converter_util.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
+part of order_detail;
 
 class CancelDetail extends StatelessWidget {
   const CancelDetail({Key? key}) : super(key: key);
@@ -13,7 +7,7 @@ class CancelDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
-        if (state is OrderDetailLoaded &&
+        if (state is OrderDetailLoadSuccess &&
             state.currentOrderStatus == OrderStatus.CANCELED) {
           return Column(
             children: [
@@ -63,7 +57,7 @@ class CancelDetail extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          "${ConverterUtil.formattedTime(state.eventLogs.last.time!)} ${ConverterUtil.formattedDate2(state.eventLogs.last.time!)}",
+                          "${FormatUtil.formattedTime(state.eventLogs.last.time!)} ${FormatUtil.formattedDate2(state.eventLogs.last.time!)}",
                           style: AppStyle.normalTextStyleDark
                               .copyWith(fontWeight: FontWeight.w400),
                         )

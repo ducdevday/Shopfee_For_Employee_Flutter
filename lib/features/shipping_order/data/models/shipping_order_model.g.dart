@@ -9,10 +9,10 @@ part of 'shipping_order_model.dart';
 ShippingOrderModel _$ShippingOrderModelFromJson(Map<String, dynamic> json) =>
     ShippingOrderModel(
       id: json['id'] as String,
-      total: (json['total'] as num).toDouble(),
+      total: json['total'] as num,
       customerName: json['customerName'] as String,
       phoneNumber: json['phoneNumber'] as String,
-      productName: json['productName'] as String? ?? "Product Temp",
+      productName: json['productName'] as String,
       productQuantity: json['productQuantity'] as int,
       thumbnailUrl: json['thumbnailUrl'] as String,
       statusLastEvent:

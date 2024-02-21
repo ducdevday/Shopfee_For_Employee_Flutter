@@ -4,23 +4,23 @@ import 'package:shopfeeforemployee/core/utils/global_keys.dart';
 class NavigationUtil {
   static NavigatorState? get _navigatorKey => navigatorKey.currentState;
 
-  static Future push({required Widget page}) async {
+  static Future push(Widget page) async {
     return await _navigatorKey?.push(MaterialPageRoute(builder: (_) => page));
   }
 
-  static Future pushNamed({required String route, Object? args}) async {
-    return await _navigatorKey?.pushNamed(route, arguments: args);
+  static Future pushNamed(String route, {Object? arguments}) async {
+    return await _navigatorKey?.pushNamed(route, arguments: arguments);
   }
 
-  static Future pushAndRemoveUntil({required Widget page}) async {
+  static Future pushAndRemoveUntil(Widget page) async {
     return await _navigatorKey?.pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => page), (route) => false);
   }
 
-  static Future pushNamedAndRemoveUntil(
-      {required String route, Object? args}) async {
+  static Future pushNamedAndRemoveUntil(String route,
+      {Object? arguments}) async {
     return await _navigatorKey?.pushNamedAndRemoveUntil(route, (r) => false,
-        arguments: args);
+        arguments: arguments);
   }
 
   static pop({Object? result}) {

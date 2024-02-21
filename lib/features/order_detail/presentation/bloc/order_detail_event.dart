@@ -1,40 +1,40 @@
-part of 'order_detail_bloc.dart';
+part of order_detail;
 
 abstract class OrderDetailEvent extends Equatable {
   const OrderDetailEvent();
 }
 
 class LoadOrderDetail extends OrderDetailEvent {
-  final String id;
+  final String orderId;
 
   const LoadOrderDetail({
-    required this.id,
+    required this.orderId,
   });
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [orderId];
 }
 
 class AddEventLog extends OrderDetailEvent {
-  final String id;
+  final String orderId;
   final EventLogEntity eventLog;
 
   const AddEventLog({
-    required this.id,
+    required this.orderId,
     required this.eventLog,
   });
 
   @override
-  List<Object> get props => [id, eventLog];
+  List<Object> get props => [orderId, eventLog];
 }
 
 class ChooseReasonCancel extends OrderDetailEvent {
-  final String reason;
+  final ReasonCancelType reasonCancel;
 
   const ChooseReasonCancel({
-    required this.reason,
+    required this.reasonCancel,
   });
 
   @override
-  List<Object> get props => [reason];
+  List<Object> get props => [reasonCancel];
 }

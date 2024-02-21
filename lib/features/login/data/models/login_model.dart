@@ -4,14 +4,15 @@ import 'package:shopfeeforemployee/features/login/domain/entities/login_entity.d
 part 'login_model.g.dart';
 
 @JsonSerializable()
-class LoginModel extends LoginEntity {
+class LoginModel{
+  @JsonKey(name: "username" )
+  final String account;
+  final String password;
+
   const LoginModel({
-    account,
-    password,
-  }) : super(
-    account: account,
-    password: password
-  );
+    required this.account,
+    required this.password,
+  });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) {
     return _$LoginModelFromJson(json);
@@ -26,5 +27,4 @@ class LoginModel extends LoginEntity {
       password: loginEntity.password
     );
   }
-
 }

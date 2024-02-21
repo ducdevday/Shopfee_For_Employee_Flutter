@@ -5,22 +5,31 @@ import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipp
 part 'shipping_order_model.g.dart';
 
 @JsonSerializable()
-class ShippingOrderModel extends ShippingOrderEntity {
+class ShippingOrderModel {
+  final String id;
+  final num total;
+  final String customerName;
+  final String phoneNumber;
+  final String productName;
+  final int productQuantity;
+  final String thumbnailUrl;
+  final OrderStatus statusLastEvent;
+  final DateTime timeLastEvent;
+
   const ShippingOrderModel({
-    required super.id,
-    required super.total,
-    required super.customerName,
-    required super.phoneNumber,
-    super.productName = "Product Temp",
-    required super.productQuantity,
-    required super.thumbnailUrl,
-    required super.statusLastEvent,
-    required super.timeLastEvent,
+    required this.id,
+    required this.total,
+    required this.customerName,
+    required this.phoneNumber,
+    required this.productName,
+    required this.productQuantity,
+    required this.thumbnailUrl,
+    required this.statusLastEvent,
+    required this.timeLastEvent,
   });
+
   factory ShippingOrderModel.fromJson(Map<String, dynamic> json) =>
       _$ShippingOrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ShippingOrderModelToJson(this);
-
-
 }

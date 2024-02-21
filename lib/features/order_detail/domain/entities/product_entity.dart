@@ -1,3 +1,4 @@
+import 'package:shopfeeforemployee/features/order_detail/data/models/product_model.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/topping_entity.dart';
 
 class ProductEntity {
@@ -19,4 +20,15 @@ class ProductEntity {
     required this.note,
   });
 
+  factory ProductEntity.fromModel(ProductModel model) {
+    return ProductEntity(
+        id: model.id,
+        name: model.name,
+        quantity: model.quantity,
+        size: model.size,
+        price: model.price,
+        toppings:
+            model.toppings?.map((e) => ToppingEntity.fromModel(e)).toList(),
+        note: model.note);
+  }
 }

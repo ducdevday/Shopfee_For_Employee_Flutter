@@ -1,25 +1,21 @@
-import 'package:dartz/dartz.dart';
-import 'package:shopfeeforemployee/core/common/models/no_response.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/errors/failures.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/repositories/order_detail_repository.dart';
 
 abstract class OrderDetailUseCase {
-  Future<Either<Failure, OrderDetailEntity>> getOrderDetail(String orderId);
+  Future<OrderDetailEntity> getOrderDetail(String orderId);
 
-  Future<Either<Failure, List<EventLogEntity>>> getEventLogs(String orderId);
+  Future<List<EventLogEntity>> getEventLogs(String orderId);
 
-  Future<Either<Failure, NoResponse>> addEventLog(
-      String orderId, EventLogEntity eventLog);
+  Future<void> addEventLog(String orderId, EventLogEntity eventLog);
 
-  Future<Either<Failure, String>> getFCMToken(String userId);
+  Future<String> getFCMToken(String userId);
 
-  Future<Either<Failure, NoResponse>> sendOrderMessage(
+  Future<void> sendOrderMessage(
       OrderStatus status, String orderId, String fcmToken);
 
-  Future<Either<Failure, NoResponse>> completeTransaction(String transactionId);
+  Future<void> completeTransaction(String transactionId);
 }
 
 class OrderDetailUseCaseImpl extends OrderDetailUseCase {
@@ -28,30 +24,27 @@ class OrderDetailUseCaseImpl extends OrderDetailUseCase {
   OrderDetailUseCaseImpl(this._orderDetailRepository);
 
   @override
-  Future<Either<Failure, OrderDetailEntity>> getOrderDetail(
-      String orderId) async {
+  Future<OrderDetailEntity> getOrderDetail(String orderId) async {
     return await _orderDetailRepository.getOrderDetail(orderId);
   }
 
   @override
-  Future<Either<Failure, List<EventLogEntity>>> getEventLogs(
-      String orderId) async {
+  Future<List<EventLogEntity>> getEventLogs(String orderId) async {
     return await _orderDetailRepository.getEventLogs(orderId);
   }
 
   @override
-  Future<Either<Failure, NoResponse>> addEventLog(
-      String orderId, EventLogEntity eventLog) async {
+  Future<void> addEventLog(String orderId, EventLogEntity eventLog) async {
     return await _orderDetailRepository.addEventLog(orderId, eventLog);
   }
 
   @override
-  Future<Either<Failure, String>> getFCMToken(String userId) async {
+  Future<String> getFCMToken(String userId) async {
     return await _orderDetailRepository.getFCMToken(userId);
   }
 
   @override
-  Future<Either<Failure, NoResponse>> sendOrderMessage(
+  Future<void> sendOrderMessage(
       OrderStatus status, String orderId, String fcmToken) async {
     final message = formatMessage(status, orderId);
     return await _orderDetailRepository.sendOrderMessage(
@@ -92,8 +85,7 @@ class OrderDetailUseCaseImpl extends OrderDetailUseCase {
   }
 
   @override
-  Future<Either<Failure, NoResponse>> completeTransaction(
-      String transactionId) async {
+  Future<void> completeTransaction(String transactionId) async {
     return await _orderDetailRepository.completeTransaction(transactionId);
   }
 }

@@ -1,15 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_confirm_dialog.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
-import 'package:shopfeeforemployee/features/shipping_order/presentation/bloc/shipping_order_bloc.dart';
-
-import 'reason_cancel_sheet.dart';
+part of order_detail;
 
 class OrderDetailBottom extends StatelessWidget {
   final String orderId;
@@ -42,7 +31,7 @@ class OrderDetailBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
-        if (state is OrderDetailLoaded) {
+        if (state is OrderDetailLoadSuccess) {
           if (state.currentOrderStatus != OrderStatus.SUCCEED &&
               state.currentOrderStatus != OrderStatus.CANCELED) {
             return BottomAppBar(
@@ -61,18 +50,17 @@ class OrderDetailBottom extends StatelessWidget {
                                     MyConfirmDialog(
                                         title: "Confirm",
                                         content:
-                                            "Are you sure to ${state.nextOrderStatus.name} this order",
+                                            "Are you sure to ${state.nextOrderStatus?.name} this order",
                                         callbackOK: () async {
                                           context.read<OrderDetailBloc>().add(
                                               AddEventLog(
-                                                  id: orderId,
+                                                  orderId: orderId,
                                                   eventLog: EventLogEntity(
                                                       orderStatus:
                                                           state.nextOrderStatus,
                                                       time: DateTime.now(),
                                                       description: null)));
                                           Navigator.pop(contextDialog);
-
                                         },
                                         callbackCancel: () {
                                           Navigator.pop(contextDialog);
@@ -84,7 +72,7 @@ class OrderDetailBottom extends StatelessWidget {
                                       borderRadius:
                                           BorderRadius.circular(40)))),
                           child: Text(OrderStatus.orderStatusAction(
-                              state.currentOrderStatus)!),
+                              state.currentOrderStatus)),
                         ),
                       ),
                       Builder(builder: (context) {

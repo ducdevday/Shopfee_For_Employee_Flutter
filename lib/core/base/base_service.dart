@@ -1,7 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:shopfeeforemployee/core/common/models/result.dart';
-import 'package:shopfeeforemployee/core/global/global_data.dart';
 import 'package:shopfeeforemployee/core/service/shared_service.dart';
 
 class BaseService {
@@ -29,9 +28,9 @@ class BaseService {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          if (GlobalData.ins.accessToken != null) {
+          if (SharedService.getAccessToken() != null) {
             options.headers['Authorization'] =
-            "Bearer ${GlobalData.ins.accessToken}";
+                "Bearer ${SharedService.getAccessToken()}";
           }
           // if (!await isConnected()) {
           //   // throw an error if there is no internet connection
@@ -48,28 +47,28 @@ class BaseService {
           //     error: "No internet connection", requestOptions: e.requestOptions,
           //   );
           // }
-          if (e.response?.statusCode == 401 && GlobalData.ins.employeeId != null) {
+          if (e.response?.statusCode == 401 &&
+              SharedService.getEmployeeId() != null) {
             // If a 401 response is received, refresh the access token
             Map<String, dynamic> body = {
-              "refreshToken": GlobalData.ins.refreshToken,
+              "refreshToken": SharedService.getRefreshToken(),
             };
             try {
-              var response = await dio
-                  .post("${BaseService.authPath}/employee/refresh-token", data: body);
+              var response = await dio.post(
+                  "${BaseService.authPath}/employee/refresh-token",
+                  data: body);
               var result = Result(
                   success: response.data["success"],
                   message: response.data["message"],
                   data: response.data["data"]);
 
-              if(result.success){
+              if (result.success) {
                 SharedService.setAccessToken(response.data!["accessToken"]);
                 SharedService.setAccessToken(response.data!["refreshToken"]);
-                GlobalData.ins.accessToken = SharedService.getAccessToken();
-                GlobalData.ins.refreshToken = SharedService.getRefreshToken();
 
                 // Update the request header with the new access token
                 e.requestOptions.headers['Authorization'] =
-                'Bearer ${GlobalData.ins.accessToken}';
+                    'Bearer ${SharedService.getAccessToken()}';
               }
             } catch (e) {
               print(e);
@@ -83,8 +82,8 @@ class BaseService {
     );
   }
 }
+
 Future<bool> isConnected() async {
   var connectivityResult = await Connectivity().checkConnectivity();
   return connectivityResult != ConnectivityResult.none;
-
 }

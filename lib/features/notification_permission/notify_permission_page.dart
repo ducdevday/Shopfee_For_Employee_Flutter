@@ -2,13 +2,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
+import 'package:shopfeeforemployee/core/config/app_color.dart';
+import 'package:shopfeeforemployee/core/config/app_dimen.dart';
+import 'package:shopfeeforemployee/core/config/app_style.dart';
 import 'package:shopfeeforemployee/core/router/app_router.dart';
 import 'package:shopfeeforemployee/core/service/shared_service.dart';
+import 'package:shopfeeforemployee/features/login/presentation/login.dart';
 
 class NotifyPermissionPage extends StatefulWidget {
+  static const String route = "/notify_permission";
+
   const NotifyPermissionPage({Key? key}) : super(key: key);
 
   @override
@@ -49,7 +52,7 @@ class _NotifyPermissionPageState extends State<NotifyPermissionPage> {
         settings.authorizationStatus == AuthorizationStatus.provisional) {
       print("User granted permission");
       SharedService.setIsFirstTime(false);
-      Navigator.pushNamed(context, AppRouter.loginRoute);
+      Navigator.pushNamed(context, LoginPage.route);
     } else {
       print("User denied permission");
     }

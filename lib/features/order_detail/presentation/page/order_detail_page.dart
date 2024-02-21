@@ -1,29 +1,29 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_error.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_loading.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/di/service_locator.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/widgets/cancel_detail.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/widgets/delivery_infomation.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/widgets/note.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/widgets/order_detail_bottom.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/widgets/order_information.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/widgets/payment_summary.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/widgets/product_list.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/widgets/tracking_information.dart';
+part of order_detail;
 
-class OrderDetailPage extends StatelessWidget {
+class OrderDetailPage extends StatefulWidget {
+  static const String route = "/order_detail";
   final String orderId;
 
   const OrderDetailPage({Key? key, required this.orderId}) : super(key: key);
 
   @override
+  State<OrderDetailPage> createState() => _OrderDetailPageState();
+}
+
+class _OrderDetailPageState extends State<OrderDetailPage> {
+  late final OrderDetailBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = ServiceLocator.sl<OrderDetailBloc>()
+      ..add(LoadOrderDetail(orderId: widget.orderId));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ServiceLocator.sl<OrderDetailBloc>()
-        ..add(LoadOrderDetail(id: orderId)),
+      create: (context) => _bloc,
       child: BlocConsumer<OrderDetailBloc, OrderDetailState>(
         listener: (context, state) {
           if (state is OrderDetailFinished) {
@@ -31,9 +31,9 @@ class OrderDetailPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          if (state is OrderDetailLoading) {
+          if (state is OrderDetailLoadInProcess) {
             return MyLoading();
-          } else if (state is OrderDetailLoaded) {
+          } else if (state is OrderDetailLoadSuccess) {
             return Scaffold(
                 appBar: AppBar(
                   title: const Text("Order Detail"),
@@ -99,8 +99,8 @@ class OrderDetailPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                bottomNavigationBar: OrderDetailBottom(orderId: orderId));
-          } else if (state is OrderDetailError) {
+                bottomNavigationBar: OrderDetailBottom(orderId: widget.orderId));
+          } else if (state is OrderDetailLoadFailure) {
             return MyError();
           } else {
             return SizedBox();
@@ -110,5 +110,3 @@ class OrderDetailPage extends StatelessWidget {
     );
   }
 }
-
-

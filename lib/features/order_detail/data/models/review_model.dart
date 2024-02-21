@@ -4,10 +4,17 @@ import 'package:shopfeeforemployee/features/order_detail/domain/entities/review_
 part 'review_model.g.dart';
 
 @JsonSerializable()
-class ReviewModel extends ReviewEntity{
-  ReviewModel({required super.rating, required super.content});
+class ReviewModel {
+  final int? rating;
+  final String? content;
 
-  factory ReviewModel.fromJson(Map<String, dynamic> json) => _$ReviewModelFromJson(json);
+  const ReviewModel({
+    this.rating,
+    this.content,
+  });
+
+  factory ReviewModel.fromJson(Map<String, dynamic> json) =>
+      _$ReviewModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReviewModelToJson(this);
 }

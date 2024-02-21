@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/utils/converter_util.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
+part of order_detail;
 
 class ProductList extends StatefulWidget {
   const ProductList({
@@ -43,7 +38,7 @@ class _ProductListState extends State<ProductList> {
               ),
               BlocBuilder<OrderDetailBloc, OrderDetailState>(
                 builder: (context, state) {
-                  if (state is OrderDetailLoaded) {
+                  if (state is OrderDetailLoadSuccess) {
                     productListLength =
                         state.orderDetail.products!.length;
                     return ListView.separated(
@@ -112,7 +107,7 @@ class _ProductListState extends State<ProductList> {
     );
   }
 
-  Widget buildProductItem(OrderDetailLoaded state, int index) {
+  Widget buildProductItem(OrderDetailLoadSuccess state, int index) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -133,7 +128,7 @@ class _ProductListState extends State<ProductList> {
                 style: AppStyle.normalTextStyleDark,
               ),
               state.orderDetail.products![index].toppings!.isNotEmpty
-                  ? Text(ConverterUtil.formattedArrayString(state.orderDetail.products![index].toppings!.map((topping) => topping.name).toList()),
+                  ? Text(FormatUtil.formattedArrayString(state.orderDetail.products![index].toppings!.map((topping) => topping.name).toList()),
                       style: AppStyle.normalTextStyleDark)
                   : SizedBox(),
               state.orderDetail.products![index].note!.isNotEmpty
@@ -163,7 +158,7 @@ class _ProductListState extends State<ProductList> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(ConverterUtil.formattedMoney(state.orderDetail.products![index].price!),
+              Text(FormatUtil.formattedMoney(state.orderDetail.products![index].price!),
                   style: AppStyle.mediumTitleStyleDark
                       .copyWith(color: AppColor.headingColor)),
             ],

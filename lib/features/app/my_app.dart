@@ -1,12 +1,19 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shopfeeforemployee/core/config/theme.dart';
-import 'package:shopfeeforemployee/core/global/global_data.dart';
+import 'package:shopfeeforemployee/core/config/app_theme.dart';
+import 'package:shopfeeforemployee/core/di/service_locator.dart';
 import 'package:shopfeeforemployee/core/router/app_router.dart';
+import 'package:shopfeeforemployee/core/service/shared_service.dart';
 import 'package:shopfeeforemployee/core/utils/global_keys.dart';
 import 'package:shopfeeforemployee/core/utils/navigation_util.dart';
+import 'package:shopfeeforemployee/features/employee/presentation/employee.dart';
+import 'package:shopfeeforemployee/features/home/presentation/home.dart';
+import 'package:shopfeeforemployee/features/login/presentation/login.dart';
+import 'package:shopfeeforemployee/features/notification_permission/notify_permission_page.dart';
+import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -36,8 +43,8 @@ class _MyAppState extends State<MyApp> {
       try {
         if (notificationResponse.payload != null &&
             notificationResponse.payload!.isNotEmpty) {
-          NavigationUtil.pushNamed(route: AppRouter.orderDetailRoute,
-              args: notificationResponse.payload);
+          NavigationUtil.pushNamed(OrderDetailPage.route,
+              arguments: notificationResponse.payload);
         }
       } catch (e) {
         print(e);
@@ -69,28 +76,34 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
-      theme: AppTheme.lightTheme,
-      navigatorKey: navigatorKey,
-      scaffoldMessengerKey: scaffoldKey,
-      onGenerateRoute: (settings) {
-        return AppRouter.onGenerateRoute(settings);
-      },
-      // home: ProcessTimelinePage(),
-      initialRoute: getStartRoute(),
-      builder: EasyLoading.init(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) => ServiceLocator.sl<EmployeeBloc>()
+              ..add(EmployeeLoadInformation())),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.light,
+        theme: AppTheme.lightTheme,
+        navigatorKey: navigatorKey,
+        scaffoldMessengerKey: scaffoldKey,
+        onGenerateRoute: (settings) {
+          return AppRouter.onGenerateRoute(settings);
+        },
+        // home: ProcessTimelinePage(),
+        initialRoute: getStartRoute(),
+        builder: EasyLoading.init(),
+      ),
     );
   }
 
   String getStartRoute() {
-    if(GlobalData.ins.isFirstTime){
-      return AppRouter.notifyPermissionRoute;
+    if (SharedService.getIsFirstTime()) {
+      return NotifyPermissionPage.route;
+    } else if (SharedService.getEmployeeId() == null) {
+      return LoginPage.route;
     }
-    else if (GlobalData.ins.employeeId == null) {
-      return AppRouter.loginRoute;
-    }
-    return AppRouter.homeRoute;
+    return HomePage.route;
   }
 }

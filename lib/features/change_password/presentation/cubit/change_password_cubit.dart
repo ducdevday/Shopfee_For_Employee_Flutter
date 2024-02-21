@@ -1,10 +1,4 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:shopfeeforemployee/core/utils/exception_util.dart';
-import 'package:shopfeeforemployee/features/change_password/domain/usecase/change_password_usecase.dart';
-
-part 'change_password_state.dart';
+part of change_password;
 
 class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   final ChangePasswordUseCase _changePasswordUseCase;
@@ -12,50 +6,38 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   ChangePasswordCubit(this._changePasswordUseCase)
       : super(ChangePasswordInitial());
 
-  void initPassword() {
-    emit(const ChangePasswordLoaded());
-  }
-
-  void enterOldPassword(String oldPassword) {
-    if (state is ChangePasswordLoaded) {
-      final currentState = state as ChangePasswordLoaded;
-      emit(currentState.copyWith(oldPassword: oldPassword));
+  bool checkValidField({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) {
+    if (ValidateFieldUtil.validatePassword(currentPassword) &&
+        ValidateFieldUtil.validatePassword(newPassword) &&
+        ValidateFieldUtil.validatePassword(confirmPassword) &&
+        newPassword != confirmPassword) {
+      return true;
+    } else {
+      return false;
     }
   }
 
-  void enterNewPassword(String newPassword) {
-    if (state is ChangePasswordLoaded) {
-      final currentState = state as ChangePasswordLoaded;
-      emit(currentState.copyWith(newPassword: newPassword));
-    }
-  }
-
-  void enterConfirmPassword(String confirmPassword) {
-    if (state is ChangePasswordLoaded) {
-      final currentState = state as ChangePasswordLoaded;
-      emit(currentState.copyWith(confirmPassword: confirmPassword));
-    }
-  }
-
-  Future<void> changePassword() async {
-    if (state is ChangePasswordLoaded) {
-      final currentState = state as ChangePasswordLoaded;
-      if (currentState.newPassword != currentState.confirmPassword) {
-        EasyLoading.showError(
-            "New Password and Confirm New Password is not match");
-        return;
-      }
+  Future<void> changePassword(String currentPassword, String newPassword,
+      String confirmPassword) async {
+    if (checkValidField(
+            currentPassword: currentPassword,
+            newPassword: newPassword,
+            confirmPassword: confirmPassword) ==
+        false) return;
+    try {
       EasyLoading.show(maskType: EasyLoadingMaskType.black);
       var response = await _changePasswordUseCase.changePassword(
-          currentState.oldPassword, currentState.newPassword);
+          currentPassword, newPassword);
       EasyLoading.dismiss();
-      response.fold((failure) => ExceptionUtil.handle(failure), (_) {
-        EasyLoading.showSuccess("Change Password Successfully",
-            duration: Duration(milliseconds: 1000));
-        Future.delayed(Duration(milliseconds: 1000), () {
-          emit(ChangePasswordFinished());
-        });
-      });
+      EasyLoading.showSuccess("Change Password Successfully",
+          duration: Duration(milliseconds: 1000));
+      emit(ChangePasswordSuccess());
+    } catch (e) {
+      ExceptionUtil.handle(e);
     }
   }
 }

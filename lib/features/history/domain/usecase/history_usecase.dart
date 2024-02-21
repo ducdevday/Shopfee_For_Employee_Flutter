@@ -6,7 +6,7 @@ import 'package:shopfeeforemployee/features/history/domain/entities/history_enti
 import 'package:shopfeeforemployee/features/history/domain/repositories/history_repository.dart';
 
 abstract class HistoryUseCase{
-  Future<Either<Failure, List<HistoryEntity>>> getHistoryByStatus(int page, int size, OrderStatus status, String searchQuery);
+  Future<List<HistoryEntity>> getHistoryByStatus(int page, int size, OrderStatus status, String searchQuery);
 }
 
 class HistoryUseCaseImpl extends HistoryUseCase{
@@ -15,7 +15,7 @@ class HistoryUseCaseImpl extends HistoryUseCase{
   HistoryUseCaseImpl(this._historyRepository);
 
   @override
-  Future<Either<Failure, List<HistoryEntity>>> getHistoryByStatus(int page, int size, OrderStatus status, String searchQuery) async {
+  Future<List<HistoryEntity>> getHistoryByStatus(int page, int size, OrderStatus status, String searchQuery) async {
     return await _historyRepository.getHistoryByStatus(page, size, status, searchQuery);
   }
 }

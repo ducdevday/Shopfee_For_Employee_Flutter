@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
+import 'package:shopfeeforemployee/core/config/app_color.dart';
 import 'package:shopfeeforemployee/core/utils/global_keys.dart';
 
 class AlertUtil {

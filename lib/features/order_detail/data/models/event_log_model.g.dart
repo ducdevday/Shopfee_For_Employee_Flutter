@@ -8,7 +8,8 @@ part of 'event_log_model.dart';
 
 EventLogModel _$EventLogModelFromJson(Map<String, dynamic> json) =>
     EventLogModel(
-      orderStatus: $enumDecode(_$OrderStatusEnumMap, json['orderStatus']),
+      orderStatus:
+          $enumDecodeNullable(_$OrderStatusEnumMap, json['orderStatus']),
       time:
           json['time'] == null ? null : DateTime.parse(json['time'] as String),
       description: json['description'] as String?,

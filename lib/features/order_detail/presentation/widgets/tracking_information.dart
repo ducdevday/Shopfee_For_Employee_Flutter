@@ -1,11 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/utils/converter_util.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
-import 'package:timelines/timelines.dart';
+part of order_detail;
 
 class TrackingInformation extends StatefulWidget {
   const TrackingInformation({Key? key}) : super(key: key);
@@ -17,18 +10,18 @@ class TrackingInformation extends StatefulWidget {
 class _TrackingInformationState extends State<TrackingInformation> {
   String getTrackingImage(OrderStatus status, OrderStatus currentStatus) {
     if (status == OrderStatus.CREATED) {
-      return "assets/images/status1.png";
+      return AppPath.icStatusCreated;
     } else if (status == OrderStatus.ACCEPTED) {
       if (currentStatus == OrderStatus.CANCELED) {
-        return "assets/images/status5.png";
+        return AppPath.icStatusCanceled;
       }
-      return "assets/images/status2.png";
+      return AppPath.icStatusAccepted;
     } else if (status == OrderStatus.DELIVERING) {
-      return "assets/images/status3.png";
+      return AppPath.icStatusDelivering;
     } else if (status == OrderStatus.SUCCEED) {
-      return "assets/images/status4.png";
+      return AppPath.icStatusSucceed;
     } else {
-      return "assets/images/status5.png";
+      return AppPath.icStatusCanceled;
     }
   }
 
@@ -51,18 +44,18 @@ class _TrackingInformationState extends State<TrackingInformation> {
 
   String getTrackingName(OrderStatus status, OrderStatus currentStatus) {
     if (status == OrderStatus.CREATED) {
-      return ConverterUtil.capitalFirstWord(status.name);
+      return FormatUtil.capitalFirstWord(status.name);
     } else if (status == OrderStatus.ACCEPTED) {
       if (currentStatus == OrderStatus.CANCELED) {
-        return ConverterUtil.capitalFirstWord(currentStatus.name);
+        return FormatUtil.capitalFirstWord(currentStatus.name);
       }
-      return ConverterUtil.capitalFirstWord(status.name);
+      return FormatUtil.capitalFirstWord(status.name);
     } else if (status == OrderStatus.DELIVERING) {
-      return ConverterUtil.capitalFirstWord(status.name);
+      return FormatUtil.capitalFirstWord(status.name);
     } else if (status == OrderStatus.SUCCEED) {
-      return ConverterUtil.capitalFirstWord(status.name);
+      return FormatUtil.capitalFirstWord(status.name);
     } else {
-      return ConverterUtil.capitalFirstWord(status.name);
+      return FormatUtil.capitalFirstWord(status.name);
     }
   }
 
@@ -70,9 +63,9 @@ class _TrackingInformationState extends State<TrackingInformation> {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
-        if (state is OrderDetailLoaded) {
-          return Container(
-            height: 150,
+        if (state is OrderDetailLoadSuccess) {
+          return SizedBox(
+            height: 175,
             child: Timeline.tileBuilder(
               theme: TimelineThemeData(
                 direction: Axis.horizontal,
@@ -92,10 +85,10 @@ class _TrackingInformationState extends State<TrackingInformation> {
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Image.asset(
                       getTrackingImage(state.ordersTracking[index],
-                          state.currentOrderStatus),
+                          state.currentOrderStatus!),
                       width: 50.0,
                       color: getTrackingColor(
-                          index, state.currentIndex, state.currentOrderStatus),
+                          index, state.currentIndex!, state.currentOrderStatus!),
                     ),
                   );
                 },
@@ -106,11 +99,11 @@ class _TrackingInformationState extends State<TrackingInformation> {
                       children: [
                         Text(
                           getTrackingName(state.ordersTracking[index],
-                              state.currentOrderStatus),
+                              state.currentOrderStatus!),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: getTrackingColor(index, state.currentIndex,
-                                state.currentOrderStatus),
+                            color: getTrackingColor(index, state.currentIndex!,
+                                state.currentOrderStatus!),
                           ),
                         ),
                         Builder(builder: (context) {
@@ -118,23 +111,23 @@ class _TrackingInformationState extends State<TrackingInformation> {
                             return Column(
                               children: [
                                 Text(
-                                  ConverterUtil.formattedTime(
+                                  FormatUtil.formattedTime(
                                       state.eventLogs[index].time!),
                                   style: TextStyle(
                                     color: getTrackingColor(
                                         index,
-                                        state.currentIndex,
-                                        state.currentOrderStatus),
+                                        state.currentIndex!,
+                                        state.currentOrderStatus!),
                                   ),
                                 ),
                                 Text(
-                                  ConverterUtil.formattedDate2(
+                                  FormatUtil.formattedDate2(
                                       state.eventLogs[index].time!),
                                   style: TextStyle(
                                     color: getTrackingColor(
                                         index,
-                                        state.currentIndex,
-                                        state.currentOrderStatus),
+                                        state.currentIndex!,
+                                        state.currentOrderStatus!),
                                   ),
                                 ),
                               ],
@@ -173,8 +166,8 @@ class _TrackingInformationState extends State<TrackingInformation> {
                     children: [
                       OutlinedDotIndicator(
                         borderWidth: 4.0,
-                        color: getTrackingColor(index, state.currentIndex,
-                            state.currentOrderStatus),
+                        color: getTrackingColor(index, state.currentIndex!,
+                            state.currentOrderStatus!),
                       ),
                     ],
                   );
@@ -183,9 +176,9 @@ class _TrackingInformationState extends State<TrackingInformation> {
                   if (index > 0) {
                     if (index == state.currentIndex) {
                       final prevColor = getTrackingColor(index - 1,
-                          state.currentIndex, state.currentOrderStatus);
+                          state.currentIndex!, state.currentOrderStatus!);
                       final color = getTrackingColor(
-                          index, state.currentIndex, state.currentOrderStatus);
+                          index, state.currentIndex!, state.currentOrderStatus!);
                       List<Color> gradientColors;
                       if (type == ConnectorType.start) {
                         gradientColors = [
@@ -207,8 +200,8 @@ class _TrackingInformationState extends State<TrackingInformation> {
                       );
                     } else {
                       return SolidLineConnector(
-                        color: getTrackingColor(index, state.currentIndex,
-                            state.currentOrderStatus),
+                        color: getTrackingColor(index, state.currentIndex!,
+                            state.currentOrderStatus!),
                       );
                     }
                   } else {

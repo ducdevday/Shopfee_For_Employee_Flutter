@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/features/shipping_order/presentation/widgets/shipping_order_list.dart';
+part of shipping_order;
 
 class ShippingOrderPage extends StatelessWidget {
+  static const String route = "/shipping_order";
+
   const ShippingOrderPage({Key? key}) : super(key: key);
 
   @override
@@ -18,6 +16,8 @@ class ShippingOrderPage extends StatelessWidget {
           backgroundColor: Colors.white,
           centerTitle: true,
           bottom: TabBar(
+              padding: EdgeInsets.zero,
+              tabAlignment: TabAlignment.start,
               isScrollable: true,
               unselectedLabelColor: AppColor.disableColor,
               indicatorColor: AppColor.primaryColor,
@@ -34,13 +34,18 @@ class ShippingOrderPage extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            ShippingOrderList(orderStatus: OrderStatus.CREATED, emptyTitle: "No Created Orders Yet"),
-            ShippingOrderList(orderStatus: OrderStatus.ACCEPTED, emptyTitle: "No Accepted Orders Yet"),
-            ShippingOrderList(orderStatus: OrderStatus.DELIVERING, emptyTitle: "No Delivering Orders Yet")
+            ShippingOrderList(
+                orderStatus: OrderStatus.CREATED,
+                emptyTitle: "No Created Orders Yet"),
+            ShippingOrderList(
+                orderStatus: OrderStatus.ACCEPTED,
+                emptyTitle: "No Accepted Orders Yet"),
+            ShippingOrderList(
+                orderStatus: OrderStatus.DELIVERING,
+                emptyTitle: "No Delivering Orders Yet")
           ],
         ),
       ),
     );
   }
 }
-

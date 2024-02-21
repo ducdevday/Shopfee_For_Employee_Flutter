@@ -15,7 +15,7 @@ class OrderDetailService extends BaseService {
 
   Future<Response> addEventLog(String orderId, EventLogModel eventLog) async {
     Map<String, dynamic> body = {
-      "orderStatus": eventLog.orderStatus.name,
+      "orderStatus": eventLog.orderStatus?.name,
       "description": eventLog.description
     };
     final response = await dio

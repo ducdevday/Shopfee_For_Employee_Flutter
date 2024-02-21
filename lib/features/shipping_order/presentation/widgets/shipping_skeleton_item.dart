@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_skelton.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
+part of shipping_order;
 
 class ShippingSkeletonItem extends StatelessWidget {
   const ShippingSkeletonItem({Key? key}) : super(key: key);
@@ -18,15 +16,14 @@ class ShippingSkeletonItem extends StatelessWidget {
                 padding: EdgeInsets.only(left: AppDimen.screenPadding),
                 child: Row(
                   children: [
-                    MySkeleton(
+                    MySkeletonCircle(
                       width: 20,
                       height: 20,
-                      isCircle: true,
                     ),
                     SizedBox(
                       width: 4,
                     ),
-                    MySkeleton(width: 60, height: 20),
+                    MySkeletonRectangle(width: 60, height: 20),
                   ],
                 ),
               ),
@@ -38,7 +35,7 @@ class ShippingSkeletonItem extends StatelessWidget {
                 padding:
                     EdgeInsets.symmetric(horizontal: AppDimen.spacing),
                 child: Row(children: [
-                  MySkeleton(width: 70, height: 70),
+                  MySkeletonRectangle(width: 70, height: 70),
                   SizedBox(
                     width: 4,
                   ),
@@ -49,22 +46,22 @@ class ShippingSkeletonItem extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: MySkeleton(width: 40, height: 20,)
+                              child: MySkeletonRectangle(width: 40, height: 20,)
                             ),
                             SizedBox(
                               width: 8,
                             ),
-                            MySkeleton(width: 60, height: 20,)
+                            MySkeletonRectangle(width: 60, height: 20,)
                           ],
                         ),
                         SizedBox(
                           height: 4,
                         ),
-                        MySkeleton(width: 60, height: 10,),
+                        MySkeletonRectangle(width: 60, height: 10,),
                         SizedBox(
                           height: 4,
                         ),
-                        MySkeleton(width: 60, height: 20,)
+                        MySkeletonRectangle(width: 60, height: 20,)
                       ],
                     ),
                   ),
@@ -77,7 +74,7 @@ class ShippingSkeletonItem extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(right: 8.0),
-            child: Align(alignment: Alignment.centerRight,child: MySkeleton(width: 80, height: 40,)),
+            child: Align(alignment: Alignment.centerRight,child: MySkeletonRectangle(width: 80, height: 40,)),
           )
         ],
       ),

@@ -1,8 +1,9 @@
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
+import 'package:shopfeeforemployee/features/shipping_order/data/models/shipping_order_model.dart';
 
 class ShippingOrderEntity {
   final String id;
-  final double total;
+  final num total;
   final String customerName;
   final String phoneNumber;
   final String productName;
@@ -22,4 +23,16 @@ class ShippingOrderEntity {
     required this.statusLastEvent,
     required this.timeLastEvent,
   });
+
+  factory ShippingOrderEntity.fromModel(ShippingOrderModel model){
+    return ShippingOrderEntity(id: model.id,
+        total: model.total,
+        customerName: model.customerName,
+        phoneNumber: model.phoneNumber,
+        productName: model.productName,
+        productQuantity: model.productQuantity,
+        thumbnailUrl: model.thumbnailUrl,
+        statusLastEvent: model.statusLastEvent,
+        timeLastEvent: model.timeLastEvent);
+  }
 }

@@ -23,8 +23,8 @@ class SharedService {
     _pref.setString("refreshToken", refreshToken);
   }
 
-  static bool? getIsFirstTime(){
-    return _pref.getBool("isFirstTime");
+  static bool getIsFirstTime(){
+    return _pref.getBool("isFirstTime") ?? true;
   }
 
   static String? getEmployeeId(){
@@ -50,4 +50,17 @@ class SharedService {
   static void removeRefreshToken(){
     _pref.remove("refreshToken");
   }
+
+  static void setToken(String userId, String accessToken, String refreshToken) {
+    setEmployeeId(userId);
+    setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
+  }
+
+  static void clearToken() {
+    removeEmployeeId();
+    removeAccessToken();
+    removeRefreshToken();
+  }
+
 }

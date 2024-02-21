@@ -1,4 +1,4 @@
-part of 'shipping_order_bloc.dart';
+part of shipping_order;
 
 abstract class ShippingOrderState extends Equatable {
   const ShippingOrderState();

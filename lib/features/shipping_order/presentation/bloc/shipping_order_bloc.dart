@@ -1,17 +1,4 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/common/models/order_type.dart';
-import 'package:shopfeeforemployee/core/errors/failures.dart';
-import 'package:shopfeeforemployee/core/utils/exception_util.dart';
-import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipping_order_entity.dart';
-import 'package:shopfeeforemployee/features/shipping_order/domain/usecase/shipping_order_usecase.dart';
-
-part 'shipping_order_event.dart';
-
-part 'shipping_order_state.dart';
+part of shipping_order;
 
 class ShippingOrderBloc extends Bloc<ShippingOrderEvent, ShippingOrderState> {
   final ShippingOrderUseCase _shippingOrderUseCase;
@@ -24,51 +11,44 @@ class ShippingOrderBloc extends Bloc<ShippingOrderEvent, ShippingOrderState> {
 
   FutureOr<void> _onLoadShippingOrder(
       LoadShippingOrder event, Emitter<ShippingOrderState> emit) async {
-    emit(ShippingOrderLoading());
-    int page = 1;
-    int size = 5;
-    List<ShippingOrderEntity> orderList = [];
-    final response =  await _shippingOrderUseCase
-        .getOrderListByStatus(OrderType.SHIPPING,event.orderStatus, page, size);
+    try {
+      emit(ShippingOrderLoading());
+      int page = 1;
+      int size = 5;
+      final orderList = await _shippingOrderUseCase.getOrderListByStatus(
+          OrderType.SHIPPING, event.orderStatus, page, size);
 
-    response.fold(
-        (failure) => {
-              if (failure is ServerFailure)
-                {emit(ShippingOrderError())}
-              else
-                ExceptionUtil.handle(failure)
-            },
-            (resultList) {
-      orderList.addAll(resultList);
-    });
-    emit(ShippingOrderLoaded(orderList: orderList, page: page, size: size));
+      emit(ShippingOrderLoaded(orderList: orderList, page: page, size: size));
+    } catch (e) {
+      emit(ShippingOrderError());
+      ExceptionUtil.handle(e);
+    }
   }
 
-  FutureOr<void> _onLoadMoreShippingOrder(LoadMoreShippingOrder event, Emitter<ShippingOrderState> emit) async{
-    if (state is ShippingOrderLoaded) {
-      final currentState = state as ShippingOrderLoaded;
-      emit(currentState.copyWith(isLoadMore: true));
-      await Future.delayed(Duration(milliseconds: 1000));
-      final response = await _shippingOrderUseCase.getOrderListByStatus(
-          OrderType.SHIPPING, event.orderStatus, currentState.page + 1, currentState.size);
-
-      response.fold((failure) {
-        if (failure is ServerFailure) {
-          emit(ShippingOrderError());
-        } else {
-          ExceptionUtil.handle(failure);
-        }
-      }, (resultList) {
-        if (resultList.isNotEmpty) {
+  FutureOr<void> _onLoadMoreShippingOrder(
+      LoadMoreShippingOrder event, Emitter<ShippingOrderState> emit) async {
+    try {
+      if (state is ShippingOrderLoaded) {
+        final currentState = state as ShippingOrderLoaded;
+        emit(currentState.copyWith(isLoadMore: true));
+        await Future.delayed(Duration(milliseconds: 1000));
+        final orderList = await _shippingOrderUseCase.getOrderListByStatus(
+            OrderType.SHIPPING,
+            event.orderStatus,
+            currentState.page + 1,
+            currentState.size);
+        if (orderList.isNotEmpty) {
           emit(currentState.copyWith(
-              orderList: List.from(currentState.orderList)
-                ..addAll(resultList),
+              orderList: List.from(currentState.orderList)..addAll(orderList),
               page: currentState.page + 1,
               isLoadMore: false));
         } else {
           emit(currentState.copyWith(cannotLoadMore: true));
         }
-      });
+      }
+    } catch (e) {
+      emit(ShippingOrderError());
+      ExceptionUtil.handle(e);
     }
   }
 }

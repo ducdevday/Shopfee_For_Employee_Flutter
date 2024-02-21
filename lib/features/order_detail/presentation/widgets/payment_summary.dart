@@ -1,14 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/common/models/payment_status.dart';
-import 'package:shopfeeforemployee/core/common/models/payment_type.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_label.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/utils/converter_util.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
+part of order_detail;
 
 class PaymentSummary extends StatelessWidget {
   const PaymentSummary({
@@ -19,7 +9,7 @@ class PaymentSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
-        if (state is OrderDetailLoaded) {
+        if (state is OrderDetailLoadSuccess) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -42,8 +32,7 @@ class PaymentSummary extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      ConverterUtil.formattedMoney(
-                          state.orderDetail.total!),
+                      FormatUtil.formattedMoney(state.orderDetail.total!),
                       style: AppStyle.normalTextStyleDark
                           .copyWith(fontWeight: FontWeight.w400),
                     )
@@ -103,8 +92,7 @@ class PaymentSummary extends StatelessWidget {
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(
-                      ConverterUtil.formattedMoney(
-                          state.orderDetail.total!),
+                      FormatUtil.formattedMoney(state.orderDetail.total!),
                       style: AppStyle.mediumTitleStyleDark,
                     )
                   ],
@@ -177,15 +165,14 @@ class PaymentSummary extends StatelessWidget {
     );
   }
 
-  StatelessWidget buildPaymentStatus(OrderDetailLoaded state) {
+  StatelessWidget buildPaymentStatus(OrderDetailLoadSuccess state) {
     // TODO: Need to fix
     if (state.currentOrderStatus == OrderStatus.SUCCEED) {
       return MyLabel(label: "Paid", color: AppColor.success);
     }
     if (state.orderDetail.transaction!.status == PaymentStatus.UNPAID) {
       return MyLabel(label: "Unpaid", color: AppColor.warning);
-    } else if (state.orderDetail.transaction!.status ==
-        PaymentStatus.PAID) {
+    } else if (state.orderDetail.transaction!.status == PaymentStatus.PAID) {
       return MyLabel(label: "Paid", color: AppColor.success);
     } else if (state.orderDetail.transaction!.status ==
         PaymentStatus.REFUNDED) {
@@ -194,12 +181,12 @@ class PaymentSummary extends StatelessWidget {
     return SvgPicture.asset("assets/icons/ic_unpaid.svg");
   }
 
-  Row buildPaymentMethod(OrderDetailLoaded state) {
+  Row buildPaymentMethod(OrderDetailLoadSuccess state) {
     if (state.orderDetail.transaction!.type == PaymentType.CASHING) {
       return Row(
         children: [
           Image.asset(
-            "assets/icons/ic_cash.jpg",
+            AppPath.icCash,
             width: 24,
             height: 24,
           ),
@@ -213,7 +200,7 @@ class PaymentSummary extends StatelessWidget {
       return Row(
         children: [
           Image.asset(
-            "assets/icons/ic_vnpay.png",
+            AppPath.icVnPay,
             width: 24,
             height: 24,
           ),

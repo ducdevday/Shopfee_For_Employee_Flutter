@@ -1,23 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_error.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/di/service_locator.dart';
-import 'package:shopfeeforemployee/features/history/presentation/bloc/history_bloc.dart';
-import 'package:shopfeeforemployee/features/history/presentation/widgets/history_listview.dart';
-import 'package:shopfeeforemployee/features/history/presentation/widgets/history_skeleton_list.dart';
+part of history;
 
 class HistoryPage extends StatelessWidget {
+  static const String route = "/history";
   const HistoryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ServiceLocator.sl<HistoryBloc>()..add(InitHistory()),
+      create: (context) => ServiceLocator.sl<HistoryBloc>()..add(HistoryLoadInformation()),
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -49,9 +39,9 @@ class HistoryPage extends StatelessWidget {
           ),
           body: BlocBuilder<HistoryBloc, HistoryState>(
             builder: (context, state) {
-              if (state is HistoryLoading) {
+              if (state is HistoryLoadInProcess) {
                 return const HistorySkeletonList();
-              } else if (state is HistoryLoaded) {
+              } else if (state is HistoryLoadSuccess) {
                 return const TabBarView(
                   children: [
                     HistoryListView(orderStatus: OrderStatus.SUCCEED),
@@ -107,7 +97,7 @@ class _SearchBarHistoryState extends State<SearchBarHistory> {
           handleSearchChange(value);
         },
         onSubmitted: (value) {
-          context.read<HistoryBloc>().add(InitHistory(searchQuery: value));
+          context.read<HistoryBloc>().add(HistoryLoadInformation(searchQuery: value));
         },
         decoration: InputDecoration(
           filled: true,
@@ -119,7 +109,7 @@ class _SearchBarHistoryState extends State<SearchBarHistory> {
             onPressed: () {
               _controller.text = "";
               handleSearchChange("");
-              context.read<HistoryBloc>().add(InitHistory());
+              context.read<HistoryBloc>().add(HistoryLoadInformation());
             },
             iconSize: 16,
             color: AppColor.nonactiveColor,

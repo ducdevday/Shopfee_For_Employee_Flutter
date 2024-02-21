@@ -15,29 +15,18 @@ class HistoryRepositoryImpl implements HistoryRepository {
   HistoryRepositoryImpl(this._historyService);
 
   @override
-  Future<Either<Failure, List<HistoryModel>>> getHistoryByStatus(
+  Future<List<HistoryEntity>> getHistoryByStatus(
       int page, int size, OrderStatus status, String searchQuery) async {
-    try {
-      final response =
-          await _historyService.getHistoryStatus(page, size, status, searchQuery);
-      final result = ResultList(
-          success: response.data["success"],
-          message: response.data["message"],
-          data: response.data["data"]);
-      if (result.success) {
-        List<HistoryModel> historyList =
-            result.data!.map((e) => HistoryModel.fromJson(e)).toList();
-        return Right(historyList);
-      }
-      return Left(ServerFailure(isNotLoaded: true));
-    } catch (e) {
-      if (e is DioException) {
-        if (e.type == DioExceptionType.connectionError) {
-          return Left(NetworkFailure());
-        }
-        return Left(UnknownFailure());
-      }
-      return Left(UnknownFailure());
-    }
+    final response =
+        await _historyService.getHistoryStatus(page, size, status, searchQuery);
+    final result = ResultList(
+        success: response.data["success"],
+        message: response.data["message"],
+        data: response.data["data"]);
+    List<HistoryModel> historyModelList =
+        result.data!.map((e) => HistoryModel.fromJson(e)).toList();
+    List<HistoryEntity> historyEntityList =
+        historyModelList.map((e) => HistoryEntity.fromModel(e)).toList();
+    return historyEntityList;
   }
 }

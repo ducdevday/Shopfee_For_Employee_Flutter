@@ -1,4 +1,4 @@
-part of 'history_bloc.dart';
+part of history;
 
 abstract class HistoryState extends Equatable {
   const HistoryState();
@@ -9,12 +9,12 @@ class HistoryInitial extends HistoryState {
   List<Object> get props => [];
 }
 
-class HistoryLoading extends HistoryState {
+class HistoryLoadInProcess extends HistoryState {
   @override
   List<Object> get props => [];
 }
 
-class HistoryLoaded extends HistoryState {
+class HistoryLoadSuccess extends HistoryState {
   final List<HistoryEntity> historiesSucceed;
   final List<HistoryEntity> historiesCanceled;
   final int pageSucceed;
@@ -26,7 +26,7 @@ class HistoryLoaded extends HistoryState {
   final int size;
   final String query;
 
-  const HistoryLoaded({required this.historiesSucceed,
+  const HistoryLoadSuccess({required this.historiesSucceed,
     required this.historiesCanceled,
     required this.pageSucceed,
     required this.pageCanceled,
@@ -53,7 +53,7 @@ class HistoryLoaded extends HistoryState {
         query,
       ];
 
-  HistoryLoaded copyWith({
+  HistoryLoadSuccess copyWith({
     List<HistoryEntity>? historiesSucceed,
     List<HistoryEntity>? historiesCanceled,
     int? pageSucceed,
@@ -65,7 +65,7 @@ class HistoryLoaded extends HistoryState {
     int? size,
     String? query,
   }) {
-    return HistoryLoaded(
+    return HistoryLoadSuccess(
       historiesSucceed: historiesSucceed ?? this.historiesSucceed,
       historiesCanceled: historiesCanceled ?? this.historiesCanceled,
       pageSucceed: pageSucceed ?? this.pageSucceed,
@@ -82,7 +82,7 @@ class HistoryLoaded extends HistoryState {
   }
 }
 
-class HistoryError extends HistoryState {
+class HistoryLoadFailure extends HistoryState {
   @override
   List<Object> get props => [];
 }

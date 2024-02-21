@@ -1,5 +1,6 @@
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/core/common/models/order_type.dart';
+import 'package:shopfeeforemployee/features/history/data/models/history_model.dart';
 
 class HistoryEntity {
   final String id;
@@ -25,4 +26,18 @@ class HistoryEntity {
     required this.statusLastEvent,
     required this.timeLastEvent,
   });
+
+  factory HistoryEntity.fromModel(HistoryModel model) {
+    return HistoryEntity(
+        id: model.id,
+        total: model.total,
+        customerName: model.customerName,
+        phoneNumber: model.phoneNumber,
+        productName: model.productName,
+        productQuantity: model.productQuantity,
+        thumbnailUrl: model.thumbnailUrl,
+        orderType: model.orderType,
+        statusLastEvent: model.statusLastEvent,
+        timeLastEvent: model.timeLastEvent);
+  }
 }

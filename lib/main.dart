@@ -15,15 +15,7 @@ void main() async {
   await FirebaseMessaging.instance.subscribeToTopic("orders");
   await SharedService.init();
   await ServiceLocator().init();
-  await _initLocalData();
   Bloc.observer = BlocObserverUtil();
 
   runApp(const MyApp());
-}
-
-Future<void> _initLocalData() async {
-  GlobalData.ins.isFirstTime = SharedService.getIsFirstTime() ?? true;
-  GlobalData.ins.employeeId = SharedService.getEmployeeId();
-  GlobalData.ins.accessToken = SharedService.getAccessToken();
-  GlobalData.ins.refreshToken = SharedService.getRefreshToken();
 }

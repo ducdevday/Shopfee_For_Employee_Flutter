@@ -10,38 +10,30 @@ import 'transaction_model.dart';
 part 'order_detail_model.g.dart';
 
 @JsonSerializable()
-class OrderDetailModel extends OrderDetailEntity {
-  @override
-  final AddressModel? address;
-  @override
-  final List<ProductModel>? products;
-  @override
-  final TransactionModel? transaction;
-  @override
-  final ReviewModel? review;
+class OrderDetailModel {
+  String? id;
+  String? note;
+  double? total;
+  OrderType? orderType;
+  AddressModel? address;
+  DateTime? createdAt;
+  List<ProductModel>? products;
+  TransactionModel? transaction;
+  ReviewModel? review;
+  String? userId;
 
   OrderDetailModel({
-    required String? id,
-    required String? note,
-    required double? total,
-    required OrderType? orderType,
-    required this.address,
-    required DateTime? createdAt,
-    required this.products,
-    required this.transaction,
-    required this.review,
-    required String? userId,
-  }) : super(
-            id: id,
-            note: note,
-            total: total,
-            orderType: orderType,
-            address: address,
-            createdAt: createdAt,
-            products: products,
-            transaction: transaction,
-            review: review,
-            userId: userId);
+    this.id,
+    this.note,
+    this.total,
+    this.orderType,
+    this.address,
+    this.createdAt,
+    this.products,
+    this.transaction,
+    this.review,
+    this.userId,
+  });
 
   factory OrderDetailModel.fromJson(Map<String, dynamic> json) =>
       _$OrderDetailModelFromJson(json);

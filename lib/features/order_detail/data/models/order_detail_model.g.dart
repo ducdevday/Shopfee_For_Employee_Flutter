@@ -37,12 +37,12 @@ Map<String, dynamic> _$OrderDetailModelToJson(OrderDetailModel instance) =>
       'note': instance.note,
       'total': instance.total,
       'orderType': instance.orderType,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'userId': instance.userId,
       'address': instance.address,
+      'createdAt': instance.createdAt?.toIso8601String(),
       'products': instance.products,
       'transaction': instance.transaction,
       'review': instance.review,
+      'userId': instance.userId,
     };
 
 const _$OrderTypeEnumMap = {

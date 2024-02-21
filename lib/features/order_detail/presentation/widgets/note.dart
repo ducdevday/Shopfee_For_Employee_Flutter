@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
+part of order_detail;
 
 class Note extends StatelessWidget {
   const Note({Key? key}) : super(key: key);
@@ -11,7 +7,7 @@ class Note extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
-        if (state is OrderDetailLoaded &&
+        if (state is OrderDetailLoadSuccess &&
             state.orderDetail.note != null &&
             state.orderDetail.note!.isNotEmpty) {
           return Column(

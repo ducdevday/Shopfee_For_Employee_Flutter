@@ -8,16 +8,13 @@ class ExceptionUtil {
   static void handle(failure) {
     if (failure is ServerFailure) {
       // error from api
-      EasyLoading.showError(
-          failure.message!, duration: const Duration(milliseconds: 2000));
-    }
-    else if (failure is NetworkFailure) {
-      NavigationUtil.push(page: const NoNetWorkPage());
-    }
-    else if(failure is UnknownFailure){
+      EasyLoading.showError(failure.message!,
+          duration: const Duration(milliseconds: 2000));
+    } else if (failure is NetworkFailure) {
+      NavigationUtil.push(const NoNetWorkPage());
+    } else if (failure is UnknownFailure) {
       AlertUtil.showToast("Something went wrong");
-    }
-    else{
+    } else {
       AlertUtil.showToast("Something went wrong");
     }
   }

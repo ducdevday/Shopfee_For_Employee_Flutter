@@ -1,11 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_confirm_dialog.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
+part of order_detail;
 
 class DeliveryInformation extends StatelessWidget {
   const DeliveryInformation({Key? key}) : super(key: key);
@@ -22,7 +15,7 @@ class DeliveryInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
-        if (state is OrderDetailLoaded) {
+        if (state is OrderDetailLoadSuccess) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -52,7 +45,7 @@ class DeliveryInformation extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          state.orderDetail.address!.recipientName!,
+                          state.orderDetail.address?.recipientName ?? "",
                           style: AppStyle.mediumTextStyleDark
                               .copyWith(color: AppColor.headingColor),
                         ),
@@ -67,10 +60,10 @@ class DeliveryInformation extends StatelessWidget {
                                 builder: (BuildContext contextDialog) =>
                                     MyConfirmDialog(
                                         title: "Call to",
-                                        content: "+84 ${state.orderDetail.address!.phoneNumber!.substring(1)}",
+                                        content: "+84 ${state.orderDetail.address?.phoneNumber?.substring(1)}",
                                         callbackOK: () async {
                                           await _makePhoneCall(
-                                              "tel:+84 ${state.orderDetail.address!.phoneNumber!.substring(1)}");
+                                              "tel:+84 ${state.orderDetail.address?.phoneNumber?.substring(1)}");
                                           Navigator.pop(contextDialog);
                                         },
                                         callbackCancel: () {
@@ -78,7 +71,7 @@ class DeliveryInformation extends StatelessWidget {
                                         }));
                           },
                           child: Text(
-                            state.orderDetail.address!.phoneNumber!,
+                            state.orderDetail.address?.phoneNumber ?? "",
                             style: AppStyle.normalTextStyleDark.copyWith(
                                 decoration: TextDecoration.underline,
                                 color: AppColor.info),

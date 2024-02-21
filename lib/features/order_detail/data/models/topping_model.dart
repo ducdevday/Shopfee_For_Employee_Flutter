@@ -4,10 +4,17 @@ import 'package:shopfeeforemployee/features/order_detail/domain/entities/topping
 part 'topping_model.g.dart';
 
 @JsonSerializable()
-class ToppingModel extends ToppingEntity{
-  ToppingModel({required super.name, required super.price});
+class ToppingModel {
+  final String name;
+  final double price;
 
-  factory ToppingModel.fromJson(Map<String, dynamic> json) => _$ToppingModelFromJson(json);
+  const ToppingModel({
+    required this.name,
+    required this.price,
+  });
+
+  factory ToppingModel.fromJson(Map<String, dynamic> json) =>
+      _$ToppingModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ToppingModelToJson(this);
 }

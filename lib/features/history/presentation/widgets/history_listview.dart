@@ -1,14 +1,4 @@
-import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/features/history/domain/entities/history_entity.dart';
-import 'package:shopfeeforemployee/features/history/presentation/bloc/history_bloc.dart';
-import 'package:shopfeeforemployee/features/history/presentation/widgets/history_item.dart';
+part of history;
 
 class HistoryListView extends StatefulWidget {
   final OrderStatus orderStatus;
@@ -31,14 +21,20 @@ class _HistoryListViewState extends State<HistoryListView> {
     scrollController.addListener(_scrollListener);
   }
 
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   void _scrollListener() {
     if (isLoadingMore || cannotLoadMore) return;
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
       if (widget.orderStatus == OrderStatus.SUCCEED) {
-        context.read<HistoryBloc>().add(const LoadHistorySucceed());
+        context.read<HistoryBloc>().add(const HistoryLoadSucceedOrder());
       } else {
-        context.read<HistoryBloc>().add(const LoadHistoryCanceled());
+        context.read<HistoryBloc>().add(const HistoryLoadCanceledOrder());
       }
     }
   }
@@ -47,7 +43,7 @@ class _HistoryListViewState extends State<HistoryListView> {
   Widget build(BuildContext context) {
     return BlocBuilder<HistoryBloc, HistoryState>(
       builder: (context, state) {
-        if (state is HistoryLoaded) {
+        if (state is HistoryLoadSuccess) {
           if (widget.orderStatus == OrderStatus.SUCCEED) {
             isLoadingMore = state.isSucceedLoadMore;
             cannotLoadMore = state.cannotSucceedLoadMore;
@@ -60,7 +56,7 @@ class _HistoryListViewState extends State<HistoryListView> {
           if (historyList.isNotEmpty) {
             return RefreshIndicator(
               onRefresh: () async {
-                context.read<HistoryBloc>().add(InitHistory());
+                context.read<HistoryBloc>().add(HistoryLoadInformation());
               },
               child: ListView.separated(
                 controller: scrollController,

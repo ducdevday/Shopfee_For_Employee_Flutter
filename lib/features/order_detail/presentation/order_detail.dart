@@ -1,0 +1,44 @@
+library order_detail;
+
+import 'dart:async';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shopfeeforemployee/core/common/enum/reason_cancel_type.dart';
+import 'package:shopfeeforemployee/core/common/models/order_status.dart';
+import 'package:shopfeeforemployee/core/common/models/payment_status.dart';
+import 'package:shopfeeforemployee/core/common/models/payment_type.dart';
+import 'package:shopfeeforemployee/core/common/widgets/my_confirm_dialog.dart';
+import 'package:shopfeeforemployee/core/common/widgets/my_error.dart';
+import 'package:shopfeeforemployee/core/common/widgets/my_label.dart';
+import 'package:shopfeeforemployee/core/common/widgets/my_loading.dart';
+import 'package:shopfeeforemployee/core/config/app_color.dart';
+import 'package:shopfeeforemployee/core/config/app_dimen.dart';
+import 'package:shopfeeforemployee/core/config/app_path.dart';
+import 'package:shopfeeforemployee/core/config/app_style.dart';
+import 'package:shopfeeforemployee/core/di/service_locator.dart';
+import 'package:shopfeeforemployee/core/errors/failures.dart';
+import 'package:shopfeeforemployee/core/utils/exception_util.dart';
+import 'package:shopfeeforemployee/core/utils/format_util.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/usecase/order_detail_usecase.dart';
+import 'package:timelines/timelines.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+part 'bloc/order_detail_bloc.dart';
+part 'bloc/order_detail_event.dart';
+part 'bloc/order_detail_state.dart';
+part 'page/order_detail_page.dart';
+part 'widgets/cancel_detail.dart';
+part 'widgets/delivery_infomation.dart';
+part 'widgets/note.dart';
+part 'widgets/order_detail_bottom.dart';
+part 'widgets/order_information.dart';
+part 'widgets/payment_summary.dart';
+part 'widgets/product_list.dart';
+part 'widgets/reason_cancel_sheet.dart';
+part 'widgets/tracking_information.dart';

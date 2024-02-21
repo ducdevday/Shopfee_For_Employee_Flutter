@@ -1,14 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/router/app_router.dart';
-import 'package:shopfeeforemployee/core/utils/converter_util.dart';
-import 'package:shopfeeforemployee/core/utils/navigation_util.dart';
-import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipping_order_entity.dart';
-import 'package:shopfeeforemployee/features/shipping_order/presentation/bloc/shipping_order_bloc.dart';
+part of shipping_order;
 
 class ShippingOrderItem extends StatelessWidget {
   final ShippingOrderEntity order;
@@ -19,8 +9,7 @@ class ShippingOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        NavigationUtil.pushNamed(
-                route: AppRouter.orderDetailRoute, args: order.id)
+        NavigationUtil.pushNamed(OrderDetailPage.route, arguments: order.id)
             .then((value) {
           context
               .read<ShippingOrderBloc>()
@@ -103,14 +92,14 @@ class ShippingOrderItem extends StatelessWidget {
                             height: 4,
                           ),
                           Text(
-                            "${ConverterUtil.formattedTime(order.timeLastEvent)} - ${ConverterUtil.formattedDate(order.timeLastEvent)}",
+                            "${FormatUtil.formattedTime(order.timeLastEvent)} - ${FormatUtil.formattedDate(order.timeLastEvent)}",
                             style: AppStyle.normalTextStyleDark,
                           ),
                           const SizedBox(
                             height: 4,
                           ),
                           Text(
-                            "Total: ${ConverterUtil.formattedMoney(order.total)}",
+                            "Total: ${FormatUtil.formattedMoney(order.total)}",
                             style: AppStyle.mediumTextStyleDark.copyWith(
                               color: AppColor.headingColor.withOpacity(0.95),
                             ),
@@ -151,8 +140,8 @@ class ShippingOrderItem extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      NavigationUtil.pushNamed(
-                              route: AppRouter.orderDetailRoute, args: order.id)
+                      NavigationUtil.pushNamed(OrderDetailPage.route,
+                              arguments: order.id)
                           .then((value) {
                         context.read<ShippingOrderBloc>().add(LoadShippingOrder(
                             orderStatus: order.statusLastEvent));

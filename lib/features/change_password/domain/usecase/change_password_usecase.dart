@@ -5,7 +5,7 @@ import 'package:shopfeeforemployee/core/errors/failures.dart';
 import 'package:shopfeeforemployee/features/change_password/domain/repositories/change_password_repository.dart';
 
 abstract class ChangePasswordUseCase{
-  Future<Either<Failure, NoResponse>> changePassword(String oldPassword, String newPassword);
+  Future<void> changePassword(String oldPassword, String newPassword);
 }
 
 class ChangePasswordUseCaseImpl extends ChangePasswordUseCase{
@@ -14,7 +14,7 @@ class ChangePasswordUseCaseImpl extends ChangePasswordUseCase{
   ChangePasswordUseCaseImpl(this._changePasswordRepository);
 
   @override
-  Future<Either<Failure, NoResponse>> changePassword(String oldPassword, String newPassword) async{
+  Future<void> changePassword(String oldPassword, String newPassword) async{
       return await _changePasswordRepository.changePassword(oldPassword, newPassword);
   }
 }

@@ -7,7 +7,7 @@ import 'package:shopfeeforemployee/features/shipping_order/domain/entities/shipp
 import 'package:shopfeeforemployee/features/shipping_order/domain/repositories/shipping_order_repository.dart';
 
 abstract class ShippingOrderUseCase{
-  Future<Either<Failure, List<ShippingOrderEntity>>> getOrderListByStatus(OrderType type, OrderStatus status, int page, int size);
+  Future<List<ShippingOrderEntity>> getOrderListByStatus(OrderType type, OrderStatus status, int page, int size);
 }
 
 class ShippingOrderUseCaseImpl extends ShippingOrderUseCase{
@@ -16,7 +16,7 @@ class ShippingOrderUseCaseImpl extends ShippingOrderUseCase{
   ShippingOrderUseCaseImpl(this._shippingOrderRepository);
 
   @override
-  Future<Either<Failure, List<ShippingOrderEntity>>> getOrderListByStatus(OrderType type, OrderStatus status, int page, int size) async{
+  Future<List<ShippingOrderEntity>> getOrderListByStatus(OrderType type, OrderStatus status, int page, int size) async{
       return await _shippingOrderRepository.getOrderListByStatus(type, status, page, size);
   }
 }

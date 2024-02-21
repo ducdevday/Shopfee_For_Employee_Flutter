@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
+part of account;
 
 class SettingItem extends StatelessWidget {
   final IconData iconData;

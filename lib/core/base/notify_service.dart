@@ -9,7 +9,7 @@ class NotifyService {
   NotifyService() {
     dio = Dio(
       BaseOptions(
-          baseUrl: path,
+          // baseUrl: path,
           connectTimeout: const Duration(milliseconds: 30000),
           receiveTimeout: const Duration(milliseconds: 30000),
           responseType: ResponseType.json,
