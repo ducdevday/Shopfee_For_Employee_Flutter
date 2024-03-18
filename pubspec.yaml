@@ -63,6 +63,21 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-Italic.ttf
+          style: italic
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -75,18 +90,6 @@ flutter_native_splash:
   background_image: "assets/icons/ic_app.png"
 #  image: assets/icons/ic_app.png
 #  color: "#000000"
-
-
-
   android_12:
-
   android_gravity: center
-
   fullscreen: true
-
-  # If you have changed the name(s) of your info.plist file(s), you can specify the filename(s)
-  # with the info_plist_files parameter.  Remove only the # characters in the three lines below,
-  # do not remove any spaces:
-  #info_plist_files:
-  #  - 'ios/Runner/Info-Debug.plist'
-  #  - 'ios/Runner/Info-Release.plist'
