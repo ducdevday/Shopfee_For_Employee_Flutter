@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shopfeeforemployee/core/config/app_theme.dart';
 import 'package:shopfeeforemployee/core/di/service_locator.dart';
 import 'package:shopfeeforemployee/core/router/app_router.dart';
@@ -106,4 +109,10 @@ class _MyAppState extends State<MyApp> {
     }
     return HomePage.route;
   }
+}
+Future<void> initData() async {
+  final Directory appDocDir = await getApplicationDocumentsDirectory();
+  final String appDocPath = appDocDir.path;
+  SharedService.setAppDocPath(appDocPath);
+
 }

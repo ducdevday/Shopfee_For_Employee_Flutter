@@ -19,7 +19,6 @@ import 'package:shopfeeforemployee/features/login/domain/repositories/login_repo
 import 'package:shopfeeforemployee/features/login/domain/usecase/login_usecase.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/datasources/order_detail_service.dart';
-import 'package:shopfeeforemployee/features/order_detail/data/datasources/order_notify_service.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/repositories/order_detail_repository_impl.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/repositories/order_detail_repository.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/usecase/order_detail_usecase.dart';
@@ -91,9 +90,8 @@ class ServiceLocator {
 
   void _orderDetailFeature() {
     sl.registerLazySingleton(() => OrderDetailService());
-    sl.registerLazySingleton(() => OrderNotifyService());
     sl.registerLazySingleton<OrderDetailRepository>(
-        () => OrderDetailRepositoryImpl(sl(), sl()));
+        () => OrderDetailRepositoryImpl(sl()));
     sl.registerLazySingleton<OrderDetailUseCase>(
         () => OrderDetailUseCaseImpl(sl()));
     sl.registerFactory<OrderDetailBloc>(() => OrderDetailBloc(sl()));

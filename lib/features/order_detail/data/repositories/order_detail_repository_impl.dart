@@ -1,12 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
-import 'package:shopfeeforemployee/core/common/models/no_response.dart';
 import 'package:shopfeeforemployee/core/common/models/result.dart';
 import 'package:shopfeeforemployee/core/common/models/result_list.dart';
-import 'package:shopfeeforemployee/core/errors/failures.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/datasources/order_detail_service.dart';
-import 'package:shopfeeforemployee/features/order_detail/data/datasources/order_notify_service.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/models/event_log_model.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/models/order_detail_model.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
@@ -15,9 +10,8 @@ import 'package:shopfeeforemployee/features/order_detail/domain/repositories/ord
 
 class OrderDetailRepositoryImpl implements OrderDetailRepository {
   final OrderDetailService _orderDetailService;
-  final OrderNotifyService _orderNotifyService;
 
-  OrderDetailRepositoryImpl(this._orderDetailService, this._orderNotifyService);
+  OrderDetailRepositoryImpl(this._orderDetailService);
 
   @override
   Future<OrderDetailEntity> getOrderDetail(String orderId) async {
@@ -59,7 +53,7 @@ class OrderDetailRepositoryImpl implements OrderDetailRepository {
   @override
   Future<void> sendOrderMessage(
       String title, String body, String destinationId, String fcmToken) async {
-    final response = await _orderNotifyService.sendOrderMessage(
+    final response = await _orderDetailService.sendOrderMessage(
         title, body, destinationId, fcmToken);
   }
 
