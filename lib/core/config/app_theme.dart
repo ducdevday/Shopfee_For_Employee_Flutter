@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shopfeeforemployee/core/config/app_color.dart';
-import 'package:shopfeeforemployee/core/config/app_dimen.dart';
-import 'package:shopfeeforemployee/core/config/app_style.dart';
+
+import 'app_color.dart';
+import 'app_dimen.dart';
+import 'app_style.dart';
 
 class AppTheme {
   static final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -17,9 +18,12 @@ class AppTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor:
-            MaterialStateProperty.all<Color>(AppColor.primaryColor),
+        MaterialStateProperty.all<Color>(AppColor.primaryColor),
         foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap, // the '2023' part
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        )), // the '2023' part
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(

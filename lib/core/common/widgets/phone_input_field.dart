@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopfeeforemployee/core/config/app_style.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class PhoneInputField extends StatefulWidget {
   final String title;
@@ -61,17 +62,25 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
           validator: (value) {
             return widget.validateField(value!);
           },
+          textInputAction: TextInputAction.next,
+          inputFormatters: [
+            PhoneInputFormatter(
+              allowEndlessPhone: false,
+              defaultCountryCode: "VN",
+            )
+          ],
           controller: widget.controller,
           focusNode: _focusNode,
           decoration: InputDecoration(
-            errorText: errorText,
-            contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            focusedErrorBorder: AppStyle.outlineInputBorderDefault,
-            errorBorder: AppStyle.outlineInputBorderDefault,
-            enabledBorder: AppStyle.outlineInputBorderDefault,
-            focusedBorder: AppStyle.outlineInputBorderPrimary,
-            disabledBorder: AppStyle.outlineInputBorderDefault,
-            hintText: widget.hint,
+              errorText: errorText,
+              contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              focusedErrorBorder: AppStyle.outlineInputBorderDefault,
+              errorBorder: AppStyle.outlineInputBorderDefault,
+              enabledBorder: AppStyle.outlineInputBorderDefault,
+              focusedBorder: AppStyle.outlineInputBorderPrimary,
+              disabledBorder: AppStyle.outlineInputBorderDefault,
+              hintText: widget.hint,
+              hintStyle: TextStyle(color: Colors.grey)
           ),
         ),
       ],

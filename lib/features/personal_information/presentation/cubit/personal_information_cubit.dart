@@ -6,12 +6,13 @@ class PersonalInformationCubit extends Cubit<PersonalInformationState> {
   PersonalInformationCubit(this._personalInformationUseCase)
       : super(PersonalInformationInitial());
 
-  void checkValidField({
-    required String firstName,
-    required String lastName,
-  }) {
+  void checkValidField(
+      {required String firstName,
+      required String lastName,
+      required String phoneNumber}) {
     if (ValidateFieldUtil.validateName(firstName) &&
-        ValidateFieldUtil.validateName(lastName)) {
+        ValidateFieldUtil.validateName(lastName) &&
+        ValidateFieldUtil.validatePhone(phoneNumber)) {
       emit(const PersonalInformationReady());
     } else {
       emit(PersonalInformationInitial());

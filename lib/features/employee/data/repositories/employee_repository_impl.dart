@@ -9,29 +9,6 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
 
   EmployeeRepositoryImpl(this._employeeService);
 
-  // @override
-  // Future<Either<Failure, EmployeeModel>> getEmployee(String employeeId) async {
-  //   try {
-  //     final response = await _homeService.getEmployee(employeeId);
-  //     final result = Result(
-  //       success: response.data["success"],
-  //       message: response.data["message"],
-  //       data: response.data["data"],
-  //     );
-  //
-  //     final employeeModel = EmployeeModel.fromJson(result.data!);
-  //     return Right(employeeModel);
-  //   } catch (e) {
-  //     if (e is DioException) {
-  //       if (e.type == DioExceptionType.connectionError) {
-  //         return Left(NetworkFailure());
-  //       }
-  //       return Left(UnknownFailure());
-  //     }
-  //     return Left(UnknownFailure());
-  //   }
-  // }
-
   @override
   Future<EmployeeEntity> getEmployee(String employeeId) async {
     final response = await _employeeService.getEmployee(employeeId);
@@ -44,5 +21,10 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
     final employeeModel = EmployeeModel.fromJson(result.data!);
     final employeeEntity = employeeModel.toEntity();
     return employeeEntity;
+  }
+
+  @override
+  Future<void> logout() async {
+    final response = await _employeeService.logout();
   }
 }

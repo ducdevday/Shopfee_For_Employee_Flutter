@@ -22,7 +22,7 @@ class LoginCubit extends Cubit<LoginState> {
       final response = await _loginUseCase
           .login(LoginEntity(account: account, password: password));
       SharedService.setToken(
-          response.employeeId, response.accessToken, response.refreshToken);
+          response.employeeId, response.accessToken);
       EasyLoading.dismiss();
       EasyLoading.showSuccess("Login Success");
       emit(LoginSuccess());

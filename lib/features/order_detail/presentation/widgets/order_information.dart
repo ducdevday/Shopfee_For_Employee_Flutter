@@ -42,7 +42,7 @@ class OrderInformation extends StatelessWidget {
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(
-                      FormatUtil.formattedDate(
+                      FormatUtil.formatDate(
                           state.orderDetail.createdAt!),
                       style: AppStyle.normalTextStyleDark,
                     )
@@ -59,7 +59,7 @@ class OrderInformation extends StatelessWidget {
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(
-                      FormatUtil.formattedTime(
+                      FormatUtil.formatTime(
                           state.orderDetail.createdAt!),
                       style: AppStyle.normalTextStyleDark,
                     )

@@ -4,6 +4,7 @@ import 'package:shopfeeforemployee/features/employee/domain/repositories/employe
 abstract class EmployeeUseCase {
   Future<EmployeeEntity> getEmployee(String employeeId);
 
+  Future<void> logout();
 }
 
 class EmployeeUseCaseImpl extends EmployeeUseCase {
@@ -14,5 +15,10 @@ class EmployeeUseCaseImpl extends EmployeeUseCase {
   @override
   Future<EmployeeEntity> getEmployee(String employeeId) async {
     return await _employeeRepository.getEmployee(employeeId);
+  }
+
+  @override
+  Future<void> logout() async {
+    return await _employeeRepository.logout();
   }
 }

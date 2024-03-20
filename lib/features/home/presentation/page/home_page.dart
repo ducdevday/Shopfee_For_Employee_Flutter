@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context,AccountPage.route);
+            Navigator.pushNamed(context, AccountPage.route);
           },
           child: BlocBuilder<EmployeeBloc, EmployeeState>(
             builder: (context, state) {
@@ -99,8 +99,8 @@ class HomePage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(
-                            context,ShippingOrderPage.route);
+                        NavigationUtil.pushNamed(OrdersPage.route,
+                            arguments: OrderType.SHIPPING);
                       },
                       child: Card(
                         shape: const RoundedRectangleBorder(
@@ -214,7 +214,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context,HistoryPage.route);
+                        Navigator.pushNamed(context, HistoryPage.route);
                       },
                       child: Card(
                         shape: const RoundedRectangleBorder(
@@ -266,7 +266,7 @@ class HomePage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context,AccountPage.route);
+                        Navigator.pushNamed(context, AccountPage.route);
                       },
                       child: Card(
                         shape: const RoundedRectangleBorder(

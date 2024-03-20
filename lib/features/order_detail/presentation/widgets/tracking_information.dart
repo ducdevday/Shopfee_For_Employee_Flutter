@@ -44,18 +44,18 @@ class _TrackingInformationState extends State<TrackingInformation> {
 
   String getTrackingName(OrderStatus status, OrderStatus currentStatus) {
     if (status == OrderStatus.CREATED) {
-      return FormatUtil.capitalFirstWord(status.name);
+      return status.name;
     } else if (status == OrderStatus.ACCEPTED) {
       if (currentStatus == OrderStatus.CANCELED) {
-        return FormatUtil.capitalFirstWord(currentStatus.name);
+        return status.name;
       }
-      return FormatUtil.capitalFirstWord(status.name);
+      return status.name;
     } else if (status == OrderStatus.DELIVERING) {
-      return FormatUtil.capitalFirstWord(status.name);
+      return status.name;
     } else if (status == OrderStatus.SUCCEED) {
-      return FormatUtil.capitalFirstWord(status.name);
+      return status.name;
     } else {
-      return FormatUtil.capitalFirstWord(status.name);
+      return status.name;
     }
   }
 
@@ -101,7 +101,7 @@ class _TrackingInformationState extends State<TrackingInformation> {
                           getTrackingName(state.ordersTracking[index],
                               state.currentOrderStatus!),
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                             color: getTrackingColor(index, state.currentIndex!,
                                 state.currentOrderStatus!),
                           ),
@@ -111,7 +111,7 @@ class _TrackingInformationState extends State<TrackingInformation> {
                             return Column(
                               children: [
                                 Text(
-                                  FormatUtil.formattedTime(
+                                  FormatUtil.formatTime(
                                       state.eventLogs[index].time!),
                                   style: TextStyle(
                                     color: getTrackingColor(
@@ -121,7 +121,7 @@ class _TrackingInformationState extends State<TrackingInformation> {
                                   ),
                                 ),
                                 Text(
-                                  FormatUtil.formattedDate2(
+                                  FormatUtil.formatDate2(
                                       state.eventLogs[index].time!),
                                   style: TextStyle(
                                     color: getTrackingColor(

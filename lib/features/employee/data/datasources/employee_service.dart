@@ -7,4 +7,10 @@ class EmployeeService {
         DioService.instance.get("${DioService.employeePath}/$employeeId");
     return response;
   }
+
+  Future<Response> logout() async {
+    final response =
+    await DioService.instance.get("${DioService.authPath}/logout");
+    return response;
+  }
 }

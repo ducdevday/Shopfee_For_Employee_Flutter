@@ -27,6 +27,9 @@ Map<String, dynamic> _$EventLogModelToJson(EventLogModel instance) =>
 const _$OrderStatusEnumMap = {
   OrderStatus.CREATED: 'CREATED',
   OrderStatus.ACCEPTED: 'ACCEPTED',
+  OrderStatus.CANCELLATION_REQUEST: 'CANCELLATION_REQUEST',
+  OrderStatus.CANCELLATION_REQUEST_REFUSED: 'CANCELLATION_REQUEST_REFUSED',
+  OrderStatus.CANCELLATION_REQUEST_ACCEPTED: 'CANCELLATION_REQUEST_ACCEPTED',
   OrderStatus.DELIVERING: 'DELIVERING',
   OrderStatus.SUCCEED: 'SUCCEED',
   OrderStatus.CANCELED: 'CANCELED',

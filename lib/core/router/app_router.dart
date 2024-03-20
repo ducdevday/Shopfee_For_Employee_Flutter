@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopfeeforemployee/core/common/models/order_type.dart';
 import 'package:shopfeeforemployee/features/account/presentation/account.dart';
 import 'package:shopfeeforemployee/features/change_password/presentation/change_password.dart';
 import 'package:shopfeeforemployee/features/history/presentation/history.dart';
@@ -6,8 +7,8 @@ import 'package:shopfeeforemployee/features/home/presentation/home.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
 import 'package:shopfeeforemployee/features/notification_permission/notify_permission_page.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
+import 'package:shopfeeforemployee/features/orders/presentation/orders.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';
-import 'package:shopfeeforemployee/features/shipping_order/presentation/shipping_order.dart';
 
 class AppRouter {
   static onGenerateRoute(RouteSettings settings) {
@@ -27,9 +28,9 @@ class AppRouter {
       case ChangePasswordPage.route:
         return MaterialPageRoute(
             builder: (context) => const ChangePasswordPage());
-      case ShippingOrderPage.route:
+      case OrdersPage.route:
         return MaterialPageRoute(
-            builder: (context) => const ShippingOrderPage());
+            builder: (context) => OrdersPage(orderType: settings.arguments as OrderType,));
       case OrderDetailPage.route:
         return MaterialPageRoute(
             builder: (context) =>

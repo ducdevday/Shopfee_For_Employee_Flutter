@@ -9,7 +9,7 @@ class ChangePasswordService {
       "newPassword": newPassword,
     };
     final response = await DioService.instance.patch(
-        "${DioService.employeePath}/change-password/$employeeId",
+        "${DioService.authPath}/$employeeId/change-password",
         data: body);
     return response;
   }

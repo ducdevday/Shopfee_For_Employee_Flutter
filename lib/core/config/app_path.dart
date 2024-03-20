@@ -62,4 +62,6 @@ class AppPath {
   static const String icStatusSucceed = "assets/images/status4.png";
 
   static const String icStatusCanceled = "assets/images/status5.png";
+
+  static const String icNoOrder = "assets/icons/ic_no_order.png";
 }

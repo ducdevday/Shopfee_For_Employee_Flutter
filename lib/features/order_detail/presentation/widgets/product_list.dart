@@ -158,7 +158,7 @@ class _ProductListState extends State<ProductList> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(FormatUtil.formattedMoney(state.orderDetail.products![index].price!),
+              Text(FormatUtil.formatMoney(state.orderDetail.products![index].price!),
                   style: AppStyle.mediumTitleStyleDark
                       .copyWith(color: AppColor.headingColor)),
             ],

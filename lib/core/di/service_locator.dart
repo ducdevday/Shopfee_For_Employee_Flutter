@@ -13,6 +13,7 @@ import 'package:shopfeeforemployee/features/history/data/datasources/history_ser
 import 'package:shopfeeforemployee/features/history/data/repositories/history_repository_impl.dart';
 import 'package:shopfeeforemployee/features/history/domain/repositories/history_repository.dart';
 import 'package:shopfeeforemployee/features/history/domain/usecase/history_usecase.dart';
+import 'package:shopfeeforemployee/features/history/presentation/history.dart';
 import 'package:shopfeeforemployee/features/login/data/datasources/login_service.dart';
 import 'package:shopfeeforemployee/features/login/data/repositories/login_repository_impl.dart';
 import 'package:shopfeeforemployee/features/login/domain/repositories/login_repository.dart';
@@ -23,18 +24,16 @@ import 'package:shopfeeforemployee/features/order_detail/data/repositories/order
 import 'package:shopfeeforemployee/features/order_detail/domain/repositories/order_detail_repository.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/usecase/order_detail_usecase.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
+import 'package:shopfeeforemployee/features/orders/data/datasources/orders_service.dart';
+import 'package:shopfeeforemployee/features/orders/data/repositories/orders_repository_impl.dart';
+import 'package:shopfeeforemployee/features/orders/domain/repositories/orders_repository.dart';
+import 'package:shopfeeforemployee/features/orders/domain/usecase/orders_usecase.dart';
+import 'package:shopfeeforemployee/features/orders/presentation/orders.dart';
 import 'package:shopfeeforemployee/features/personal_information/data/datasources/personal_information_service.dart';
 import 'package:shopfeeforemployee/features/personal_information/data/repositories/personal_information_repository_impl.dart';
 import 'package:shopfeeforemployee/features/personal_information/domain/repositories/personnal_information_repository.dart';
 import 'package:shopfeeforemployee/features/personal_information/domain/usecase/personnal_information_usecase.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';
-import 'package:shopfeeforemployee/features/shipping_order/data/datasources/shipping_order_service.dart';
-import 'package:shopfeeforemployee/features/shipping_order/data/repositories/shipping_order_repository_impl.dart';
-import 'package:shopfeeforemployee/features/shipping_order/domain/repositories/shipping_order_repository.dart';
-import 'package:shopfeeforemployee/features/shipping_order/domain/usecase/shipping_order_usecase.dart';
-import 'package:shopfeeforemployee/features/shipping_order/presentation/shipping_order.dart';
-
-import '../../features/history/presentation/history.dart';
 
 class ServiceLocator {
   static final sl = GetIt.instance;
@@ -44,7 +43,7 @@ class ServiceLocator {
     _employeeFeature();
     _personalInformationFeature();
     _changePasswordFeature();
-    _shippingOrderFeature();
+    _ordersFeature();
     _orderDetailFeature();
     _historyDetailFeature();
   }
@@ -79,13 +78,12 @@ class ServiceLocator {
     sl.registerFactory<ChangePasswordCubit>(() => ChangePasswordCubit(sl()));
   }
 
-  void _shippingOrderFeature() {
-    sl.registerLazySingleton(() => ShippingOrderService());
-    sl.registerLazySingleton<ShippingOrderRepository>(
-        () => ShippingOrderRepositoryImpl(sl()));
-    sl.registerLazySingleton<ShippingOrderUseCase>(
-        () => ShippingOrderUseCaseImpl(sl()));
-    sl.registerFactory<ShippingOrderBloc>(() => ShippingOrderBloc(sl()));
+  void _ordersFeature() {
+    sl.registerLazySingleton(() => OrdersService());
+    sl.registerLazySingleton<OrdersRepository>(
+        () => OrdersRepositoryImpl(sl()));
+    sl.registerLazySingleton<OrdersUseCase>(() => OrdersUseCaseImpl(sl()));
+    sl.registerFactory<OrdersBloc>(() => OrdersBloc(sl()));
   }
 
   void _orderDetailFeature() {

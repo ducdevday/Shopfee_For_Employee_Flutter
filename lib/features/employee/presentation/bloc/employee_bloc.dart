@@ -29,6 +29,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
       EmployeeLogout event, Emitter<EmployeeState> emit) async {
     try {
       EasyLoading.show(maskType: EasyLoadingMaskType.black);
+      await _employeeUseCase.logout();
       SharedService.clearToken();
       EasyLoading.dismiss();
     } catch (e) {

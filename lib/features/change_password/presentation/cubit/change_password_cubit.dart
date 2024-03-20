@@ -14,7 +14,7 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
     if (ValidateFieldUtil.validatePassword(currentPassword) &&
         ValidateFieldUtil.validatePassword(newPassword) &&
         ValidateFieldUtil.validatePassword(confirmPassword) &&
-        newPassword != confirmPassword) {
+        newPassword == confirmPassword) {
       return true;
     } else {
       return false;

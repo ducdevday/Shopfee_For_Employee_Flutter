@@ -97,14 +97,14 @@ class HistoryItem extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${FormatUtil.formattedTime(history.timeLastEvent)} - ${FormatUtil.formattedDate(history.timeLastEvent)}",
+                                    "${FormatUtil.formatTime(history.timeLastEvent)} - ${FormatUtil.formatDate(history.timeLastEvent)}",
                                     style: AppStyle.normalTextStyleDark,
                                   ),
                                   const SizedBox(
                                     height: 4,
                                   ),
                                   Text(
-                                    "Total: ${FormatUtil.formattedMoney(history.total)}",
+                                    "Total: ${FormatUtil.formatMoney(history.total)}",
                                     style:
                                         AppStyle.mediumTextStyleDark.copyWith(
                                       color: AppColor.headingColor

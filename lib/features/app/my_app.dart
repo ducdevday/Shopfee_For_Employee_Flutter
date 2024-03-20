@@ -110,9 +110,3 @@ class _MyAppState extends State<MyApp> {
     return HomePage.route;
   }
 }
-Future<void> initData() async {
-  final Directory appDocDir = await getApplicationDocumentsDirectory();
-  final String appDocPath = appDocDir.path;
-  SharedService.setAppDocPath(appDocPath);
-
-}

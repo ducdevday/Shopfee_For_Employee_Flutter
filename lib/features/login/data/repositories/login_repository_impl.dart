@@ -29,6 +29,9 @@ class LoginRepositoryImpl implements LoginRepository {
       return token;
     } catch (e) {
       if (e is DioException) {
+        if (e.response?.statusCode == 500) {
+          throw ServerFailure(message: "Account or password is incorrect");
+        }
         if (e.response?.statusCode == 400) {
           throw ServerFailure(message: "Account has been locked");
         } else if (e.response?.statusCode == 401) {

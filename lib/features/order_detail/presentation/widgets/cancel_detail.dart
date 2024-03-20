@@ -57,7 +57,7 @@ class CancelDetail extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          "${FormatUtil.formattedTime(state.eventLogs.last.time!)} ${FormatUtil.formattedDate2(state.eventLogs.last.time!)}",
+                          "${FormatUtil.formatTime(state.eventLogs.last.time!)} ${FormatUtil.formatDate2(state.eventLogs.last.time!)}",
                           style: AppStyle.normalTextStyleDark
                               .copyWith(fontWeight: FontWeight.w400),
                         )
