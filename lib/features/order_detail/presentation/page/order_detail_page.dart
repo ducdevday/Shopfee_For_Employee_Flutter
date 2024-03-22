@@ -17,7 +17,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   void initState() {
     super.initState();
     _bloc = ServiceLocator.sl<OrderDetailBloc>()
-      ..add(LoadOrderDetail(orderId: widget.orderId));
+      ..add(OrderDetailLoadInformation(orderId: widget.orderId));
   }
 
   @override
@@ -38,65 +38,40 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 appBar: AppBar(
                   title: const Text("Order Detail"),
                   centerTitle: true,
+                  automaticallyImplyLeading: true,
                   bottom: const PreferredSize(
                     preferredSize: Size.fromHeight(1),
                     child: Divider(height: 1),
                   ),
                 ),
                 body: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppDimen.screenPadding),
-                    child: Column(
-                      children: [
-                        const TrackingInformation(),
-                        Container(
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: const Color(0xffefebe9)),
-                              borderRadius: BorderRadius.circular(16)),
-                          child: Column(
-                            children: [
-                              const OrderInformation(),
-                              Container(
-                                height: 4,
-                                color: const Color(0xffEFEBE9),
-                              ),
-                              const DeliveryInformation(),
-                              Container(
-                                height: 4,
-                                color: const Color(0xffEFEBE9),
-                              ),
-                              const ProductList(),
-                              Container(
-                                height: 4,
-                                color: const Color(0xffEFEBE9),
-                              ),
-                              const PaymentSummary(),
-                              const Note(),
-                              const CancelDetail(),
-                            ],
-                          ),
-                        ),
-                        // SizedBox(height: 20),
-                        // ElevatedButton(
-                        //     onPressed: () {
-                        //       Navigator.pushNamed(context, "/review",
-                        //           arguments: orderId);
-                        //     },
-                        //     child: Text(
-                        //       "Review",
-                        //     ),
-                        //     style: ElevatedButton.styleFrom(
-                        //         backgroundColor:
-                        //             AppColor.primaryColorBackground,
-                        //         foregroundColor: AppColor.primaryColor,
-                        //         disabledBackgroundColor:
-                        //             const Color(0xffCACACA),
-                        //         disabledForegroundColor: AppColor.lightColor,
-                        //         shape: RoundedRectangleBorder(
-                        //             borderRadius: BorderRadius.circular(16))))
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      const OrderInformation(),
+                      Container(
+                        height: 4,
+                        color: const Color(0xffEFEBE9),
+                      ),
+                      const TrackingInformation(),
+                      Container(
+                        height: 4,
+                        color: const Color(0xffEFEBE9),
+                      ),
+                      const DeliveryInformation(),
+                      const TakeAwayInformation(),
+                      Container(
+                        height: 4,
+                        color: const Color(0xffEFEBE9),
+                      ),
+                      const Note(),
+                      const ProductList(),
+                      Container(
+                        height: 4,
+                        color: const Color(0xffEFEBE9),
+                      ),
+                      const PaymentSummary(),
+                      const CancelDetail(),
+                    ],
                   ),
                 ),
                 bottomNavigationBar: OrderDetailBottom(orderId: widget.orderId));

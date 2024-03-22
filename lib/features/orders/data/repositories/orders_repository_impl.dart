@@ -1,3 +1,4 @@
+import 'package:shopfeeforemployee/core/common/models/result.dart';
 import 'package:shopfeeforemployee/core/common/models/result_list.dart';
 import 'package:shopfeeforemployee/features/orders/data/datasources/orders_service.dart';
 import 'package:shopfeeforemployee/features/orders/data/models/order_information_model.dart';
@@ -16,13 +17,14 @@ class OrdersRepositoryImpl implements OrdersRepository {
       OrderParamsEntity params) async {
     final queryParams = OrderParamsModel.fromEntity(params);
     final response = await _ordersService.getOrderListByStatus(queryParams);
-    final resultList = ResultList(
+    final result = Result(
       success: response.data["success"],
       message: response.data["message"],
       data: response.data["data"],
     );
+    final orderJsonList = result.data!["orderList"] as List<dynamic>;
     List<OrderInformationModel> orderModelList =
-        resultList.data!.map((e) => OrderInformationModel.fromJson(e)).toList();
+        orderJsonList.map((e) => OrderInformationModel.fromJson(e)).toList();
     List<OrderInformationEntity> orderEntityList =
         orderModelList.map((e) => OrderInformationEntity.fromModel(e)).toList();
     return orderEntityList;

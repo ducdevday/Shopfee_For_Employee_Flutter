@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shopfeeforemployee/core/common/enum/cancel_request_action.dart';
+import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/core/common/models/result.dart';
 import 'package:shopfeeforemployee/core/common/models/result_list.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/datasources/order_detail_service.dart';
@@ -70,5 +72,12 @@ class OrderDetailRepositoryImpl implements OrderDetailRepository {
   Future<void> completeTransaction(String transactionId) async {
     final response =
         await _orderDetailService.completeTransaction(transactionId);
+  }
+
+  @override
+  Future<void> handleRequestCancel(
+      String orderId, CancelRequestAction action) async {
+    final response =
+        await _orderDetailService.handleRequestCancel(orderId, action);
   }
 }

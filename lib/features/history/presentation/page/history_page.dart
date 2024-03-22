@@ -25,7 +25,7 @@ class HistoryPage extends StatelessWidget {
                       unselectedLabelColor: AppColor.disableColor,
                       indicatorColor: AppColor.primaryColor,
                       labelColor: AppColor.primaryColor,
-                      tabs: OrderStatus.orderStatusFinished()
+                      tabs: OrderStatusExtension.orderStatusFinished()
                           .map((e) => Tab(
                                 child: Text(
                                   e,

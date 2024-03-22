@@ -1,18 +1,31 @@
 import 'package:dio/dio.dart';
 import 'package:shopfeeforemployee/core/base/dio_service.dart';
 import 'package:shopfeeforemployee/core/base/fcm_service.dart';
+import 'package:shopfeeforemployee/core/common/enum/cancel_request_action.dart';
+import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/models/event_log_model.dart';
 
 class OrderDetailService {
   Future<Response> getOrderDetail(String orderId) async {
     final response = await DioService.instance
-        .get("${DioService.orderPath}/details/$orderId");
+        .get("${DioService.orderPath}/$orderId/details");
     return response;
   }
 
   Future<Response> getEventLogs(String orderId) async {
     final response = await DioService.instance
-        .get("${DioService.orderPath}/status/$orderId");
+        .get("${DioService.orderPath}/$orderId/status-line");
+    return response;
+  }
+
+  Future<Response> handleRequestCancel(
+      String orderId, CancelRequestAction action) async {
+    Map<String, dynamic> body = {
+      "status": action.name,
+    };
+    final response = await DioService.instance.patch(
+        "${DioService.orderPath}/$orderId/process-cancellation-request",
+        data: body);
     return response;
   }
 
@@ -22,7 +35,7 @@ class OrderDetailService {
       "description": eventLog.description
     };
     final response = await DioService.instance
-        .patch("${DioService.orderPath}/employee/$orderId", data: body);
+        .patch("${DioService.orderPath}/$orderId/employee/event", data: body);
     return response;
   }
 
@@ -32,9 +45,10 @@ class OrderDetailService {
     return response;
   }
 
-  Future<Response> sendOrderMessage(String title, String body, String destinationId, String fcmToken) async {
+  Future<Response> sendOrderMessage(
+      String title, String body, String destinationId, String fcmToken) async {
     Map<String, dynamic> data = {
-      "priority" :"high",
+      "priority": "high",
       "data": {
         "click_action": "FLUTTER_NOTIFICATION_CLICK",
         "status": "done",
@@ -51,7 +65,8 @@ class OrderDetailService {
       // "to": fcmToken
       "registration_ids": [fcmToken],
     };
-    final response = await FCMService.instance.post("${FCMService.FCM_PATH}", data: data);
+    final response =
+        await FCMService.instance.post("${FCMService.FCM_PATH}", data: data);
     return response;
   }
 }

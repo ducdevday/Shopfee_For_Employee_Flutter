@@ -17,37 +17,24 @@ class OrderDetailLoadInProcess extends OrderDetailState {
 class OrderDetailLoadSuccess extends OrderDetailState {
   final OrderDetailEntity orderDetail;
   final List<EventLogEntity> eventLogs;
-  final List<OrderStatus> ordersTracking;
   final ReasonCancelType? reasonCancel;
   final bool isAddEventLogClicked;
 
   const OrderDetailLoadSuccess(
       {required this.orderDetail,
       required this.eventLogs,
-      this.ordersTracking = const [
-        OrderStatus.CREATED,
-        OrderStatus.ACCEPTED,
-        OrderStatus.DELIVERING,
-        OrderStatus.SUCCEED
-      ],
       this.reasonCancel,
       this.isAddEventLogClicked = false});
+
+  EventLogEntity get lastEventLog => eventLogs.first;
 
   @override
   List<Object?> get props => [
         orderDetail,
         eventLogs,
-        ordersTracking,
         reasonCancel,
         isAddEventLogClicked,
       ];
-
-  OrderStatus? get currentOrderStatus => eventLogs.last.orderStatus;
-
-  int? get currentIndex => eventLogs.last.orderStatus?.index;
-
-  OrderStatus? get nextOrderStatus =>
-      currentIndex == null ? null : ordersTracking.elementAt(currentIndex! + 1);
 
   OrderDetailLoadSuccess copyWith({
     OrderDetailEntity? orderDetail,
@@ -59,7 +46,6 @@ class OrderDetailLoadSuccess extends OrderDetailState {
     return OrderDetailLoadSuccess(
       orderDetail: orderDetail ?? this.orderDetail,
       eventLogs: eventLogs ?? this.eventLogs,
-      ordersTracking: ordersTracking ?? this.ordersTracking,
       reasonCancel: reasonCancel ?? this.reasonCancel,
       isAddEventLogClicked: isAddEventLogClicked ?? this.isAddEventLogClicked,
     );

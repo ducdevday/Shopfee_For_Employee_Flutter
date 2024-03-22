@@ -11,7 +11,7 @@ class PaymentSummary extends StatelessWidget {
       builder: (context, state) {
         if (state is OrderDetailLoadSuccess) {
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(AppDimen.spacing),
             child: Column(
               children: [
                 Align(
@@ -20,25 +20,25 @@ class PaymentSummary extends StatelessWidget {
                       style: AppStyle.mediumTitleStyleDark
                           .copyWith(color: AppColor.headingColor)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Price",
+                      "Item Price",
                       style: AppStyle.normalTextStyleDark
                           .copyWith(fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      FormatUtil.formatMoney(state.orderDetail.total!),
+                      FormatUtil.formatMoney(state.orderDetail.totalItemPrice!),
                       style: AppStyle.normalTextStyleDark
                           .copyWith(fontWeight: FontWeight.w400),
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Row(
@@ -50,7 +50,8 @@ class PaymentSummary extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      "0đ",
+                      FormatUtil.formatMoney(
+                          state.orderDetail.shippingFee ?? 0),
                       style: AppStyle.normalTextStyleDark
                           .copyWith(fontWeight: FontWeight.w400),
                     )
@@ -81,7 +82,31 @@ class PaymentSummary extends StatelessWidget {
                 //     )
                 //   ],
                 // ),
-                SizedBox(
+                if (state.orderDetail.coin != null &&
+                    state.orderDetail.coin != 0)
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Applied Coin",
+                            style: AppStyle.normalTextStyleDark
+                                .copyWith(fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            "- ${FormatUtil.formatMoney(state.orderDetail.coin)}",
+                            style: AppStyle.normalTextStyleDark
+                                .copyWith(fontWeight: FontWeight.w400),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                const SizedBox(
                   height: 8,
                 ),
                 Row(
@@ -92,12 +117,12 @@ class PaymentSummary extends StatelessWidget {
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(
-                      FormatUtil.formatMoney(state.orderDetail.total!),
+                      FormatUtil.formatMoney(state.orderDetail.totalPayment!),
                       style: AppStyle.mediumTitleStyleDark,
                     )
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 10,
                 ),
                 Column(
@@ -109,13 +134,13 @@ class PaymentSummary extends StatelessWidget {
                           color: AppColor.headingColor,
                           fontWeight: FontWeight.w500),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
-                    buildPaymentMethod(state),
+                    buildPaymentMethod(state.orderDetail.transaction?.type),
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 20,
                 ),
                 Align(
@@ -129,7 +154,7 @@ class PaymentSummary extends StatelessWidget {
                             color: AppColor.headingColor,
                             fontWeight: FontWeight.w500),
                       ),
-                      buildPaymentStatus(state),
+                      buildPaymentStatus(state.orderDetail.transaction?.status),
                     ],
                   ),
                 ),
@@ -159,57 +184,34 @@ class PaymentSummary extends StatelessWidget {
             ),
           );
         } else {
-          return SizedBox();
+          return const SizedBox();
         }
       },
     );
   }
 
-  StatelessWidget buildPaymentStatus(OrderDetailLoadSuccess state) {
-    // TODO: Need to fix
-    if (state.currentOrderStatus == OrderStatus.SUCCEED) {
-      return MyLabel(label: "Paid", color: AppColor.success);
-    }
-    if (state.orderDetail.transaction!.status == PaymentStatus.UNPAID) {
-      return MyLabel(label: "Unpaid", color: AppColor.warning);
-    } else if (state.orderDetail.transaction!.status == PaymentStatus.PAID) {
-      return MyLabel(label: "Paid", color: AppColor.success);
-    } else if (state.orderDetail.transaction!.status ==
-        PaymentStatus.REFUNDED) {
-      return MyLabel(label: "Refunded", color: AppColor.info);
-    }
-    return SvgPicture.asset("assets/icons/ic_unpaid.svg");
+  Widget buildPaymentStatus(PaymentStatus? paymentStatus) {
+    if (paymentStatus == null) return SizedBox();
+    return MyLabel(
+        label: PaymentStatus.getFormattedName(paymentStatus),
+        color: PaymentStatus.getColor(paymentStatus));
   }
 
-  Row buildPaymentMethod(OrderDetailLoadSuccess state) {
-    if (state.orderDetail.transaction!.type == PaymentType.CASHING) {
-      return Row(
-        children: [
-          Image.asset(
-            AppPath.icCash,
-            width: 24,
-            height: 24,
-          ),
-          SizedBox(
-            width: 4,
-          ),
-          Text("Cash", style: AppStyle.normalTextStyleDark),
-        ],
-      );
-    } else {
-      return Row(
-        children: [
-          Image.asset(
-            AppPath.icVnPay,
-            width: 24,
-            height: 24,
-          ),
-          SizedBox(
-            width: 4,
-          ),
-          Text("VNPay", style: AppStyle.normalTextStyleDark),
-        ],
-      );
-    }
+  Widget buildPaymentMethod(PaymentType? paymentType) {
+    if (paymentType == null) return SizedBox();
+    return Row(
+      children: [
+        Image.asset(
+          PaymentType.getIconPath(paymentType),
+          width: 24,
+          height: 24,
+        ),
+        const SizedBox(
+          width: 4,
+        ),
+        Text(PaymentType.getFormattedName(paymentType),
+            style: AppStyle.normalTextStyleDark),
+      ],
+    );
   }
 }

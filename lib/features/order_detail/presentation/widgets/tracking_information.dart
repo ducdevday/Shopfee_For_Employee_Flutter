@@ -8,55 +8,18 @@ class TrackingInformation extends StatefulWidget {
 }
 
 class _TrackingInformationState extends State<TrackingInformation> {
-  String getTrackingImage(OrderStatus status, OrderStatus currentStatus) {
-    if (status == OrderStatus.CREATED) {
-      return AppPath.icStatusCreated;
-    } else if (status == OrderStatus.ACCEPTED) {
-      if (currentStatus == OrderStatus.CANCELED) {
-        return AppPath.icStatusCanceled;
-      }
-      return AppPath.icStatusAccepted;
-    } else if (status == OrderStatus.DELIVERING) {
-      return AppPath.icStatusDelivering;
-    } else if (status == OrderStatus.SUCCEED) {
-      return AppPath.icStatusSucceed;
-    } else {
-      return AppPath.icStatusCanceled;
-    }
+  late final ValueNotifier<bool> showFullTrackingListener;
+
+  @override
+  void initState() {
+    super.initState();
+    showFullTrackingListener = ValueNotifier(false);
   }
 
-  Color getTrackingColor(
-      int index, int currentIndex, OrderStatus currentStatus) {
-    if (currentStatus == OrderStatus.CANCELED) {
-      currentIndex = 1;
-    }
-    if (index == currentIndex) {
-      if (currentStatus == OrderStatus.CANCELED) {
-        return AppColor.error;
-      }
-      return AppColor.inProgressColor;
-    } else if (index < currentIndex) {
-      return AppColor.completeColor;
-    } else {
-      return AppColor.todoColor;
-    }
-  }
-
-  String getTrackingName(OrderStatus status, OrderStatus currentStatus) {
-    if (status == OrderStatus.CREATED) {
-      return status.name;
-    } else if (status == OrderStatus.ACCEPTED) {
-      if (currentStatus == OrderStatus.CANCELED) {
-        return status.name;
-      }
-      return status.name;
-    } else if (status == OrderStatus.DELIVERING) {
-      return status.name;
-    } else if (status == OrderStatus.SUCCEED) {
-      return status.name;
-    } else {
-      return status.name;
-    }
+  @override
+  void dispose() {
+    showFullTrackingListener.dispose();
+    super.dispose();
   }
 
   @override
@@ -64,157 +27,192 @@ class _TrackingInformationState extends State<TrackingInformation> {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
         if (state is OrderDetailLoadSuccess) {
-          return SizedBox(
-            height: 175,
-            child: Timeline.tileBuilder(
-              theme: TimelineThemeData(
-                direction: Axis.horizontal,
-                connectorTheme: const ConnectorThemeData(
-                  space: 30.0,
-                  thickness: 5.0,
-                ),
-              ),
-              builder: TimelineTileBuilder.connected(
-                connectionDirection: ConnectionDirection.before,
-                itemExtentBuilder: (_, __) =>
-                    (MediaQuery.of(context).size.width -
-                        AppDimen.screenPadding * 2) /
-                    state.ordersTracking.length,
-                oppositeContentsBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Image.asset(
-                      getTrackingImage(state.ordersTracking[index],
-                          state.currentOrderStatus!),
-                      width: 50.0,
-                      color: getTrackingColor(
-                          index, state.currentIndex!, state.currentOrderStatus!),
-                    ),
-                  );
-                },
-                contentsBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          getTrackingName(state.ordersTracking[index],
-                              state.currentOrderStatus!),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: getTrackingColor(index, state.currentIndex!,
-                                state.currentOrderStatus!),
-                          ),
-                        ),
-                        Builder(builder: (context) {
-                          if (state.eventLogs.asMap().containsKey(index)) {
-                            return Column(
-                              children: [
-                                Text(
-                                  FormatUtil.formatTime(
-                                      state.eventLogs[index].time!),
-                                  style: TextStyle(
-                                    color: getTrackingColor(
-                                        index,
-                                        state.currentIndex!,
-                                        state.currentOrderStatus!),
-                                  ),
-                                ),
-                                Text(
-                                  FormatUtil.formatDate2(
-                                      state.eventLogs[index].time!),
-                                  style: TextStyle(
-                                    color: getTrackingColor(
-                                        index,
-                                        state.currentIndex!,
-                                        state.currentOrderStatus!),
-                                  ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        })
-                      ],
-                    ),
-                  );
-                },
-                indicatorBuilder: (_, index) {
-                  // var color;
-                  // var child;
-                  // if (index == _processIndex) {
-                  //   color = inProgressColor;
-                  // child = Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: CircularProgressIndicator(
-                  //     strokeWidth: 3.0,
-                  //     valueColor: AlwaysStoppedAnimation(Colors.white),
-                  //   ),
-                  // );
-                  //} else if (index < _processIndex) {
-                  // color = completeColor;
-                  // child = Icon(
-                  //   Icons.check,
-                  //   color: Colors.white,
-                  //   size: 15.0,
-                  // );
-                  // } else {
-                  // color = todoColor;
-                  // }
-                  return Stack(
+          final List<EventLogEntity> eventLogs =
+              state.eventLogs.reversed.toList();
+          final EventLogEntity lastEventLog = state.lastEventLog;
+          return Padding(
+            padding: const EdgeInsets.all(AppDimen.spacing),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
                     children: [
-                      OutlinedDotIndicator(
-                        borderWidth: 4.0,
-                        color: getTrackingColor(index, state.currentIndex!,
-                            state.currentOrderStatus!),
+                      Expanded(
+                        child: Text(
+                          "Tracking",
+                          style: AppStyle.mediumTitleStyleDark.copyWith(
+                              color: AppColor.headingColor,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
+                      InkWell(
+                          onTap: () {
+                            showFullTrackingListener.value =
+                                !showFullTrackingListener.value;
+                          },
+                          child: ValueListenableBuilder(
+                            valueListenable: showFullTrackingListener,
+                            builder: (BuildContext context,
+                                bool showFullTracking, Widget? child) {
+                              return Text(
+                                showFullTracking ? "Less" : "More",
+                                style: AppStyle.mediumTextStyleDark,
+                              );
+                            },
+                          ))
                     ],
-                  );
-                },
-                connectorBuilder: (_, index, type) {
-                  if (index > 0) {
-                    if (index == state.currentIndex) {
-                      final prevColor = getTrackingColor(index - 1,
-                          state.currentIndex!, state.currentOrderStatus!);
-                      final color = getTrackingColor(
-                          index, state.currentIndex!, state.currentOrderStatus!);
-                      List<Color> gradientColors;
-                      if (type == ConnectorType.start) {
-                        gradientColors = [
-                          Color.lerp(prevColor, color, 0.5)!,
-                          color
-                        ];
-                      } else {
-                        gradientColors = [
-                          prevColor,
-                          Color.lerp(prevColor, color, 0.5)!
-                        ];
-                      }
-                      return DecoratedLineConnector(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: gradientColors,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                ValueListenableBuilder(
+                  valueListenable: showFullTrackingListener,
+                  builder: (BuildContext context, bool showFullTracking,
+                      Widget? child) {
+                    if (showFullTracking) {
+                      return Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: AppDimen.spacing),
+                        child: FixedTimeline.tileBuilder(
+                          theme: TimelineThemeData(
+                            nodePosition: 0,
+                            color: Color(0xff989898),
+                            indicatorTheme: IndicatorThemeData(
+                              position: 0,
+                              size: 12.0,
+                            ),
+                            connectorTheme: ConnectorThemeData(
+                              thickness: 1,
+                            ),
+                          ),
+                          builder: TimelineTileBuilder.connected(
+                            connectionDirection: ConnectionDirection.before,
+                            itemCount: eventLogs.length,
+                            contentsBuilder: (context, index) => Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${eventLogs[index].orderStatus?.getFormattedName()}",
+                                    style: AppStyle.mediumTextStyleDark
+                                        .copyWith(color: AppColor.primaryColor),
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    "${FormatUtil.formatTime(eventLogs[index].time)} - ${FormatUtil.formatDate(eventLogs[index].time)}",
+                                    style: AppStyle.smallTextStyleDark,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            indicatorBuilder: (_, index) {
+                              if (eventLogs[index].orderStatus !=
+                                  OrderStatus.SUCCEED) {
+                                return DotIndicator(
+                                  color: AppColor.primaryColor,
+                                );
+                              } else {
+                                return DotIndicator(
+                                  color: AppColor.primaryColor,
+                                  child: const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 10.0,
+                                  ),
+                                );
+                              }
+                            },
+                            itemExtentBuilder: (_, index) {
+                              return index < eventLogs.length - 1 ? 70.0 : 40.0;
+                            },
+                            connectorBuilder: (_, index, ___) =>
+                                DashedLineConnector(
+                              color: AppColor.primaryColor,
+                              thickness: 1.5,
+                              dash: 1,
+                              gap: 2,
+                            ),
                           ),
                         ),
                       );
                     } else {
-                      return SolidLineConnector(
-                        color: getTrackingColor(index, state.currentIndex!,
-                            state.currentOrderStatus!),
-                      );
+                      return child!;
                     }
-                  } else {
-                    return null;
-                  }
-                },
-                itemCount: state.ordersTracking.length,
-              ),
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppDimen.spacing),
+                    child: FixedTimeline.tileBuilder(
+                      theme: TimelineThemeData(
+                        nodePosition: 0,
+                        color: Color(0xff989898),
+                        indicatorTheme: IndicatorThemeData(
+                          position: 0,
+                          size: 12.0,
+                        ),
+                        connectorTheme: ConnectorThemeData(
+                          thickness: 1,
+                        ),
+                      ),
+                      builder: TimelineTileBuilder.connected(
+                        connectionDirection: ConnectionDirection.before,
+                        itemCount: 1,
+                        contentsBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${lastEventLog.orderStatus?.getFormattedName()}",
+                                style: AppStyle.mediumTextStyleDark
+                                    .copyWith(color: AppColor.primaryColor),
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Text(
+                                "${FormatUtil.formatTime(lastEventLog.time)} - ${FormatUtil.formatDate(lastEventLog.time)}",
+                                style: AppStyle.smallTextStyleDark,
+                              ),
+                            ],
+                          ),
+                        ),
+                        indicatorBuilder: (_, index) {
+                          if (lastEventLog.orderStatus != OrderStatus.SUCCEED) {
+                            return DotIndicator(
+                              color: AppColor.primaryColor,
+                            );
+                          } else {
+                            return DotIndicator(
+                              color: AppColor.primaryColor,
+                              child: const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 10.0,
+                              ),
+                            );
+                          }
+                        },
+                        connectorBuilder: (_, index, ___) =>
+                            DashedLineConnector(
+                          color: AppColor.primaryColor,
+                          thickness: 1.5,
+                          dash: 1,
+                          gap: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
-        } else {
-          return const SizedBox();
         }
+        return SizedBox();
       },
     );
   }

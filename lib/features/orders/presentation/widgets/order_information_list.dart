@@ -12,9 +12,7 @@ class OrderInformationList extends StatefulWidget {
   State<OrderInformationList> createState() => _OrderInformationListState();
 }
 
-class _OrderInformationListState
-    extends State<OrderInformationList> // with AutomaticKeepAliveClientMixin
-{
+class _OrderInformationListState extends State<OrderInformationList> {
   late final OrdersBloc _bloc;
   late final ScrollController scrollController;
   late bool isLoadingMore;
@@ -114,7 +112,7 @@ class _OrderInformationListState
                       height: 16,
                     ),
                     Text(
-                      OrderStatus.getEmptyOrderStatusList(widget.orderStatus),
+                      widget.orderStatus.getEmptyOrderStatusList(),
                       style: AppStyle.mediumTextStyleDark
                           .copyWith(color: AppColor.nonactiveColor),
                     )

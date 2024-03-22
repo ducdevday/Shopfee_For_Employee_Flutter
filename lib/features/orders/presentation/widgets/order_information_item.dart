@@ -88,11 +88,10 @@ class OrderInformationItem extends StatelessWidget {
                                   height: 4,
                                 ),
                                 Text(
-                                  OrderStatus.getFormattedName(
-                                      order.statusLastEvent),
+                                  order.statusLastEvent.getFormattedName(),
                                   style: AppStyle.smallTextStyleDark.copyWith(
-                                      color: OrderStatus.getBadgeColor(
-                                          order.statusLastEvent),
+                                      color:
+                                          order.statusLastEvent.getBadgeColor(),
                                       fontWeight: FontWeight.w500),
                                 )
                               ],

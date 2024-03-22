@@ -9,7 +9,7 @@ class OrderInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(AppDimen.spacing),
       child: BlocBuilder<OrderDetailBloc, OrderDetailState>(
         builder: (context, state) {
           if (state is OrderDetailLoadSuccess) {

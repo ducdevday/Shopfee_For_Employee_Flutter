@@ -1,3 +1,4 @@
+import 'package:shopfeeforemployee/core/common/enum/cancel_request_action.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
@@ -16,6 +17,10 @@ abstract class OrderDetailUseCase {
       OrderStatus status, String orderId, String fcmToken);
 
   Future<void> completeTransaction(String transactionId);
+
+  Future<void> acceptRequestCancel(String orderId);
+
+  Future<void> refuseRequestCancel(String orderId);
 }
 
 class OrderDetailUseCaseImpl extends OrderDetailUseCase {
@@ -87,5 +92,17 @@ class OrderDetailUseCaseImpl extends OrderDetailUseCase {
   @override
   Future<void> completeTransaction(String transactionId) async {
     return await _orderDetailRepository.completeTransaction(transactionId);
+  }
+
+  @override
+  Future<void> acceptRequestCancel(String orderId) async {
+    return await _orderDetailRepository.handleRequestCancel(
+        orderId, CancelRequestAction.ACCEPTED);
+  }
+
+  @override
+  Future<void> refuseRequestCancel(String orderId) async {
+    return await _orderDetailRepository.handleRequestCancel(
+        orderId, CancelRequestAction.REFUSED);
   }
 }

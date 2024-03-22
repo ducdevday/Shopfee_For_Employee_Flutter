@@ -10,50 +10,30 @@ class Note extends StatelessWidget {
         if (state is OrderDetailLoadSuccess &&
             state.orderDetail.note != null &&
             state.orderDetail.note!.isNotEmpty) {
-          return Column(
-            children: [
-              Container(
-                height: 4,
-                color: Color(0xffEFEBE9),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Note",
-                          style: AppStyle.mediumTitleStyleDark
-                              .copyWith(color: AppColor.headingColor)),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    TextFormField(
-                      initialValue: state.orderDetail.note,
-                      enabled: false,
-                      style: TextStyle(fontSize: 14),
-                      decoration: InputDecoration(
-                        disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xffCCCCCC)),
-                            borderRadius: BorderRadius.circular(8)),
-                        contentPadding: EdgeInsets.all(8),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xffCCCCCC)),
-                            borderRadius: BorderRadius.circular(8)),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xffCCCCCC)),
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                    )
-                  ],
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  AppPath.icNote,
+                  width: AppDimen.mediumSize,
+                  height: AppDimen.mediumSize,
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: AppDimen.spacing,
+                ),
+                Expanded(
+                  child: Text(
+                    "${state.orderDetail.note}",
+                    style: AppStyle.normalTextStyleDark,
+                  ),
+                )
+              ],
+            ),
           );
-        } else {
-          return SizedBox();
         }
+        return SizedBox();
       },
     );
   }

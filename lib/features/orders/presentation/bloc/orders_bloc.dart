@@ -4,11 +4,11 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   final OrdersUseCase _ordersUseCase;
 
   OrdersBloc(this._ordersUseCase) : super(OrdersInitial()) {
-    on<OrderLoadInformation>(_onLoadShippingOrder);
-    on<OrderLoadMoreInformation>(_onLoadMoreShippingOrder);
+    on<OrderLoadInformation>(_onOrderLoadInformation);
+    on<OrderLoadMoreInformation>(_onOrderLoadMoreInformation);
   }
 
-  FutureOr<void> _onLoadShippingOrder(
+  FutureOr<void> _onOrderLoadInformation(
       OrderLoadInformation event, Emitter<OrdersState> emit) async {
     try {
       emit(OrdersLoadInProcess());
@@ -27,7 +27,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     }
   }
 
-  FutureOr<void> _onLoadMoreShippingOrder(
+  FutureOr<void> _onOrderLoadMoreInformation(
       OrderLoadMoreInformation event, Emitter<OrdersState> emit) async {
     try {
       if (state is ShippingOrderLoadSuccess) {

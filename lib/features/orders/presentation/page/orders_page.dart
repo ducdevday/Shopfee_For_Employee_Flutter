@@ -23,7 +23,7 @@ class OrdersPage extends StatelessWidget {
               unselectedLabelColor: AppColor.disableColor,
               indicatorColor: AppColor.primaryColor,
               labelColor: AppColor.primaryColor,
-              tabs: OrderStatus.orderStatusShippingProcessing()
+              tabs: OrderStatusExtension.orderStatusShippingProcessing()
                   .map((e) => Tab(
                         child: Text(
                           e,

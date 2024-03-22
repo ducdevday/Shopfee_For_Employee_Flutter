@@ -4,10 +4,10 @@ abstract class OrderDetailEvent extends Equatable {
   const OrderDetailEvent();
 }
 
-class LoadOrderDetail extends OrderDetailEvent {
+class OrderDetailLoadInformation extends OrderDetailEvent {
   final String orderId;
 
-  const LoadOrderDetail({
+  const OrderDetailLoadInformation({
     required this.orderId,
   });
 
@@ -15,11 +15,11 @@ class LoadOrderDetail extends OrderDetailEvent {
   List<Object> get props => [orderId];
 }
 
-class AddEventLog extends OrderDetailEvent {
+class OrderDetailAddEventLog extends OrderDetailEvent {
   final String orderId;
   final EventLogEntity eventLog;
 
-  const AddEventLog({
+  const OrderDetailAddEventLog({
     required this.orderId,
     required this.eventLog,
   });
@@ -28,10 +28,32 @@ class AddEventLog extends OrderDetailEvent {
   List<Object> get props => [orderId, eventLog];
 }
 
-class ChooseReasonCancel extends OrderDetailEvent {
+class OrderDetailAcceptRequestCancel extends OrderDetailEvent {
+  final String orderId;
+
+  const OrderDetailAcceptRequestCancel({
+    required this.orderId,
+  });
+
+  @override
+  List<Object> get props => [orderId];
+}
+
+class OrderDetailRefuseRequestCancel extends OrderDetailEvent {
+  final String orderId;
+
+  const OrderDetailRefuseRequestCancel({
+    required this.orderId,
+  });
+
+  @override
+  List<Object> get props => [orderId];
+}
+
+class OrderDetailChooseReasonCancel extends OrderDetailEvent {
   final ReasonCancelType reasonCancel;
 
-  const ChooseReasonCancel({
+  const OrderDetailChooseReasonCancel({
     required this.reasonCancel,
   });
 

@@ -1,7 +1,7 @@
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/models/event_log_model.dart';
 
-class EventLogEntity{
+class EventLogEntity {
   final OrderStatus? orderStatus;
   final DateTime? time;
   final String? description;
@@ -9,7 +9,7 @@ class EventLogEntity{
 
   const EventLogEntity({
     required this.orderStatus,
-    required this.time,
+    this.time,
     required this.description,
     this.makerByEmployee,
   });

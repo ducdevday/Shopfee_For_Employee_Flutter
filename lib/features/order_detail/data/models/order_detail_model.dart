@@ -1,10 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shopfeeforemployee/core/common/models/order_type.dart';
-import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
+import 'package:shopfeeforemployee/features/order_detail/data/models/order_product_model.dart';
 
-import 'address_model.dart';
-import 'product_model.dart';
-import 'review_model.dart';
+import 'branch_model.dart';
+import 'receiver_information_model.dart';
 import 'transaction_model.dart';
 
 part 'order_detail_model.g.dart';
@@ -13,26 +12,30 @@ part 'order_detail_model.g.dart';
 class OrderDetailModel {
   String? id;
   String? note;
-  double? total;
+  num? totalPayment;
+  num? shippingFee;
+  num? totalItemPrice;
   OrderType? orderType;
-  AddressModel? address;
+  ReceiverInformationModel? receiverInformation;
   DateTime? createdAt;
-  List<ProductModel>? products;
+  List<OrderProductModel>? itemList;
   TransactionModel? transaction;
-  ReviewModel? review;
-  String? userId;
+  BranchModel? branch;
+  int? coin;
 
   OrderDetailModel({
     this.id,
     this.note,
-    this.total,
+    this.totalPayment,
+    this.shippingFee,
+    this.totalItemPrice,
     this.orderType,
-    this.address,
+    this.receiverInformation,
     this.createdAt,
-    this.products,
+    this.itemList,
     this.transaction,
-    this.review,
-    this.userId,
+    this.branch,
+    this.coin,
   });
 
   factory OrderDetailModel.fromJson(Map<String, dynamic> json) =>

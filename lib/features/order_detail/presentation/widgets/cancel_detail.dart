@@ -7,93 +7,94 @@ class CancelDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
-        if (state is OrderDetailLoadSuccess &&
-            state.currentOrderStatus == OrderStatus.CANCELED) {
-          return Column(
-            children: [
-              Container(
-                height: 4,
-                color: const Color(0xffEFEBE9),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Canceled Detail",
-                          style: AppStyle.mediumTitleStyleDark
-                              .copyWith(color: AppColor.headingColor)),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Request By",
-                          style: AppStyle.normalTextStyleDark
-                              .copyWith(fontWeight: FontWeight.w400),
-                        ),
-                        Text(
-                          state.eventLogs.last.makerByEmployee!
-                              ? "Employee"
-                              : "User",
-                          style: AppStyle.normalTextStyleDark
-                              .copyWith(fontWeight: FontWeight.w400),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Request at",
-                          style: AppStyle.normalTextStyleDark
-                              .copyWith(fontWeight: FontWeight.w400),
-                        ),
-                        Text(
-                          "${FormatUtil.formatTime(state.eventLogs.last.time!)} ${FormatUtil.formatDate2(state.eventLogs.last.time!)}",
-                          style: AppStyle.normalTextStyleDark
-                              .copyWith(fontWeight: FontWeight.w400),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Reason",
-                          style: AppStyle.normalTextStyleDark
-                              .copyWith(fontWeight: FontWeight.w400),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: Text(
-                            "${state.eventLogs.last.description}",
+        if (state is OrderDetailLoadSuccess) {
+          final lastEventLog = state.lastEventLog;
+          if (lastEventLog.orderStatus == OrderStatus.CANCELED) {
+            return Column(
+              children: [
+                Container(
+                  height: 4,
+                  color: const Color(0xffEFEBE9),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(AppDimen.spacing),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Canceled Detail",
+                            style: AppStyle.mediumTitleStyleDark
+                                .copyWith(color: AppColor.headingColor)),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Request By",
                             style: AppStyle.normalTextStyleDark
                                 .copyWith(fontWeight: FontWeight.w400),
-                            textAlign: TextAlign.right,
                           ),
-                        )
-                      ],
-                    ),
-                  ],
+                          Text(
+                            lastEventLog.makerByEmployee!
+                                ? "Employee"
+                                : "User",
+                            style: AppStyle.normalTextStyleDark
+                                .copyWith(fontWeight: FontWeight.w400),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Request at",
+                            style: AppStyle.normalTextStyleDark
+                                .copyWith(fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            "${FormatUtil.formatTime(lastEventLog.time)} ${FormatUtil.formatDate2(lastEventLog.time)}",
+                            style: AppStyle.normalTextStyleDark
+                                .copyWith(fontWeight: FontWeight.w400),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Reason",
+                            style: AppStyle.normalTextStyleDark
+                                .copyWith(fontWeight: FontWeight.w400),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Text(
+                              "${lastEventLog.description}",
+                              style: AppStyle.normalTextStyleDark
+                                  .copyWith(fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.right,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        } else {
-          return SizedBox();
+              ],
+            );
+          }
         }
+        return SizedBox();
       },
     );
   }

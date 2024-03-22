@@ -47,7 +47,7 @@ class ReasonCancelSheet extends StatelessWidget {
                   itemBuilder: (context, index) => InkWell(
                         onTap: () {
                           context.read<OrderDetailBloc>().add(
-                              ChooseReasonCancel(
+                              OrderDetailChooseReasonCancel(
                                   reasonCancel:
                                       ReasonCancelType.values[index]));
                         },
@@ -67,7 +67,7 @@ class ReasonCancelSheet extends StatelessWidget {
                                   groupValue: state.reasonCancel,
                                   onChanged: (ReasonCancelType? value) {
                                     context.read<OrderDetailBloc>().add(
-                                        ChooseReasonCancel(
+                                        OrderDetailChooseReasonCancel(
                                             reasonCancel: ReasonCancelType
                                                 .values[index]));
                                   })
@@ -94,7 +94,7 @@ class ReasonCancelSheet extends StatelessWidget {
                                   content: "Are you sure to CANCEL this order",
                                   callbackOK: () async {
                                     context.read<OrderDetailBloc>().add(
-                                        AddEventLog(
+                                        OrderDetailAddEventLog(
                                             orderId: orderId,
                                             eventLog: EventLogEntity(
                                                 orderStatus:

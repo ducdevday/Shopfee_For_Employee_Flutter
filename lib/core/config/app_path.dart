@@ -30,6 +30,8 @@ class AppPath {
 
   static const String icVnPay = "assets/icons/ic_vnpay.png";
 
+  static const String icZaloPay = "assets/icons/ic_zalopay.png";
+
   static const String icEdit = "assets/icons/ic_edit.svg";
 
   static const String icUnpaid = "assets/icons/ic_unpaid.svg";
@@ -64,4 +66,10 @@ class AppPath {
   static const String icStatusCanceled = "assets/images/status5.png";
 
   static const String icNoOrder = "assets/icons/ic_no_order.png";
+
+  static const String icNote = "assets/icons/ic_note.png";
+
+  static const String icStoreMark = "assets/icons/ic_store_mark.png";
+
+  static const String icClock = "assets/icons/ic_clock.png";
 }

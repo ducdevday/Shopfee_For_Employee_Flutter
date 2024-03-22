@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/common/models/order_type.dart';
+import 'package:shopfeeforemployee/core/common/extension/order_status_extension.dart';
 import 'package:shopfeeforemployee/features/orders/domain/entities/order_params_entity.dart';
 
 part 'order_params_model.g.dart';

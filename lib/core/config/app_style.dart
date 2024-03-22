@@ -21,11 +21,13 @@ class AppStyle {
       fontSize: AppDimen.mediumTitle,
       fontWeight: FontWeight.w600,
       overflow: TextOverflow.clip);
+
   static final mediumTextStyleDark = TextStyle(
       color: AppColor.paragraphColor,
       fontSize: AppDimen.normalText,
       fontWeight: FontWeight.w500,
       overflow: TextOverflow.clip);
+
   static final normalTextStyleDark = TextStyle(
       color: AppColor.paragraphColor,
       fontSize: AppDimen.normalText,
