@@ -6,6 +6,7 @@ import 'package:shopfeeforemployee/core/common/models/result_list.dart';
 import 'package:shopfeeforemployee/core/errors/failures.dart';
 import 'package:shopfeeforemployee/features/history/data/datasources/history_service.dart';
 import 'package:shopfeeforemployee/features/history/data/models/history_model.dart';
+import 'package:shopfeeforemployee/features/history/data/models/history_params.dart';
 import 'package:shopfeeforemployee/features/history/domain/entities/history_entity.dart';
 import 'package:shopfeeforemployee/features/history/domain/repositories/history_repository.dart';
 
@@ -16,15 +17,15 @@ class HistoryRepositoryImpl implements HistoryRepository {
 
   @override
   Future<List<HistoryEntity>> getHistoryByStatus(
-      int page, int size, OrderStatus status, String searchQuery) async {
-    final response =
-        await _historyService.getHistoryStatus(page, size, status, searchQuery);
-    final result = ResultList(
+      HistoryParams params, OrderStatus status) async {
+    final response = await _historyService.getHistoryStatus(params, status);
+    final result = Result(
         success: response.data["success"],
         message: response.data["message"],
         data: response.data["data"]);
+    final historyJsonList = result.data!["orderList"] as List<dynamic>;
     List<HistoryModel> historyModelList =
-        result.data!.map((e) => HistoryModel.fromJson(e)).toList();
+        historyJsonList.map((e) => HistoryModel.fromJson(e)).toList();
     List<HistoryEntity> historyEntityList =
         historyModelList.map((e) => HistoryEntity.fromModel(e)).toList();
     return historyEntityList;

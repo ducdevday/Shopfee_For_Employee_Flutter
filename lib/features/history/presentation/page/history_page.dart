@@ -1,16 +1,22 @@
 part of history;
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
   static const String route = "/history";
+
   const HistoryPage({Key? key}) : super(key: key);
 
   @override
+  State<HistoryPage> createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
+  ValueNotifier<String?> searchQueryNotifier = ValueNotifier(null);
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ServiceLocator.sl<HistoryBloc>()..add(HistoryLoadInformation()),
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
           backgroundColor: const Color(0xffEFEBE9),
           appBar: AppBar(
             title: const Text("History"),
@@ -20,7 +26,11 @@ class HistoryPage extends StatelessWidget {
               preferredSize: Size.fromHeight(110), // Adj
               child: Column(
                 children: [
-                  SearchBarHistory(),
+                  SearchBarHistory(
+                    onSearch: (String? query) {
+                      searchQueryNotifier.value = query;
+                    },
+                  ),
                   TabBar(
                       unselectedLabelColor: AppColor.disableColor,
                       indicatorColor: AppColor.primaryColor,
@@ -37,31 +47,33 @@ class HistoryPage extends StatelessWidget {
               ),
             ),
           ),
-          body: BlocBuilder<HistoryBloc, HistoryState>(
-            builder: (context, state) {
-              if (state is HistoryLoadInProcess) {
-                return const HistorySkeletonList();
-              } else if (state is HistoryLoadSuccess) {
-                return const TabBarView(
-                  children: [
-                    HistoryListView(orderStatus: OrderStatus.SUCCEED),
-                    HistoryListView(orderStatus: OrderStatus.CANCELED),
-                  ],
-                );
-              } else {
-                return const MyError();
-              }
+          body: ValueListenableBuilder(
+            valueListenable: searchQueryNotifier,
+            builder: (BuildContext context, String? searchQuery, Widget? child) {
+              return TabBarView(
+                children: [
+                  HistoryListView(
+                    orderStatus: OrderStatus.SUCCEED,
+                    searchQuery: searchQuery,
+                  ),
+                  HistoryListView(
+                    orderStatus: OrderStatus.CANCELED,
+                    searchQuery: searchQuery,
+                  ),
+                ],
+              );
             },
-          ),
-        ),
-      ),
+          )),
     );
   }
 }
 
 class SearchBarHistory extends StatefulWidget {
+  final Function(String?) onSearch;
+
   const SearchBarHistory({
     super.key,
+    required this.onSearch,
   });
 
   @override
@@ -69,8 +81,14 @@ class SearchBarHistory extends StatefulWidget {
 }
 
 class _SearchBarHistoryState extends State<SearchBarHistory> {
-  TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
   bool isEmpty = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
 
   void handleSearchChange(String value) {
     if (value.isNotEmpty) {
@@ -97,25 +115,27 @@ class _SearchBarHistoryState extends State<SearchBarHistory> {
           handleSearchChange(value);
         },
         onSubmitted: (value) {
-          context.read<HistoryBloc>().add(HistoryLoadInformation(searchQuery: value));
+          widget.onSearch(value);
         },
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.all(16),
           prefixIcon: const Icon(Icons.search),
-          suffixIcon: isEmpty ? null : IconButton(
-            icon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
-            onPressed: () {
-              _controller.text = "";
-              handleSearchChange("");
-              context.read<HistoryBloc>().add(HistoryLoadInformation());
-            },
-            iconSize: 16,
-            color: AppColor.nonactiveColor,
-          ),
+          suffixIcon: isEmpty
+              ? null
+              : IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
+                  onPressed: () {
+                    _controller.text = "";
+                    handleSearchChange("");
+                    widget.onSearch(null);
+                  },
+                  iconSize: 16,
+                  color: AppColor.nonactiveColor,
+                ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          hintText: "Search order ID, Customer name or phone number",
+          hintText: "Search order ID, Customer id, name or phone number",
         ),
       ),
     );

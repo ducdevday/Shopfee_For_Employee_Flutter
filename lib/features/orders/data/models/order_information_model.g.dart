@@ -34,7 +34,7 @@ Map<String, dynamic> _$OrderInformationModelToJson(
       'productName': instance.productName,
       'productQuantity': instance.productQuantity,
       'productThumbnailUrl': instance.thumbnailUrl,
-      'statusLastEvent': instance.statusLastEvent,
+      'statusLastEvent': _$OrderStatusEnumMap[instance.statusLastEvent]!,
       'timeLastEvent': instance.timeLastEvent.toIso8601String(),
       'receiveTime': instance.receiveTime?.toIso8601String(),
     };

@@ -19,7 +19,7 @@ EventLogModel _$EventLogModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$EventLogModelToJson(EventLogModel instance) =>
     <String, dynamic>{
-      'orderStatus': instance.orderStatus,
+      'orderStatus': _$OrderStatusEnumMap[instance.orderStatus],
       'createdAt': instance.time?.toIso8601String(),
       'description': instance.description,
       'employee': instance.makerByEmployee,

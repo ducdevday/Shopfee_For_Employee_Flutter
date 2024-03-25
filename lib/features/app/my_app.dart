@@ -94,8 +94,8 @@ class _MyAppState extends State<MyApp> {
         onGenerateRoute: (settings) {
           return AppRouter.onGenerateRoute(settings);
         },
-        home: OrderDetailPage(orderId: 'OB000000006',),
-        // initialRoute: getStartRoute(),
+        // home: OrderDetailPage(orderId: 'OB000000008',),
+        initialRoute: getStartRoute(),
         builder: EasyLoading.init(),
       ),
     );

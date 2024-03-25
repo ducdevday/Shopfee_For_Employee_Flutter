@@ -30,7 +30,7 @@ Map<String, dynamic> _$HistoryModelToJson(HistoryModel instance) =>
       'productQuantity': instance.productQuantity,
       'thumbnailUrl': instance.thumbnailUrl,
       'orderType': instance.orderType,
-      'statusLastEvent': instance.statusLastEvent,
+      'statusLastEvent': _$OrderStatusEnumMap[instance.statusLastEvent]!,
       'timeLastEvent': instance.timeLastEvent.toIso8601String(),
     };
 

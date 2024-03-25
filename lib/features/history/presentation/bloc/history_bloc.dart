@@ -5,91 +5,55 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
 
   HistoryBloc(this._historyUseCase) : super(HistoryInitial()) {
     on<HistoryLoadInformation>(_onHistoryLoadInformation);
-    on<HistoryLoadSucceedOrder>(_onHistoryLoadSucceedOrder);
-    on<HistoryLoadCanceledOrder>(_onHistoryLoadCanceledOrder);
+    on<HistoryLoadMoreInformation>(_onHistoryLoadMoreInformation);
   }
 
   FutureOr<void> _onHistoryLoadInformation(
       HistoryLoadInformation event, Emitter<HistoryState> emit) async {
     try {
-      int pageSuccessInit = 1;
-      int pageCancelInit = 1;
-      int size = 5;
       emit(HistoryLoadInProcess());
-      final historiesSucceed = await _historyUseCase.getHistoryByStatus(
-          pageSuccessInit, size, OrderStatus.SUCCEED, event.searchQuery);
-
-      final historiesCanceled = await _historyUseCase.getHistoryByStatus(
-          pageCancelInit, size, OrderStatus.CANCELED, event.searchQuery);
-
+      final params = HistoryParams(
+          page: event.initPage, size: event.initSize, key: event.searchQuery);
+      EasyLoading.show();
+      final historyList =
+          await _historyUseCase.getHistoryByStatus(params, event.orderStatus);
+      EasyLoading.dismiss();
       emit(HistoryLoadSuccess(
-          historiesSucceed: historiesSucceed,
-          historiesCanceled: historiesCanceled,
-          pageSucceed: pageSuccessInit,
-          pageCanceled: pageCancelInit,
-          size: size,
-          query: event.searchQuery));
+          historyList: historyList,
+          page: event.initPage,
+          size: event.initSize,
+          searchQuery: event.searchQuery));
     } catch (e) {
-      emit(HistoryLoadFailure());
       ExceptionUtil.handle(e);
+      emit(HistoryLoadFailure());
     }
   }
 
-  FutureOr<void> _onHistoryLoadSucceedOrder(
-      HistoryLoadSucceedOrder event, Emitter<HistoryState> emit) async {
-    if (state is HistoryLoadSuccess) {
-      try {
+  FutureOr<void> _onHistoryLoadMoreInformation(
+      HistoryLoadMoreInformation event, Emitter<HistoryState> emit) async {
+    try {
+      if (state is HistoryLoadSuccess) {
         final currentState = state as HistoryLoadSuccess;
-        emit(currentState.copyWith(isSucceedLoadMore: true));
-        await Future.delayed(const Duration(milliseconds: 1000));
-        final historyList = await _historyUseCase.getHistoryByStatus(
-            currentState.pageSucceed + 1,
-            currentState.size,
-            OrderStatus.SUCCEED,
-            currentState.query);
+        emit(currentState.copyWith(isLoadMore: true));
 
+        final params = HistoryParams(
+            page: currentState.page + 1,
+            size: currentState.size,
+            key: currentState.searchQuery);
+        final historyList =
+            await _historyUseCase.getHistoryByStatus(params, event.orderStatus);
         if (historyList.isNotEmpty) {
           emit(currentState.copyWith(
-              historiesSucceed: List.from(currentState.historiesSucceed)
+              historyList: List.from(currentState.historyList)
                 ..addAll(historyList),
-              pageSucceed: currentState.pageSucceed + 1,
-              isSucceedLoadMore: false));
+              page: currentState.page + 1,
+              isLoadMore: false));
         } else {
-          emit(currentState.copyWith(cannotSucceedLoadMore: true));
+          emit(currentState.copyWith(cannotLoadMore: true));
         }
-      } catch (e) {
-        emit(HistoryLoadFailure());
-        ExceptionUtil.handle(e);
       }
-    }
-  }
-
-  FutureOr<void> _onHistoryLoadCanceledOrder(
-      HistoryLoadCanceledOrder event, Emitter<HistoryState> emit) async {
-    if (state is HistoryLoadSuccess) {
-      try {
-        final currentState = state as HistoryLoadSuccess;
-        emit(currentState.copyWith(isCanceledLoadMore: true));
-        await Future.delayed(const Duration(milliseconds: 1000));
-        final historyList = await _historyUseCase.getHistoryByStatus(
-            currentState.pageCanceled + 1,
-            currentState.size,
-            OrderStatus.CANCELED,
-            currentState.query);
-
-        if (historyList.isNotEmpty) {
-          emit(currentState.copyWith(
-              historiesCanceled: List.from(currentState.historiesCanceled)
-                ..addAll(historyList),
-              pageCanceled: currentState.pageCanceled + 1,
-              isCanceledLoadMore: false));
-        } else {
-          emit(currentState.copyWith(cannotCanceledLoadMore: true));
-        }
-      } catch (e) {
-        emit(HistoryLoadFailure());
-        ExceptionUtil.handle(e);
-      }
+    } catch (e) {
+      ExceptionUtil.handle(e);
     }
   }
 }

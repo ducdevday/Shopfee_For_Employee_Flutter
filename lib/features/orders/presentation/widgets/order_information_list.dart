@@ -25,7 +25,6 @@ class _OrderInformationListState extends State<OrderInformationList> {
   @override
   void initState() {
     super.initState();
-    print("OrderInformationList initState");
     _bloc = ServiceLocator.sl<OrdersBloc>()
       ..add(OrderLoadInformation(
           orderType: widget.orderType,
@@ -128,6 +127,7 @@ class _OrderInformationListState extends State<OrderInformationList> {
     );
   }
 
-// @override
-// bool get wantKeepAlive => true;
+  // @override
+  // // TODO: implement wantKeepAlive
+  // bool get wantKeepAlive => throw UnimplementedError();
 }

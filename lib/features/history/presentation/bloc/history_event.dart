@@ -5,24 +5,29 @@ abstract class HistoryEvent extends Equatable {
 }
 
 class HistoryLoadInformation extends HistoryEvent {
-  final String searchQuery;
+  final OrderStatus orderStatus;
+  final int initPage;
+  final int initSize;
+  final String? searchQuery;
 
-  HistoryLoadInformation({this.searchQuery = ""});
+  const HistoryLoadInformation({
+    required this.orderStatus,
+    required this.initPage,
+    required this.initSize,
+    this.searchQuery,
+  });
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [orderStatus, initPage, initSize, searchQuery];
 }
 
-class HistoryLoadSucceedOrder extends HistoryEvent {
-  const HistoryLoadSucceedOrder();
+class HistoryLoadMoreInformation extends HistoryEvent {
+  final OrderStatus orderStatus;
+
+  const HistoryLoadMoreInformation({
+    required this.orderStatus,
+  });
 
   @override
-  List<Object> get props => [];
-}
-
-class HistoryLoadCanceledOrder extends HistoryEvent {
-  const HistoryLoadCanceledOrder();
-
-  @override
-  List<Object> get props => [];
+  List<Object> get props => [orderStatus];
 }
