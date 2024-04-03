@@ -13,6 +13,7 @@ class DioService {
   static const String employeePath = "employee";
   static const String orderPath = "order";
   static const String transactionPath = "transaction";
+  static const String notificationPath = "notification";
 
   late Dio _dio;
   static final DioService _instance = DioService._internal();

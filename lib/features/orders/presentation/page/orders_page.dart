@@ -9,7 +9,7 @@ class OrdersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 6,
       child: Scaffold(
         backgroundColor: const Color(0xffEFEBE9),
         appBar: AppBar(
@@ -41,10 +41,18 @@ class OrdersPage extends StatelessWidget {
               orderStatus: OrderStatus.ACCEPTED,
             ),
             OrderInformationList(
+              orderType: orderType,
+              orderStatus: OrderStatus.PREPARED,
+            ),
+            OrderInformationList(
                 orderType: orderType,
                 orderStatus: OrderStatus.CANCELLATION_REQUEST),
             OrderInformationList(
-                orderType: orderType, orderStatus: OrderStatus.DELIVERING)
+                orderType: orderType, orderStatus: OrderStatus.DELIVERING),
+            OrderInformationList(
+              orderType: orderType,
+              orderStatus: OrderStatus.NOT_RECEIVED,
+            ),
           ],
         ),
       ),

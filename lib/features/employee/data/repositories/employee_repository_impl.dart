@@ -24,7 +24,7 @@ class EmployeeRepositoryImpl implements EmployeeRepository {
   }
 
   @override
-  Future<void> logout() async {
-    final response = await _employeeService.logout();
+  Future<void> logout(String fcmTokenId) async {
+    final response = await _employeeService.logout(fcmTokenId);
   }
 }

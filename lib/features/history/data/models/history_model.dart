@@ -13,6 +13,7 @@ class HistoryModel {
   final String phoneNumber;
   final String productName;
   final int productQuantity;
+  @JsonKey(name: "productThumbnailUrl")
   final String thumbnailUrl;
   final OrderType orderType;
   final OrderStatus statusLastEvent;

@@ -3,5 +3,5 @@ import 'package:shopfeeforemployee/features/employee/domain/entities/employee_en
 
 abstract class EmployeeRepository {
   Future<EmployeeEntity> getEmployee(String employeeId);
-  Future<void> logout();
+  Future<void> logout(String fcmTokenId);
 }

@@ -13,7 +13,7 @@ HistoryModel _$HistoryModelFromJson(Map<String, dynamic> json) => HistoryModel(
       phoneNumber: json['phoneNumber'] as String,
       productName: json['productName'] as String,
       productQuantity: json['productQuantity'] as int,
-      thumbnailUrl: json['thumbnailUrl'] as String,
+      thumbnailUrl: json['productThumbnailUrl'] as String,
       orderType: $enumDecode(_$OrderTypeEnumMap, json['orderType']),
       statusLastEvent:
           $enumDecode(_$OrderStatusEnumMap, json['statusLastEvent']),
@@ -28,7 +28,7 @@ Map<String, dynamic> _$HistoryModelToJson(HistoryModel instance) =>
       'phoneNumber': instance.phoneNumber,
       'productName': instance.productName,
       'productQuantity': instance.productQuantity,
-      'thumbnailUrl': instance.thumbnailUrl,
+      'productThumbnailUrl': instance.thumbnailUrl,
       'orderType': instance.orderType,
       'statusLastEvent': _$OrderStatusEnumMap[instance.statusLastEvent]!,
       'timeLastEvent': instance.timeLastEvent.toIso8601String(),
@@ -45,7 +45,9 @@ const _$OrderStatusEnumMap = {
   OrderStatus.CANCELLATION_REQUEST: 'CANCELLATION_REQUEST',
   OrderStatus.CANCELLATION_REQUEST_REFUSED: 'CANCELLATION_REQUEST_REFUSED',
   OrderStatus.CANCELLATION_REQUEST_ACCEPTED: 'CANCELLATION_REQUEST_ACCEPTED',
+  OrderStatus.PREPARED: 'PREPARED',
   OrderStatus.DELIVERING: 'DELIVERING',
-  OrderStatus.SUCCEED: 'SUCCEED',
+  OrderStatus.NOT_RECEIVED: 'NOT_RECEIVED',
   OrderStatus.CANCELED: 'CANCELED',
+  OrderStatus.SUCCEED: 'SUCCEED',
 };

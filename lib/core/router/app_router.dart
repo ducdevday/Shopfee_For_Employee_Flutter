@@ -5,7 +5,7 @@ import 'package:shopfeeforemployee/features/change_password/presentation/change_
 import 'package:shopfeeforemployee/features/history/presentation/history.dart';
 import 'package:shopfeeforemployee/features/home/presentation/home.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
-import 'package:shopfeeforemployee/features/notification_permission/notify_permission_page.dart';
+import 'package:shopfeeforemployee/features/notify_permission/presentation/notify_permission.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
 import 'package:shopfeeforemployee/features/orders/presentation/orders.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';

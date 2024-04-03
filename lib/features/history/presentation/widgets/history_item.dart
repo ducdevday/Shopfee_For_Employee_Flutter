@@ -157,23 +157,6 @@ class HistoryItem extends StatelessWidget {
                 }
               },
             ),
-            const Divider(
-              height: 10,
-            ),
-            Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, OrderDetailPage.route,
-                          arguments: history.id);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 30)),
-                    child: Text("See Detail"),
-                  ),
-                ))
           ],
         ),
       ),

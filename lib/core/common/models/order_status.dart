@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:shopfeeforemployee/core/config/app_color.dart';
+
 
 enum OrderStatus {
   CREATED,
@@ -7,7 +6,9 @@ enum OrderStatus {
   CANCELLATION_REQUEST,
   CANCELLATION_REQUEST_REFUSED,
   CANCELLATION_REQUEST_ACCEPTED,
+  PREPARED,
   DELIVERING,
-  SUCCEED,
-  CANCELED
+  NOT_RECEIVED,
+  CANCELED,
+  SUCCEED;
 }

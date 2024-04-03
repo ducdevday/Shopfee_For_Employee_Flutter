@@ -19,6 +19,11 @@ import 'package:shopfeeforemployee/features/login/data/repositories/login_reposi
 import 'package:shopfeeforemployee/features/login/domain/repositories/login_repository.dart';
 import 'package:shopfeeforemployee/features/login/domain/usecase/login_usecase.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
+import 'package:shopfeeforemployee/features/notify_permission/data/datasources/notification_permission_service.dart';
+import 'package:shopfeeforemployee/features/notify_permission/data/repositories/notification_permission_repository_impl.dart';
+import 'package:shopfeeforemployee/features/notify_permission/domain/repositories/notification_permission_repository.dart';
+import 'package:shopfeeforemployee/features/notify_permission/domain/usecase/notification_permission_usecase.dart';
+import 'package:shopfeeforemployee/features/notify_permission/presentation/notify_permission.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/datasources/order_detail_service.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/repositories/order_detail_repository_impl.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/repositories/order_detail_repository.dart';
@@ -39,6 +44,7 @@ class ServiceLocator {
   static final sl = GetIt.instance;
 
   Future<void> init() async {
+    _notifyPermissionFeature();
     _loginFeature();
     _employeeFeature();
     _personalInformationFeature();
@@ -46,6 +52,13 @@ class ServiceLocator {
     _ordersFeature();
     _orderDetailFeature();
     _historyDetailFeature();
+  }
+
+  void _notifyPermissionFeature() {
+    sl.registerLazySingleton(() => NotifyPermissionService());
+    sl.registerLazySingleton<NotificationPermissionRepository>(() => NotificationPermissionRepositoryImpl(sl()));
+    sl.registerLazySingleton<NotificationPermissionUseCase>(() => NotificationPermissionUseCaseImpl(sl()));
+    sl.registerFactory(() => NotificationPermissionCubit(sl()));
   }
 
   void _loginFeature() {

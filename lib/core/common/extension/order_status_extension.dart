@@ -11,9 +11,11 @@ extension OrderStatusExtension on OrderStatus {
 
   static List<String> orderStatusShippingProcessing() => [
         "New Order",
-        "Preparing Order",
+        "Accepted Order",
+        "Prepared Order",
         "Request Cancel Order",
-        "Delivering Order"
+        "Delivering Order",
+        "Not Received Order"
       ];
 
   static List<String> orderStatusFinished() => ["Succeed", "Canceled"];
@@ -44,6 +46,8 @@ extension OrderStatusExtension on OrderStatus {
       case OrderStatus.CREATED:
         return "Accept";
       case OrderStatus.ACCEPTED:
+        return "Prepare";
+      case OrderStatus.PREPARED:
       case OrderStatus.CANCELLATION_REQUEST:
       case OrderStatus.CANCELLATION_REQUEST_REFUSED:
       case OrderStatus.CANCELLATION_REQUEST_ACCEPTED:
@@ -60,6 +64,8 @@ extension OrderStatusExtension on OrderStatus {
       case OrderStatus.CREATED:
         return OrderStatus.ACCEPTED;
       case OrderStatus.ACCEPTED:
+        return OrderStatus.PREPARED;
+      case OrderStatus.PREPARED:
         return OrderStatus.DELIVERING;
       case OrderStatus.DELIVERING:
         return OrderStatus.SUCCEED;
@@ -80,14 +86,16 @@ extension OrderStatusExtension on OrderStatus {
         return "REQUEST CANCEL REFUSED";
       case OrderStatus.CANCELLATION_REQUEST_ACCEPTED:
         return "REQUEST CANCEL ACCEPTED";
+      case OrderStatus.PREPARED:
+        return "PREPARED";
       case OrderStatus.DELIVERING:
         return "DELIVERING";
+      case OrderStatus.NOT_RECEIVED:
+        return "NOT RECEIVED";
       case OrderStatus.SUCCEED:
         return "SUCCEED";
       case OrderStatus.CANCELED:
         return "CANCELED";
-      default:
-        return "";
     }
   }
 
@@ -102,35 +110,24 @@ extension OrderStatusExtension on OrderStatus {
     }
   }
 
-  OrderStatus? statusPreviousEvent() {
-    switch (this) {
-      case OrderStatus.CANCELED:
-        return OrderStatus.CREATED;
-      case OrderStatus.ACCEPTED:
-        return OrderStatus.CREATED;
-      case OrderStatus.DELIVERING:
-        return OrderStatus.ACCEPTED;
-      case OrderStatus.SUCCEED:
-        return OrderStatus.DELIVERING;
-      default:
-        return null;
-    }
-  }
-
   String getEmptyOrderStatusList() {
     switch (this) {
       case OrderStatus.CREATED:
         return "No Created Orders Yet";
       case OrderStatus.ACCEPTED:
-        return "No Created ACCEPTED Yet";
+        return "No Accepted Orders Yet";
       case OrderStatus.CANCELLATION_REQUEST:
         return "No Request Cancel Orders Yet";
       case OrderStatus.CANCELLATION_REQUEST_REFUSED:
         return "No Refused Request Cancel Yet";
       case OrderStatus.CANCELLATION_REQUEST_ACCEPTED:
-        return "No Accepted Orders Yet";
+        return "No Refused Request Accept Orders Yet";
+      case OrderStatus.PREPARED:
+        return "No Prepared Orders Yet";
       case OrderStatus.DELIVERING:
         return "No Delivering Orders Yet";
+      case OrderStatus.NOT_RECEIVED:
+        return "NOT RECEIVED";
       case OrderStatus.SUCCEED:
         return "No Succeed Orders Yet";
       case OrderStatus.CANCELED:

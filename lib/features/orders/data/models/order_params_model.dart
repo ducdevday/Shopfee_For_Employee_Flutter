@@ -20,8 +20,8 @@ class OrderParamsModel {
 
   factory OrderParamsModel.fromEntity(OrderParamsEntity entity) {
     return OrderParamsModel(
-        orderType: entity.orderType.toJson(),
-        orderStatus: entity.orderStatus.toJson(),
+        orderType: entity.orderType.name,
+        orderStatus: entity.orderStatus.name,
         page: entity.page,
         size: entity.size);
   }

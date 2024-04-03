@@ -1,6 +1,5 @@
 part of login;
 
-
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase _loginUseCase;
 
@@ -19,10 +18,11 @@ class LoginCubit extends Cubit<LoginState> {
     if (checkValidField(account: account, password: password) == false) return;
     try {
       EasyLoading.show(maskType: EasyLoadingMaskType.black);
-      final response = await _loginUseCase
-          .login(LoginEntity(account: account, password: password));
-      SharedService.setToken(
-          response.employeeId, response.accessToken);
+      final response = await _loginUseCase.login(LoginEntity(
+          account: account,
+          password: password,
+          fcmTokenId: SharedService.getFCMTokenId()!));
+      SharedService.setToken(response.employeeId, response.accessToken);
       EasyLoading.dismiss();
       EasyLoading.showSuccess("Login Success");
       emit(LoginSuccess());

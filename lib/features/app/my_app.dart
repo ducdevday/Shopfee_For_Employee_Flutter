@@ -15,7 +15,7 @@ import 'package:shopfeeforemployee/core/utils/navigation_util.dart';
 import 'package:shopfeeforemployee/features/employee/presentation/employee.dart';
 import 'package:shopfeeforemployee/features/home/presentation/home.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
-import 'package:shopfeeforemployee/features/notification_permission/notify_permission_page.dart';
+import 'package:shopfeeforemployee/features/notify_permission/presentation/notify_permission.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
 
 class MyApp extends StatefulWidget {
@@ -32,8 +32,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initInfoNotify();
-    setupMessageNotify();
+    // initInfoNotify();
+    // setupMessageNotify();
   }
 
   void initInfoNotify() {
