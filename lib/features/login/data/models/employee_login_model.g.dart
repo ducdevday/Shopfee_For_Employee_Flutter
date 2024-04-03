@@ -8,14 +8,12 @@ part of 'employee_login_model.dart';
 
 EmployeeLoginModel _$EmployeeLoginModelFromJson(Map<String, dynamic> json) =>
     EmployeeLoginModel(
-      employeeId: json['employeeId'],
-      accessToken: json['accessToken'],
-      refreshToken: json['refreshToken'],
+      employeeId: json['employeeId'] as String,
+      accessToken: json['accessToken'] as String,
     );
 
 Map<String, dynamic> _$EmployeeLoginModelToJson(EmployeeLoginModel instance) =>
     <String, dynamic>{
       'employeeId': instance.employeeId,
       'accessToken': instance.accessToken,
-      'refreshToken': instance.refreshToken,
     };

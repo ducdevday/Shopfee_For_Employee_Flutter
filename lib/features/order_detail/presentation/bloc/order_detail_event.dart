@@ -1,40 +1,62 @@
-part of 'order_detail_bloc.dart';
+part of order_detail;
 
 abstract class OrderDetailEvent extends Equatable {
   const OrderDetailEvent();
 }
 
-class LoadOrderDetail extends OrderDetailEvent {
-  final String id;
+class OrderDetailLoadInformation extends OrderDetailEvent {
+  final String orderId;
 
-  const LoadOrderDetail({
-    required this.id,
+  const OrderDetailLoadInformation({
+    required this.orderId,
   });
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [orderId];
 }
 
-class AddEventLog extends OrderDetailEvent {
-  final String id;
+class OrderDetailAddEventLog extends OrderDetailEvent {
+  final String orderId;
   final EventLogEntity eventLog;
 
-  const AddEventLog({
-    required this.id,
+  const OrderDetailAddEventLog({
+    required this.orderId,
     required this.eventLog,
   });
 
   @override
-  List<Object> get props => [id, eventLog];
+  List<Object> get props => [orderId, eventLog];
 }
 
-class ChooseReasonCancel extends OrderDetailEvent {
-  final String reason;
+class OrderDetailAcceptRequestCancel extends OrderDetailEvent {
+  final String orderId;
 
-  const ChooseReasonCancel({
-    required this.reason,
+  const OrderDetailAcceptRequestCancel({
+    required this.orderId,
   });
 
   @override
-  List<Object> get props => [reason];
+  List<Object> get props => [orderId];
+}
+
+class OrderDetailRefuseRequestCancel extends OrderDetailEvent {
+  final String orderId;
+
+  const OrderDetailRefuseRequestCancel({
+    required this.orderId,
+  });
+
+  @override
+  List<Object> get props => [orderId];
+}
+
+class OrderDetailChooseReasonCancel extends OrderDetailEvent {
+  final ReasonCancelType reasonCancel;
+
+  const OrderDetailChooseReasonCancel({
+    required this.reasonCancel,
+  });
+
+  @override
+  List<Object> get props => [reasonCancel];
 }

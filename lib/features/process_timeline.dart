@@ -63,21 +63,21 @@ class _ProcessTimelinePageState extends State<ProcessTimelinePage> {
                   Text(
                     _processes[index],
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                       color: getColor(index),
                     ),
                   ),
                   Text(
                     "12:00 AM",
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                       color: getColor(index),
                     ),
                   ),
                   Text(
                     "17/08/2002",
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                       color: getColor(index),
                     ),
                   ),

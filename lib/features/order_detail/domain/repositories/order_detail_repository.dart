@@ -1,14 +1,21 @@
-import 'package:dartz/dartz.dart';
-import 'package:shopfeeforemployee/core/common/models/no_response.dart';
-import 'package:shopfeeforemployee/core/errors/failures.dart';
+import 'package:shopfeeforemployee/core/common/enum/cancel_request_action.dart';
+import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
 
 abstract class OrderDetailRepository {
-  Future<Either<Failure, OrderDetailEntity>> getOrderDetail(String orderId);
-  Future<Either<Failure, List<EventLogEntity>>> getEventLogs(String orderId);
-  Future<Either<Failure, NoResponse>> addEventLog(String orderId, EventLogEntity eventLog);
-  Future<Either<Failure, String>> getFCMToken(String userId);
-  Future<Either<Failure, NoResponse>> sendOrderMessage(String title, String body, String destinationId, String fcmToken);
-  Future<Either<Failure, NoResponse>> completeTransaction(String transactionId);
+  Future<OrderDetailEntity> getOrderDetail(String orderId);
+
+  Future<List<EventLogEntity>> getEventLogs(String orderId);
+
+  Future<void> addEventLog(String orderId, EventLogEntity eventLog);
+
+  Future<String> getFCMToken(String userId);
+
+  Future<void> sendOrderMessage(
+      String title, String body, String destinationId, String fcmToken);
+
+  Future<void> completeTransaction(String transactionId);
+
+  Future<void> handleRequestCancel(String orderId, CancelRequestAction action);
 }

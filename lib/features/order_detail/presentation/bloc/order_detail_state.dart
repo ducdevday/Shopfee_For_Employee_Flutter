@@ -1,4 +1,4 @@
-part of 'order_detail_bloc.dart';
+part of order_detail;
 
 abstract class OrderDetailState extends Equatable {
   const OrderDetailState();
@@ -9,49 +9,45 @@ class OrderDetailInitial extends OrderDetailState {
   List<Object> get props => [];
 }
 
-class OrderDetailLoading extends OrderDetailState {
+class OrderDetailLoadInProcess extends OrderDetailState {
   @override
   List<Object> get props => [];
 }
 
-class OrderDetailLoaded extends OrderDetailState {
+class OrderDetailLoadSuccess extends OrderDetailState {
   final OrderDetailEntity orderDetail;
   final List<EventLogEntity> eventLogs;
-  final List<OrderStatus> ordersTracking;
-  final String reasonCancel;
+  final ReasonCancelType? reasonCancel;
+  final bool isAddEventLogClicked;
 
-  const OrderDetailLoaded({
-    required this.orderDetail,
-    required this.eventLogs,
-    this.ordersTracking = const [
-      OrderStatus.CREATED,
-      OrderStatus.ACCEPTED,
-      OrderStatus.DELIVERING,
-      OrderStatus.SUCCEED
-    ],
-    this.reasonCancel = "This product was sold out",
-  });
+  const OrderDetailLoadSuccess(
+      {required this.orderDetail,
+      required this.eventLogs,
+      this.reasonCancel,
+      this.isAddEventLogClicked = false});
+
+  EventLogEntity get lastEventLog => eventLogs.first;
 
   @override
-  List<Object> get props => [orderDetail, eventLogs, ordersTracking, reasonCancel];
+  List<Object?> get props => [
+        orderDetail,
+        eventLogs,
+        reasonCancel,
+        isAddEventLogClicked,
+      ];
 
-  OrderStatus get currentOrderStatus => eventLogs.last.orderStatus;
-
-  int get currentIndex => eventLogs.last.orderStatus.index;
-
-  OrderStatus get nextOrderStatus => ordersTracking.elementAt(currentIndex + 1);
-
-  OrderDetailLoaded copyWith({
+  OrderDetailLoadSuccess copyWith({
     OrderDetailEntity? orderDetail,
     List<EventLogEntity>? eventLogs,
     List<OrderStatus>? ordersTracking,
-    String? reasonCancel,
+    ReasonCancelType? reasonCancel,
+    bool? isAddEventLogClicked,
   }) {
-    return OrderDetailLoaded(
+    return OrderDetailLoadSuccess(
       orderDetail: orderDetail ?? this.orderDetail,
       eventLogs: eventLogs ?? this.eventLogs,
-      ordersTracking: ordersTracking ?? this.ordersTracking,
       reasonCancel: reasonCancel ?? this.reasonCancel,
+      isAddEventLogClicked: isAddEventLogClicked ?? this.isAddEventLogClicked,
     );
   }
 }
@@ -61,7 +57,7 @@ class OrderDetailFinished extends OrderDetailState {
   List<Object> get props => [];
 }
 
-class OrderDetailError extends OrderDetailState {
+class OrderDetailLoadFailure extends OrderDetailState {
   @override
   List<Object> get props => [];
 }

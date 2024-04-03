@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/utils/converter_util.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
+part of order_detail;
 
 class ProductList extends StatefulWidget {
   const ProductList({
@@ -17,53 +12,47 @@ class ProductList extends StatefulWidget {
 class _ProductListState extends State<ProductList> {
   late int defaultLength = 3;
   late int maxLength = 3;
-  late int productListLength;
+  late int boughtListLength;
   late String defaultText = "Show more";
-  late Icon defaultIcon = Icon(Icons.keyboard_arrow_down_rounded);
+  late Icon defaultIcon = const Icon(Icons.keyboard_arrow_down_rounded);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimen.spacing),
           child: Column(
             children: [
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Item List",
-                  style: AppStyle.mediumTitleStyleDark.copyWith(
-                      color: AppColor.headingColor,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              SizedBox(
-                height: 8,
+                  "Item list",
+                  style: AppStyle.mediumTextStyleDark.copyWith(fontWeight: FontWeight.w600))
               ),
               BlocBuilder<OrderDetailBloc, OrderDetailState>(
                 builder: (context, state) {
-                  if (state is OrderDetailLoaded) {
-                    productListLength =
-                        state.orderDetail.products!.length;
+                  if (state is OrderDetailLoadSuccess) {
+                    boughtListLength = state.orderDetail.itemList!.length;
                     return ListView.separated(
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: productListLength < defaultLength
-                          ? productListLength
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: boughtListLength < defaultLength
+                          ? boughtListLength
                           : maxLength,
                       itemBuilder: (context, index) {
-                        return buildProductItem(state, index);
+                        return buildProductItem(
+                            state.orderDetail.itemList![index]);
                       },
                       separatorBuilder: (BuildContext context, int index) {
-                        return Divider(
+                        return const Divider(
                           height: 10,
                         );
                       },
                     );
                   } else {
-                    return SizedBox();
+                    return const SizedBox();
                   }
                 },
               ),
@@ -71,13 +60,13 @@ class _ProductListState extends State<ProductList> {
           ),
         ),
         Builder(builder: (context) {
-          if (defaultLength < productListLength) {
+          if (defaultLength < boughtListLength) {
             return Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Divider(
+                const Divider(
                   height: 1,
                 ),
                 Directionality(
@@ -86,15 +75,17 @@ class _ProductListState extends State<ProductList> {
                     onPressed: () {
                       if (maxLength == 3) {
                         setState(() {
-                          maxLength = productListLength;
+                          maxLength = boughtListLength;
                           defaultText = "Show less";
-                          defaultIcon = Icon(Icons.keyboard_arrow_up_rounded);
+                          defaultIcon =
+                              const Icon(Icons.keyboard_arrow_up_rounded);
                         });
                       } else {
                         setState(() {
                           maxLength = 3;
                           defaultText = "Show more";
-                          defaultIcon = Icon(Icons.keyboard_arrow_down_rounded);
+                          defaultIcon =
+                              const Icon(Icons.keyboard_arrow_down_rounded);
                         });
                       }
                     },
@@ -105,70 +96,81 @@ class _ProductListState extends State<ProductList> {
               ],
             );
           } else {
-            return Padding(padding: EdgeInsets.only(bottom: 8));
+            return const Padding(padding: EdgeInsets.only(bottom: 8));
           }
         })
       ],
     );
   }
 
-  Widget buildProductItem(OrderDetailLoaded state, int index) {
-    return Row(
+  Widget buildProductItem(OrderProductEntity product) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                  "${state.orderDetail.products![index].quantity}x ${state.orderDetail.products![index].name!}",
-                  style: AppStyle.mediumTitleStyleDark
-                      .copyWith(color: AppColor.headingColor)
-                      .copyWith(fontWeight: FontWeight.w500)),
-              SizedBox(
-                height: 6,
-              ),
-              Text(
-                state.orderDetail.products![index].size!,
-                style: AppStyle.normalTextStyleDark,
-              ),
-              state.orderDetail.products![index].toppings!.isNotEmpty
-                  ? Text(ConverterUtil.formattedArrayString(state.orderDetail.products![index].toppings!.map((topping) => topping.name).toList()),
-                      style: AppStyle.normalTextStyleDark)
-                  : SizedBox(),
-              state.orderDetail.products![index].note!.isNotEmpty
-                  ? Row(
-                      children: [
-                        Icon(
-                          Icons.sticky_note_2_outlined,
-                          color: AppColor.primaryColor,
-                          size: 18,
-                        ),
-                        Expanded(
-                          child: Text(
-                            state.orderDetail.products![index].note!,
-                            style: AppStyle.normalTextStyleDark,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      ],
-                    )
-                  : SizedBox()
-            ],
-          ),
+        Text("${product.name}",
+            style: AppStyle.mediumTitleStyleDark
+                .copyWith(color: AppColor.headingColor)
+                .copyWith(fontWeight: FontWeight.w500)),
+        const SizedBox(
+          height: 6,
         ),
-        Align(
-          alignment: Alignment.topRight,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(ConverterUtil.formattedMoney(state.orderDetail.products![index].price!),
-                  style: AppStyle.mediumTitleStyleDark
-                      .copyWith(color: AppColor.headingColor)),
-            ],
-          ),
-        )
+        ListView.separated(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              final detail = product.itemDetailList![index];
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      width: 18,
+                      height:18,
+                      decoration:  BoxDecoration(
+                        color: AppColor.dividerColor,
+                        borderRadius: BorderRadius.all(Radius.circular(4))
+                      ),
+                      child: Center(child: Text("${detail.quantity}", style: AppStyle.mediumTextStyleDark,))),
+                  SizedBox(width: AppDimen.spacing,),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          detail.size!,
+                          style: AppStyle.normalTextStyleDark,
+                        ),
+                        if (detail.toppings != null &&
+                            detail.toppings!.isNotEmpty)
+                          Text(detail.toppingOrderString,
+                              style: AppStyle.normalTextStyleDark),
+                        if (detail.note != null && detail.note!.isNotEmpty)
+                          Row(children: [
+                            Icon(
+                              Icons.sticky_note_2_outlined,
+                              color: AppColor.primaryColor,
+                              size: 18,
+                            ),
+                            Expanded(
+                              child: Text(
+                                detail.note!,
+                                style: AppStyle.normalTextStyleDark,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
+                          ])
+                      ],
+                    ),
+                  ),
+                  Text(FormatUtil.formatMoney(detail.total)),
+                ],
+              );
+            },
+            separatorBuilder: (context, index) {
+              return SizedBox(height: 4);
+            },
+            itemCount: product.itemDetailList!.length)
       ],
     );
   }

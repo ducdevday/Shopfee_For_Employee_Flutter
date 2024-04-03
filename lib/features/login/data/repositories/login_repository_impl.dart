@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:shopfeeforemployee/core/common/models/my_token.dart';
 import 'package:shopfeeforemployee/core/common/models/result.dart';
 import 'package:shopfeeforemployee/core/errors/failures.dart';
 import 'package:shopfeeforemployee/features/login/data/datasources/login_service.dart';
@@ -14,7 +15,7 @@ class LoginRepositoryImpl implements LoginRepository {
   LoginRepositoryImpl(this._loginService);
 
   @override
-  Future<Either<Failure, EmployeeLoginModel>> login(LoginEntity loginEntity) async {
+  Future<MyToken> login(LoginEntity loginEntity) async {
     try {
       final response =
           await _loginService.login(LoginModel.fromEntity(loginEntity));
@@ -24,26 +25,22 @@ class LoginRepositoryImpl implements LoginRepository {
         data: response.data["data"],
       );
 
-      final employeeLoginModel = EmployeeLoginModel.fromJson(result.data!);
-      return Right(employeeLoginModel);
+      final token = MyToken.fromJson(result.data!);
+      return token;
     } catch (e) {
-      print(e);
       if (e is DioException) {
-        if (e.type == DioExceptionType.connectionError) {
-          return Left(NetworkFailure());
+        if (e.response?.statusCode == 500) {
+          throw ServerFailure(message: "Account or password is incorrect");
         }
-        else if(e.response?.statusCode == 400){
-          return Left(ServerFailure(message: "Account has been locked"));
+        if (e.response?.statusCode == 400) {
+          throw ServerFailure(message: "Account has been locked");
+        } else if (e.response?.statusCode == 401) {
+          throw ServerFailure(message: "Password is incorrect");
+        } else if (e.response?.statusCode == 404) {
+          throw ServerFailure(message: "Account doesn't exist");
         }
-        else if (e.response?.statusCode == 401) {
-          return Left(ServerFailure(message: "Password is incorrect"));
-        }
-        else if(e.response?.statusCode == 404){
-          return Left(ServerFailure(message: "Account doesn't exist"));
-        }
-        return Left(UnknownFailure());
       }
-      return Left(UnknownFailure());
+      rethrow;
     }
   }
 }

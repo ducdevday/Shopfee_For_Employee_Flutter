@@ -1,28 +1,33 @@
-part of 'history_bloc.dart';
+part of history;
 
 abstract class HistoryEvent extends Equatable {
   const HistoryEvent();
 }
 
-class InitHistory extends HistoryEvent {
-  final String searchQuery;
+class HistoryLoadInformation extends HistoryEvent {
+  final OrderStatus orderStatus;
+  final int initPage;
+  final int initSize;
+  final String? searchQuery;
 
-  InitHistory({this.searchQuery = ""});
+  const HistoryLoadInformation({
+    required this.orderStatus,
+    required this.initPage,
+    required this.initSize,
+    this.searchQuery,
+  });
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [orderStatus, initPage, initSize, searchQuery];
 }
 
-class LoadHistorySucceed extends HistoryEvent {
-  const LoadHistorySucceed();
+class HistoryLoadMoreInformation extends HistoryEvent {
+  final OrderStatus orderStatus;
+
+  const HistoryLoadMoreInformation({
+    required this.orderStatus,
+  });
 
   @override
-  List<Object> get props => [];
-}
-
-class LoadHistoryCanceled extends HistoryEvent {
-  const LoadHistoryCanceled();
-
-  @override
-  List<Object> get props => [];
+  List<Object> get props => [orderStatus];
 }

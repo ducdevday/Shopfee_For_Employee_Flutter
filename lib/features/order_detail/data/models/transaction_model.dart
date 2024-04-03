@@ -6,15 +6,21 @@ import 'package:shopfeeforemployee/features/order_detail/domain/entities/transac
 part 'transaction_model.g.dart';
 
 @JsonSerializable()
-class TransactionModel extends TransactionEntity {
+class TransactionModel {
+  final String? id;
+  final PaymentStatus? status;
+  final PaymentType? paymentType;
+  final double? totalPaid;
 
-  @override
-  @JsonKey(name: "paymentType")
-  final PaymentType type;
-  TransactionModel({required String id,required PaymentStatus status,required this.type,required double totalPaid})
-      : super(id: id, status: status, type: type, totalPaid: totalPaid);
+  const TransactionModel({
+    this.id,
+    this.status,
+    this.paymentType,
+    this.totalPaid,
+  });
 
-  factory TransactionModel.fromJson(Map<String, dynamic> json) => _$TransactionModelFromJson(json);
+  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
+      _$TransactionModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$TransactionModelToJson(this);
 }

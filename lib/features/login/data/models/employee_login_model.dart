@@ -5,8 +5,15 @@ import 'package:shopfeeforemployee/features/login/domain/entities/employee_login
 part 'employee_login_model.g.dart';
 
 @JsonSerializable()
-class EmployeeLoginModel extends EmployeeLoginEntity{
-  const EmployeeLoginModel({employeeId, accessToken, refreshToken}) : super(employeeId: employeeId, accessToken: accessToken, refreshToken: refreshToken);
+class EmployeeLoginModel{
+  final String employeeId;
+  final String accessToken;
+
+  const EmployeeLoginModel({
+    required this.employeeId,
+    required this.accessToken,
+  });
+
   factory EmployeeLoginModel.fromJson(Map<String, dynamic> json) {
     return _$EmployeeLoginModelFromJson(json);
   }
@@ -14,4 +21,6 @@ class EmployeeLoginModel extends EmployeeLoginEntity{
   Map<String, dynamic> toJson() {
     return _$EmployeeLoginModelToJson(this);
   }
+
+
 }

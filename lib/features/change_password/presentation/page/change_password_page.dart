@@ -1,13 +1,53 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/di/service_locator.dart';
-import 'package:shopfeeforemployee/features/change_password/presentation/cubit/change_password_cubit.dart';
-import 'package:shopfeeforemployee/features/change_password/presentation/widgets/password_field.dart';
+part of change_password;
 
-class ChangePasswordPage extends StatelessWidget {
+class ChangePasswordPage extends StatefulWidget {
+  static const route = "/change_password";
+
   const ChangePasswordPage({Key? key}) : super(key: key);
+
+  @override
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
+}
+
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  late final ChangePasswordCubit _cubit;
+  late final TextEditingController currentPasswordTextController;
+  late final TextEditingController newPasswordTextController;
+  late final TextEditingController confirmPasswordTextController;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = ServiceLocator.sl<ChangePasswordCubit>();
+    currentPasswordTextController = TextEditingController();
+    newPasswordTextController = TextEditingController();
+    confirmPasswordTextController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _cubit.close();
+    currentPasswordTextController.dispose();
+    newPasswordTextController.dispose();
+    confirmPasswordTextController.dispose();
+    super.dispose();
+  }
+
+  String? getErrorText(
+    String text,
+    FieldType type,
+  ) {
+    if (type == FieldType.password &&
+        !ValidateFieldUtil.validatePassword(text)) {
+      return "Password must have greater or equal 6 digits";
+    }
+    if (type == FieldType.password &&
+        newPasswordTextController.text.trim() !=
+            confirmPasswordTextController.text.trim()) {
+      return "New password and confirm password is not match";
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +65,21 @@ class ChangePasswordPage extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (context) =>
-            ServiceLocator.sl<ChangePasswordCubit>()..initPassword(),
+        create: (context) => _cubit,
         child: BlocConsumer<ChangePasswordCubit, ChangePasswordState>(
           listener: (context, state) {
-            if (state is ChangePasswordFinished) {
+            if (state is ChangePasswordSuccess) {
               Navigator.pop(context);
             }
           },
           builder: (context, state) {
-            if (state is ChangePasswordLoaded) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                    left: AppDimen.screenPadding,
-                    right: AppDimen.screenPadding,
-                    bottom: AppDimen.screenPadding),
+            return Padding(
+              padding: const EdgeInsets.only(
+                  left: AppDimen.screenPadding,
+                  right: AppDimen.screenPadding,
+                  bottom: AppDimen.screenPadding),
+              child: Form(
+                key: formKey,
                 child: Column(
                   children: [
                     Align(
@@ -60,31 +100,35 @@ class ChangePasswordPage extends StatelessWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    PasswordField(
-                      title: 'Current Password',
-                      callback: (String value) {
-                        context.read<ChangePasswordCubit>().enterOldPassword(value);
-                      },
+                    PasswordInputField(
+                      title: "Current Password",
+                      hint: "Input Current Password",
+                      validateField: (String value) =>
+                          getErrorText(value, FieldType.password),
+                      controller: currentPasswordTextController,
+                      useFocus: false,
                     ),
                     const SizedBox(
                       height: 8,
                     ),
-                    PasswordField(
-                      title: 'New Password',
-                      callback: (String value) {
-                        context.read<ChangePasswordCubit>().enterNewPassword(value);
-                      },
+                    PasswordInputField(
+                      title: "New Password",
+                      hint: "Input New Password",
+                      validateField: (String value) =>
+                          getErrorText(value, FieldType.password),
+                      controller: newPasswordTextController,
+                      useFocus: false,
                     ),
                     const SizedBox(
                       height: 8,
                     ),
-                    PasswordField(
-                      title: 'Confirm New Password',
-                      callback: (String value) {
-                        context
-                            .read<ChangePasswordCubit>()
-                            .enterConfirmPassword(value);
-                      },
+                    PasswordInputField(
+                      title: "Confirm Password",
+                      hint: "Input Confirm Password",
+                      validateField: (String value) =>
+                          getErrorText(value, FieldType.password),
+                      controller: confirmPasswordTextController,
+                      useFocus: false,
                     ),
                     const Spacer(
                       flex: 1,
@@ -94,21 +138,21 @@ class ChangePasswordPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: AppDimen.screenPadding),
                       child: ElevatedButton(
-                        onPressed: state.changePasswordValid
-                            ? () {
-                                context.read<ChangePasswordCubit>().changePassword();
-                              }
-                            : null,
+                        onPressed: () {
+                          formKey.currentState?.validate();
+                          _cubit.changePassword(
+                              currentPasswordTextController.text.trim(),
+                              newPasswordTextController.text.trim(),
+                              confirmPasswordTextController.text.trim());
+                        },
                         style: AppStyle.elevatedButtonStylePrimary,
                         child: const Text("Change Password"),
                       ),
                     )
                   ],
                 ),
-              );
-            } else {
-              return const SizedBox();
-            }
+              ),
+            );
           },
         ),
       ),

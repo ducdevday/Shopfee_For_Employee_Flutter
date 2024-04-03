@@ -1,19 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/common/widgets/my_confirm_dialog.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/bloc/order_detail_bloc.dart';
-
-final List<String> reasons = const [
-  "This product was sold out",
-  "Shipper of Shopfee is not available at present",
-  "Shopfee is closed today",
-  "Other reason"
-];
+part of order_detail;
 
 class ReasonCancelSheet extends StatelessWidget {
   final String orderId;
@@ -24,7 +9,7 @@ class ReasonCancelSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
-        if (state is OrderDetailLoaded) {
+        if (state is OrderDetailLoadSuccess) {
           return Wrap(
             // child: Column(
             children: [
@@ -60,41 +45,42 @@ class ReasonCancelSheet extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => InkWell(
-                    onTap: (){
-                      context
-                          .read<OrderDetailBloc>()
-                          .add(ChooseReasonCancel(reason: reasons[index]));
-                    },
-                    child: Padding(
+                        onTap: () {
+                          context.read<OrderDetailBloc>().add(
+                              OrderDetailChooseReasonCancel(
+                                  reasonCancel:
+                                      ReasonCancelType.values[index]));
+                        },
+                        child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Row(
                             children: [
-                              Expanded(child: Text(reasons[index])),
+                              Expanded(
+                                  child: Text(ReasonCancelType.getString(
+                                      ReasonCancelType.values[index]))),
                               const SizedBox(
                                 width: 4,
                               ),
-                              Radio<String>(
+                              Radio<ReasonCancelType>(
                                   activeColor: AppColor.primaryColor,
-                                  value: reasons[index],
+                                  value: ReasonCancelType.values[index],
                                   groupValue: state.reasonCancel,
-                                  onChanged: (String? value) {
-                                    // context
-                                    //     .read<OrderDetailBloc>()
-                                    //     .add(ChooseReasonCancel(reason: value!));
-                                    context
-                                        .read<OrderDetailBloc>()
-                                        .add(ChooseReasonCancel(reason: reasons[index]));
+                                  onChanged: (ReasonCancelType? value) {
+                                    context.read<OrderDetailBloc>().add(
+                                        OrderDetailChooseReasonCancel(
+                                            reasonCancel: ReasonCancelType
+                                                .values[index]));
                                   })
                             ],
                           ),
                         ),
-                  ),
+                      ),
                   separatorBuilder: (context, index) => const Divider(
                         height: 10,
                         indent: 10,
                         endIndent: 10,
                       ),
-                  itemCount: reasons.length),
+                  itemCount: ReasonCancelType.values.length),
               Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(AppDimen.spacing),
@@ -105,17 +91,18 @@ class ReasonCancelSheet extends StatelessWidget {
                           builder: (BuildContext contextDialog) =>
                               MyConfirmDialog(
                                   title: "Confirm",
-                                  content:
-                                      "Are you sure to CANCEL this order",
+                                  content: "Are you sure to CANCEL this order",
                                   callbackOK: () async {
                                     context.read<OrderDetailBloc>().add(
-                                        AddEventLog(
-                                            id: orderId,
+                                        OrderDetailAddEventLog(
+                                            orderId: orderId,
                                             eventLog: EventLogEntity(
                                                 orderStatus:
                                                     OrderStatus.CANCELED,
                                                 time: DateTime.now(),
-                                                description: state.reasonCancel,
+                                                description:
+                                                    ReasonCancelType.getString(
+                                                        state.reasonCancel),
                                                 makerByEmployee: true)));
                                     Navigator.pop(contextDialog);
                                   },
@@ -129,7 +116,6 @@ class ReasonCancelSheet extends StatelessWidget {
                             MaterialStateProperty.all(AppColor.error)),
                   ))
             ],
-            // ),
           );
         } else {
           return const SizedBox();

@@ -1,47 +1,42 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shopfeeforemployee/core/common/models/order_type.dart';
-import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
+import 'package:shopfeeforemployee/features/order_detail/data/models/order_product_model.dart';
 
-import 'address_model.dart';
-import 'product_model.dart';
-import 'review_model.dart';
+import 'branch_model.dart';
+import 'receiver_information_model.dart';
 import 'transaction_model.dart';
 
 part 'order_detail_model.g.dart';
 
 @JsonSerializable()
-class OrderDetailModel extends OrderDetailEntity {
-  @override
-  final AddressModel? address;
-  @override
-  final List<ProductModel>? products;
-  @override
-  final TransactionModel? transaction;
-  @override
-  final ReviewModel? review;
+class OrderDetailModel {
+  String? id;
+  String? note;
+  num? totalPayment;
+  num? shippingFee;
+  num? totalItemPrice;
+  OrderType? orderType;
+  ReceiverInformationModel? receiverInformation;
+  DateTime? createdAt;
+  List<OrderProductModel>? itemList;
+  TransactionModel? transaction;
+  BranchModel? branch;
+  int? coin;
 
   OrderDetailModel({
-    required String? id,
-    required String? note,
-    required double? total,
-    required OrderType? orderType,
-    required this.address,
-    required DateTime? createdAt,
-    required this.products,
-    required this.transaction,
-    required this.review,
-    required String? userId,
-  }) : super(
-            id: id,
-            note: note,
-            total: total,
-            orderType: orderType,
-            address: address,
-            createdAt: createdAt,
-            products: products,
-            transaction: transaction,
-            review: review,
-            userId: userId);
+    this.id,
+    this.note,
+    this.totalPayment,
+    this.shippingFee,
+    this.totalItemPrice,
+    this.orderType,
+    this.receiverInformation,
+    this.createdAt,
+    this.itemList,
+    this.transaction,
+    this.branch,
+    this.coin,
+  });
 
   factory OrderDetailModel.fromJson(Map<String, dynamic> json) =>
       _$OrderDetailModelFromJson(json);

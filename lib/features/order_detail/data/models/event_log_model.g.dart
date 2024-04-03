@@ -8,25 +8,32 @@ part of 'event_log_model.dart';
 
 EventLogModel _$EventLogModelFromJson(Map<String, dynamic> json) =>
     EventLogModel(
-      orderStatus: $enumDecode(_$OrderStatusEnumMap, json['orderStatus']),
-      time:
-          json['time'] == null ? null : DateTime.parse(json['time'] as String),
+      orderStatus:
+          $enumDecodeNullable(_$OrderStatusEnumMap, json['orderStatus']),
+      time: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
       description: json['description'] as String?,
-      makerByEmployee: json['makerByEmployee'] as bool?,
+      makerByEmployee: json['employee'] as bool?,
     );
 
 Map<String, dynamic> _$EventLogModelToJson(EventLogModel instance) =>
     <String, dynamic>{
-      'orderStatus': instance.orderStatus,
-      'time': instance.time?.toIso8601String(),
+      'orderStatus': _$OrderStatusEnumMap[instance.orderStatus],
+      'createdAt': instance.time?.toIso8601String(),
       'description': instance.description,
-      'makerByEmployee': instance.makerByEmployee,
+      'employee': instance.makerByEmployee,
     };
 
 const _$OrderStatusEnumMap = {
   OrderStatus.CREATED: 'CREATED',
   OrderStatus.ACCEPTED: 'ACCEPTED',
+  OrderStatus.CANCELLATION_REQUEST: 'CANCELLATION_REQUEST',
+  OrderStatus.CANCELLATION_REQUEST_REFUSED: 'CANCELLATION_REQUEST_REFUSED',
+  OrderStatus.CANCELLATION_REQUEST_ACCEPTED: 'CANCELLATION_REQUEST_ACCEPTED',
+  OrderStatus.PREPARED: 'PREPARED',
   OrderStatus.DELIVERING: 'DELIVERING',
-  OrderStatus.SUCCEED: 'SUCCEED',
+  OrderStatus.NOT_RECEIVED: 'NOT_RECEIVED',
   OrderStatus.CANCELED: 'CANCELED',
+  OrderStatus.SUCCEED: 'SUCCEED',
 };

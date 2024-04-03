@@ -5,12 +5,19 @@ import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_l
 part 'event_log_model.g.dart';
 
 @JsonSerializable()
-class EventLogModel extends EventLogEntity {
-  EventLogModel({
-    required super.orderStatus,
-    required super.time,
-    required super.description,
-    required super.makerByEmployee,
+class EventLogModel{
+  final OrderStatus? orderStatus;
+  @JsonKey(name: "createdAt")
+  final DateTime? time;
+  final String? description;
+  @JsonKey(name: "employee")
+  final bool? makerByEmployee;
+
+  const EventLogModel({
+    this.orderStatus,
+    this.time,
+    this.description,
+    this.makerByEmployee,
   });
 
   factory EventLogModel.fromJson(Map<String, dynamic> json) =>
@@ -24,4 +31,6 @@ class EventLogModel extends EventLogEntity {
           time: eventLogEntity.time,
           description: eventLogEntity.description,
           makerByEmployee: eventLogEntity.makerByEmployee);
+
+
 }

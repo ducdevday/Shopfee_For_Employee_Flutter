@@ -1,83 +1,53 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/common/models/payment_status.dart';
-import 'package:shopfeeforemployee/core/errors/failures.dart';
-import 'package:shopfeeforemployee/core/utils/exception_util.dart';
-import 'package:shopfeeforemployee/core/utils/navigation_util.dart';
-import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
-import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
-import 'package:shopfeeforemployee/features/order_detail/domain/usecase/order_detail_usecase.dart';
-
-part 'order_detail_event.dart';
-
-part 'order_detail_state.dart';
+part of order_detail;
 
 class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
   final OrderDetailUseCase _orderDetailUseCase;
 
   OrderDetailBloc(this._orderDetailUseCase) : super(OrderDetailInitial()) {
-    on<LoadOrderDetail>(_onLoadOrderDetail);
-    on<AddEventLog>(_onAddEventLogs);
-    on<ChooseReasonCancel>(_onChooseReasonCancel);
+    on<OrderDetailLoadInformation>(_onOrderDetailLoadInformation);
+    on<OrderDetailAddEventLog>(_onOrderDetailAddEventLog);
+    on<OrderDetailChooseReasonCancel>(_onOrderDetailChooseReasonCancel);
+    on<OrderDetailAcceptRequestCancel>(_onOrderDetailAcceptRequestCancel);
+    on<OrderDetailRefuseRequestCancel>(_onOrderDetailRefuseRequestCancel);
   }
 
-  FutureOr<void> _onLoadOrderDetail(
-      LoadOrderDetail event, Emitter<OrderDetailState> emit) async {
-    emit(OrderDetailLoading());
-    late OrderDetailEntity orderDetail;
-    late List<EventLogEntity> eventLogs;
-
-    final responseOrderDetail =
-        await _orderDetailUseCase.getOrderDetail(event.id);
-    final responseEventLogs = await _orderDetailUseCase.getEventLogs(event.id);
-
-    responseOrderDetail.fold((failure) {
-      if (failure is ServerFailure) {
-        emit(OrderDetailError());
-        return;
-      }
-      ExceptionUtil.handle(failure);
-    }, (orderDetailEntity) {
-      orderDetail = orderDetailEntity;
-    });
-
-    responseEventLogs.fold((failure) {
-      if (failure is ServerFailure) {
-        emit(OrderDetailError());
-        return;
-      }
-      ExceptionUtil.handle(failure);
-    }, (eventLogList) {
-      eventLogs = eventLogList;
-    });
-
-    emit(OrderDetailLoaded(orderDetail: orderDetail, eventLogs: eventLogs));
+  FutureOr<void> _onOrderDetailLoadInformation(
+      OrderDetailLoadInformation event, Emitter<OrderDetailState> emit) async {
+    try {
+      emit(OrderDetailLoadInProcess());
+      final response = await Future.wait([
+        _orderDetailUseCase.getOrderDetail(event.orderId),
+        _orderDetailUseCase.getEventLogs(event.orderId)
+      ]);
+      final OrderDetailEntity orderDetail = response[0] as OrderDetailEntity;
+      final List<EventLogEntity> eventLogs =
+          response[1] as List<EventLogEntity>;
+      emit(OrderDetailLoadSuccess(
+          orderDetail: orderDetail, eventLogs: eventLogs));
+    } catch (e) {
+      emit(OrderDetailLoadFailure());
+      ExceptionUtil.handle(e);
+    }
   }
 
-  FutureOr<void> _onAddEventLogs(
-      AddEventLog event, Emitter<OrderDetailState> emit) async {
-    if (state is OrderDetailLoaded) {
-      final currentState = state as OrderDetailLoaded;
-      String fcmToken = "";
-      EasyLoading.show();
+  FutureOr<void> _onOrderDetailAddEventLog(
+      OrderDetailAddEventLog event, Emitter<OrderDetailState> emit) async {
+    try {
+      if (state is OrderDetailLoadSuccess) {
+        final currentState = state as OrderDetailLoadSuccess;
+        EasyLoading.show(maskType: EasyLoadingMaskType.black);
 
-      final responseFCM = await _orderDetailUseCase
-          .getFCMToken(currentState.orderDetail.userId!);
-      responseFCM.fold((failure) => ExceptionUtil.handle(failure), (value) {
-        fcmToken = value;
-      });
+        // final fcmToken = await _orderDetailUseCase
+        //     .getFCMToken(currentState.orderDetail.userId!);
 
-      final response =
-          await _orderDetailUseCase.addEventLog(event.id, event.eventLog);
-      EasyLoading.dismiss();
+        await _orderDetailUseCase.addEventLog(event.orderId, event.eventLog);
 
-      response.fold((failure) => ExceptionUtil.handle(failure), (_) {
-        emit(currentState.copyWith(
-            eventLogs: List.from(currentState.eventLogs)..add(event.eventLog)));
+        //TODO: Reload Page
+        add(OrderDetailLoadInformation(orderId: event.orderId));
+
+        // await _orderDetailUseCase.sendOrderMessage(
+        //     event.eventLog.orderStatus!, event.orderId, fcmToken);
+
         if (event.eventLog.orderStatus != OrderStatus.CANCELED) {
           EasyLoading.showSuccess("Success",
               duration: Duration(milliseconds: 2000));
@@ -85,29 +55,52 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
           EasyLoading.showSuccess("Canceled",
               duration: Duration(milliseconds: 2000));
         }
-      });
-
-      final responseNotify = await _orderDetailUseCase.sendOrderMessage(
-          event.eventLog.orderStatus, event.id, fcmToken);
-
-      responseNotify.fold((failure) => ExceptionUtil.handle(failure), (_) {});
-
-      if (event.eventLog.orderStatus == OrderStatus.SUCCEED &&
-          currentState.orderDetail.transaction!.status ==
-              PaymentStatus.UNPAID) {
-        final responseTransaction = await _orderDetailUseCase
-            .completeTransaction(currentState.orderDetail.transaction!.id!);
-        responseTransaction.fold(
-            (failure) => ExceptionUtil.handle(failure), (_) {});
+        if (event.eventLog.orderStatus == OrderStatus.SUCCEED &&
+            currentState.orderDetail.transaction!.status ==
+                PaymentStatus.UNPAID) {
+          final responseTransaction = await _orderDetailUseCase
+              .completeTransaction(currentState.orderDetail.transaction!.id!);
+        }
+        EasyLoading.dismiss();
       }
+    } catch (e) {
+      ExceptionUtil.handle(e);
     }
   }
 
-  FutureOr<void> _onChooseReasonCancel(
-      ChooseReasonCancel event, Emitter<OrderDetailState> emit) {
-    if (state is OrderDetailLoaded) {
-      final currentState = state as OrderDetailLoaded;
-      emit(currentState.copyWith(reasonCancel: event.reason));
+  FutureOr<void> _onOrderDetailChooseReasonCancel(
+      OrderDetailChooseReasonCancel event, Emitter<OrderDetailState> emit) {
+    if (state is OrderDetailLoadSuccess) {
+      final currentState = state as OrderDetailLoadSuccess;
+      emit(currentState.copyWith(reasonCancel: event.reasonCancel));
+    }
+  }
+
+  FutureOr<void> _onOrderDetailAcceptRequestCancel(
+      OrderDetailAcceptRequestCancel event,
+      Emitter<OrderDetailState> emit) async {
+    try {
+      EasyLoading.show();
+      await _orderDetailUseCase.acceptRequestCancel(event.orderId);
+      EasyLoading.dismiss();
+
+      //TODO: Reload Page
+      add(OrderDetailLoadInformation(orderId: event.orderId));
+    } catch (e) {
+      ExceptionUtil.handle(e);
+    }
+  }
+
+  FutureOr<void> _onOrderDetailRefuseRequestCancel(OrderDetailRefuseRequestCancel event, Emitter<OrderDetailState> emit) async {
+    try {
+      EasyLoading.show();
+      await _orderDetailUseCase.refuseRequestCancel(event.orderId);
+      EasyLoading.dismiss();
+
+      //TODO: Reload Page
+      add(OrderDetailLoadInformation(orderId: event.orderId));
+    } catch (e) {
+      ExceptionUtil.handle(e);
     }
   }
 }

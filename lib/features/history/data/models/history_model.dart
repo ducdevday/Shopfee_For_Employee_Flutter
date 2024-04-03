@@ -6,20 +6,33 @@ import 'package:shopfeeforemployee/features/history/domain/entities/history_enti
 part 'history_model.g.dart';
 
 @JsonSerializable()
-class HistoryModel extends HistoryEntity {
-  HistoryModel(
-      {required super.id,
-      required super.total,
-      required super.customerName,
-      required super.phoneNumber,
-      required super.productName,
-      required super.productQuantity,
-      required super.thumbnailUrl,
-      required super.orderType,
-      required super.statusLastEvent,
-      required super.timeLastEvent});
+class HistoryModel {
+  final String id;
+  final double total;
+  final String customerName;
+  final String phoneNumber;
+  final String productName;
+  final int productQuantity;
+  @JsonKey(name: "productThumbnailUrl")
+  final String thumbnailUrl;
+  final OrderType orderType;
+  final OrderStatus statusLastEvent;
+  final DateTime timeLastEvent;
 
-  factory HistoryModel.fromJson(Map<String, dynamic> json) => _$HistoryModelFromJson(json);
+  HistoryModel(
+      {required this.id,
+      required this.total,
+      required this.customerName,
+      required this.phoneNumber,
+      required this.productName,
+      required this.productQuantity,
+      required this.thumbnailUrl,
+      required this.orderType,
+      required this.statusLastEvent,
+      required this.timeLastEvent});
+
+  factory HistoryModel.fromJson(Map<String, dynamic> json) =>
+      _$HistoryModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$HistoryModelToJson(this);
 }

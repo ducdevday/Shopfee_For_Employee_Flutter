@@ -1,5 +1,6 @@
 import 'package:shopfeeforemployee/core/common/models/payment_status.dart';
 import 'package:shopfeeforemployee/core/common/models/payment_type.dart';
+import 'package:shopfeeforemployee/features/order_detail/data/models/transaction_model.dart';
 
 class TransactionEntity {
   final String? id;
@@ -26,5 +27,13 @@ class TransactionEntity {
       type: type ?? this.type,
       totalPaid: totalPaid ?? this.totalPaid,
     );
+  }
+
+  factory TransactionEntity.fromModel(TransactionModel model) {
+    return TransactionEntity(
+        id: model.id,
+        status: model.status,
+        type: model.paymentType,
+        totalPaid: model.totalPaid);
   }
 }

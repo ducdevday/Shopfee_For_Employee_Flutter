@@ -1,50 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:shopfeeforemployee/features/account/presentation/page/account_page.dart';
-import 'package:shopfeeforemployee/features/change_password/presentation/page/change_password_page.dart';
-import 'package:shopfeeforemployee/features/history/presentation/page/history_page.dart';
-import 'package:shopfeeforemployee/features/home/presentation/page/home_page.dart';
-import 'package:shopfeeforemployee/features/login/presentation/page/login_page.dart';
-import 'package:shopfeeforemployee/features/notification_permission/notify_permission_page.dart';
-import 'package:shopfeeforemployee/features/order_detail/presentation/page/order_detail_page.dart';
-import 'package:shopfeeforemployee/features/personal_information/presentation/page/personal_information_page.dart';
-import 'package:shopfeeforemployee/features/shipping_order/presentation/page/shipping_order_page.dart';
+import 'package:shopfeeforemployee/core/common/models/order_type.dart';
+import 'package:shopfeeforemployee/features/account/presentation/account.dart';
+import 'package:shopfeeforemployee/features/change_password/presentation/change_password.dart';
+import 'package:shopfeeforemployee/features/history/presentation/history.dart';
+import 'package:shopfeeforemployee/features/home/presentation/home.dart';
+import 'package:shopfeeforemployee/features/login/presentation/login.dart';
+import 'package:shopfeeforemployee/features/notify_permission/presentation/notify_permission.dart';
+import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
+import 'package:shopfeeforemployee/features/orders/presentation/orders.dart';
+import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';
 
 class AppRouter {
-  static const String notifyPermissionRoute = "/notifyPermission";
-  static const String loginRoute = "/login";
-  static const String homeRoute = "/home";
-  static const String accountRoute = "/account";
-  static const String personalInformationRoute = "/personal_information";
-  static const String changePasswordRoute = "/change_account";
-  static const String shippingOrderRoute = "/shipping_order";
-  static const String takeawayOrderRoute = "/takeaway_order";
-  static const String orderDetailRoute = "/order_detail";
-  static const String historyRoute = "/history";
-
   static onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case notifyPermissionRoute:
-        return MaterialPageRoute(builder: (context) => const NotifyPermissionPage());
-      case loginRoute:
+      case NotifyPermissionPage.route:
+        return MaterialPageRoute(
+            builder: (context) => const NotifyPermissionPage());
+      case LoginPage.route:
         return MaterialPageRoute(builder: (context) => const LoginPage());
-      case homeRoute:
+      case HomePage.route:
         return MaterialPageRoute(builder: (context) => const HomePage());
-      case accountRoute:
+      case AccountPage.route:
         return MaterialPageRoute(builder: (context) => const AccountPage());
-      case personalInformationRoute:
+      case PersonalInformationPage.route:
         return MaterialPageRoute(
             builder: (context) => const PersonalInformationPage());
-      case changePasswordRoute:
+      case ChangePasswordPage.route:
         return MaterialPageRoute(
             builder: (context) => const ChangePasswordPage());
-      case shippingOrderRoute:
+      case OrdersPage.route:
         return MaterialPageRoute(
-            builder: (context) => const ShippingOrderPage());
-      case orderDetailRoute:
+            builder: (context) => OrdersPage(orderType: settings.arguments as OrderType,));
+      case OrderDetailPage.route:
         return MaterialPageRoute(
             builder: (context) =>
                 OrderDetailPage(orderId: settings.arguments as String));
-      case historyRoute:
+      case HistoryPage.route:
         return MaterialPageRoute(builder: (context) => const HistoryPage());
       default:
         return _errorRoute();

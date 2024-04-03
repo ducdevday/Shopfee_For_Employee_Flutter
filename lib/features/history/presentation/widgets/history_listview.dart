@@ -1,116 +1,128 @@
-import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/features/history/domain/entities/history_entity.dart';
-import 'package:shopfeeforemployee/features/history/presentation/bloc/history_bloc.dart';
-import 'package:shopfeeforemployee/features/history/presentation/widgets/history_item.dart';
+part of history;
 
 class HistoryListView extends StatefulWidget {
   final OrderStatus orderStatus;
+  final String? searchQuery;
 
-  const HistoryListView({Key? key, required this.orderStatus}) : super(key: key);
+  const HistoryListView(
+      {Key? key, required this.orderStatus, required this.searchQuery})
+      : super(key: key);
 
   @override
   State<HistoryListView> createState() => _HistoryListViewState();
 }
 
 class _HistoryListViewState extends State<HistoryListView> {
-  final scrollController = ScrollController();
+  late HistoryBloc _bloc;
+  late ScrollController scrollController;
   late bool isLoadingMore;
   late bool cannotLoadMore;
   late List<HistoryEntity> historyList;
 
+  int initPage = 1;
+  int initSize = 8;
+
   @override
   void initState() {
     super.initState();
+    _bloc = ServiceLocator.sl<HistoryBloc>()
+      ..add(HistoryLoadInformation(
+          orderStatus: widget.orderStatus,
+          initPage: initPage,
+          initSize: initSize,
+          searchQuery: widget.searchQuery));
+    scrollController = ScrollController();
     scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    scrollController.dispose();
+    super.dispose();
   }
 
   void _scrollListener() {
     if (isLoadingMore || cannotLoadMore) return;
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      if (widget.orderStatus == OrderStatus.SUCCEED) {
-        context.read<HistoryBloc>().add(const LoadHistorySucceed());
-      } else {
-        context.read<HistoryBloc>().add(const LoadHistoryCanceled());
-      }
+      _bloc.add(HistoryLoadMoreInformation(orderStatus: widget.orderStatus));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HistoryBloc, HistoryState>(
-      builder: (context, state) {
-        if (state is HistoryLoaded) {
-          if (widget.orderStatus == OrderStatus.SUCCEED) {
-            isLoadingMore = state.isSucceedLoadMore;
-            cannotLoadMore = state.cannotSucceedLoadMore;
-            historyList = state.historiesSucceed;
-          } else {
-            isLoadingMore = state.isCanceledLoadMore;
-            cannotLoadMore = state.cannotCanceledLoadMore;
-            historyList = state.historiesCanceled;
-          }
-          if (historyList.isNotEmpty) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<HistoryBloc>().add(InitHistory());
-              },
-              child: ListView.separated(
-                controller: scrollController,
-                padding: const EdgeInsets.only(top: 10),
-                itemCount:
-                    isLoadingMore ? historyList.length + 1 : historyList.length,
-                itemBuilder: (context, index) {
-                  if (index < historyList.length) {
-                    return HistoryItem(history: historyList[index]);
-                  } else {
-                    return const Padding(
-                      padding: EdgeInsets.all(AppDimen.spacing),
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }
+    return BlocProvider(
+      create: (context) => _bloc,
+      child: BlocBuilder<HistoryBloc, HistoryState>(
+        builder: (context, state) {
+          if (state is HistoryLoadInProcess) {
+            return const HistorySkeletonList();
+          } else if (state is HistoryLoadSuccess) {
+            isLoadingMore = state.isLoadMore;
+            cannotLoadMore = state.cannotLoadMore;
+            historyList = state.historyList;
+            if (historyList.isNotEmpty) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  _bloc.add(HistoryLoadInformation(
+                      orderStatus: widget.orderStatus,
+                      initPage: initPage,
+                      initSize: initSize,
+                      searchQuery: widget.searchQuery));
                 },
-                separatorBuilder: (context, index) => const SizedBox(
-                  height: 8,
+                child: ListView.separated(
+                  controller: scrollController,
+                  padding: const EdgeInsets.only(top: 10),
+                  itemCount: isLoadingMore
+                      ? historyList.length + 1
+                      : historyList.length,
+                  itemBuilder: (context, index) {
+                    if (index < historyList.length) {
+                      return HistoryItem(history: historyList[index]);
+                    } else {
+                      return const Padding(
+                        padding: EdgeInsets.all(AppDimen.spacing),
+                        child: CupertinoActivityIndicator(),
+                      );
+                    }
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: 8,
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return Container(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/icons/ic_no_order.png",
-                    width: 60,
-                    height: 60,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    widget.orderStatus == OrderStatus.SUCCEED ? "No Succeed Orders Yet" : "No Canceled Orders Yet",
-                    style: AppStyle.mediumTextStyleDark
-                        .copyWith(color: AppColor.nonactiveColor),
-                  )
-                ],
-              ),
-            );
+              );
+            } else {
+              return SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/icons/ic_no_order.png",
+                      width: 60,
+                      height: 60,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Text(
+                      widget.orderStatus == OrderStatus.SUCCEED
+                          ? "No Succeed Orders Yet"
+                          : "No Canceled Orders Yet",
+                      style: AppStyle.mediumTextStyleDark
+                          .copyWith(color: AppColor.nonactiveColor),
+                    )
+                  ],
+                ),
+              );
+            }
+          } else if(state is HistoryLoadFailure) {
+            return const MyErrorWidget();
           }
-        } else {
           return const SizedBox();
-        }
-      },
+        },
+      ),
     );
   }
 }
-
-

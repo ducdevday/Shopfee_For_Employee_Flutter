@@ -1,13 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/core/common/models/order_type.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/dimens.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
-import 'package:shopfeeforemployee/core/router/app_router.dart';
-import 'package:shopfeeforemployee/core/utils/converter_util.dart';
-import 'package:shopfeeforemployee/features/history/domain/entities/history_entity.dart';
+part of history;
 
 class HistoryItem extends StatelessWidget {
   final HistoryEntity history;
@@ -18,7 +9,7 @@ class HistoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, AppRouter.orderDetailRoute,
+        Navigator.pushNamed(context, OrderDetailPage.route,
             arguments: history.id);
       },
       child: Container(
@@ -106,14 +97,14 @@ class HistoryItem extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${ConverterUtil.formattedTime(history.timeLastEvent)} - ${ConverterUtil.formattedDate(history.timeLastEvent)}",
+                                    "${FormatUtil.formatTime(history.timeLastEvent)} - ${FormatUtil.formatDate(history.timeLastEvent)}",
                                     style: AppStyle.normalTextStyleDark,
                                   ),
                                   const SizedBox(
                                     height: 4,
                                   ),
                                   Text(
-                                    "Total: ${ConverterUtil.formattedMoney(history.total)}",
+                                    "Total: ${FormatUtil.formatMoney(history.total)}",
                                     style:
                                         AppStyle.mediumTextStyleDark.copyWith(
                                       color: AppColor.headingColor
@@ -166,23 +157,6 @@ class HistoryItem extends StatelessWidget {
                 }
               },
             ),
-            const Divider(
-              height: 10,
-            ),
-            Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRouter.orderDetailRoute,
-                          arguments: history.id);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 30)),
-                    child: Text("See Detail"),
-                  ),
-                ))
           ],
         ),
       ),

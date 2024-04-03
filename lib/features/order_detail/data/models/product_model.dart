@@ -5,28 +5,27 @@ import 'package:shopfeeforemployee/features/order_detail/domain/entities/product
 part 'product_model.g.dart';
 
 @JsonSerializable()
-class ProductModel extends ProductEntity {
-  @override
-  final List<ToppingModel>? toppings;
+class ProductModel {
+  String? id;
+  String? name;
+  int? quantity;
+  String? size;
+  double? price;
+  List<ToppingModel>? toppings;
+  String? note;
 
-  ProductModel(
-      {required String? id,
-      required String? name,
-      required int? quantity,
-      required String? size,
-      required double? price,
-      required this.toppings,
-      required String? note})
-      : super(
-            id: id,
-            name: name,
-            quantity: quantity,
-            size: size,
-            price: price,
-            toppings: toppings,
-            note: note);
+  ProductModel({
+    this.id,
+    this.name,
+    this.quantity,
+    this.size,
+    this.price,
+    this.toppings,
+    this.note,
+  });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
+  factory ProductModel.fromJson(Map<String, dynamic> json) =>
+      _$ProductModelFromJson(json);
 
   Map<String, dynamic> toJson() => toJson();
 }

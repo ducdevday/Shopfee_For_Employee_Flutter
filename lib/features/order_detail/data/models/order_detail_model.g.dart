@@ -10,39 +10,44 @@ OrderDetailModel _$OrderDetailModelFromJson(Map<String, dynamic> json) =>
     OrderDetailModel(
       id: json['id'] as String?,
       note: json['note'] as String?,
-      total: (json['total'] as num?)?.toDouble(),
+      totalPayment: json['totalPayment'] as num?,
+      shippingFee: json['shippingFee'] as num?,
+      totalItemPrice: json['totalItemPrice'] as num?,
       orderType: $enumDecodeNullable(_$OrderTypeEnumMap, json['orderType']),
-      address: json['address'] == null
+      receiverInformation: json['receiverInformation'] == null
           ? null
-          : AddressModel.fromJson(json['address'] as Map<String, dynamic>),
+          : ReceiverInformationModel.fromJson(
+              json['receiverInformation'] as Map<String, dynamic>),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
-      products: (json['products'] as List<dynamic>?)
-          ?.map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+      itemList: (json['itemList'] as List<dynamic>?)
+          ?.map((e) => OrderProductModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       transaction: json['transaction'] == null
           ? null
           : TransactionModel.fromJson(
               json['transaction'] as Map<String, dynamic>),
-      review: json['review'] == null
+      branch: json['branch'] == null
           ? null
-          : ReviewModel.fromJson(json['review'] as Map<String, dynamic>),
-      userId: json['userId'] as String?,
+          : BranchModel.fromJson(json['branch'] as Map<String, dynamic>),
+      coin: json['coin'] as int?,
     );
 
 Map<String, dynamic> _$OrderDetailModelToJson(OrderDetailModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'note': instance.note,
-      'total': instance.total,
+      'totalPayment': instance.totalPayment,
+      'shippingFee': instance.shippingFee,
+      'totalItemPrice': instance.totalItemPrice,
       'orderType': instance.orderType,
+      'receiverInformation': instance.receiverInformation,
       'createdAt': instance.createdAt?.toIso8601String(),
-      'userId': instance.userId,
-      'address': instance.address,
-      'products': instance.products,
+      'itemList': instance.itemList,
       'transaction': instance.transaction,
-      'review': instance.review,
+      'branch': instance.branch,
+      'coin': instance.coin,
     };
 
 const _$OrderTypeEnumMap = {

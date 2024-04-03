@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shopfeeforemployee/core/config/color.dart';
-import 'package:shopfeeforemployee/core/config/style.dart';
+import 'package:shopfeeforemployee/core/config/app_color.dart';
+import 'package:shopfeeforemployee/core/config/app_style.dart';
 
 class MyLoading extends StatelessWidget {
   const MyLoading({Key? key}) : super(key: key);

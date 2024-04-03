@@ -1,4 +1,4 @@
-part of 'history_bloc.dart';
+part of history;
 
 abstract class HistoryState extends Equatable {
   const HistoryState();
@@ -9,80 +9,58 @@ class HistoryInitial extends HistoryState {
   List<Object> get props => [];
 }
 
-class HistoryLoading extends HistoryState {
+class HistoryLoadInProcess extends HistoryState {
   @override
   List<Object> get props => [];
 }
 
-class HistoryLoaded extends HistoryState {
-  final List<HistoryEntity> historiesSucceed;
-  final List<HistoryEntity> historiesCanceled;
-  final int pageSucceed;
-  final int pageCanceled;
-  final bool isSucceedLoadMore;
-  final bool isCanceledLoadMore;
-  final bool cannotSucceedLoadMore;
-  final bool cannotCanceledLoadMore;
+class HistoryLoadSuccess extends HistoryState {
+  final List<HistoryEntity> historyList;
+  final int page;
   final int size;
-  final String query;
+  final bool isLoadMore;
+  final bool cannotLoadMore;
+  final String? searchQuery;
 
-  const HistoryLoaded({required this.historiesSucceed,
-    required this.historiesCanceled,
-    required this.pageSucceed,
-    required this.pageCanceled,
+  const HistoryLoadSuccess({
+    required this.historyList,
+    required this.page,
     required this.size,
-    this.isSucceedLoadMore = false,
-    this.isCanceledLoadMore = false,
-    this.cannotSucceedLoadMore = false,
-    this.cannotCanceledLoadMore = false,
-    this.query = ""
+    this.isLoadMore = false,
+    this.cannotLoadMore = false,
+    this.searchQuery,
   });
 
   @override
-  List<Object> get props =>
-      [
-        historiesSucceed,
-        historiesCanceled,
-        pageSucceed,
-        pageCanceled,
-        isSucceedLoadMore,
-        isCanceledLoadMore,
-        cannotSucceedLoadMore,
-        cannotCanceledLoadMore,
+  List<Object?> get props => [
+        historyList,
+        page,
         size,
-        query,
+        isLoadMore,
+        cannotLoadMore,
+        searchQuery,
       ];
 
-  HistoryLoaded copyWith({
-    List<HistoryEntity>? historiesSucceed,
-    List<HistoryEntity>? historiesCanceled,
-    int? pageSucceed,
-    int? pageCanceled,
-    bool? isSucceedLoadMore,
-    bool? isCanceledLoadMore,
-    bool? cannotSucceedLoadMore,
-    bool? cannotCanceledLoadMore,
+  HistoryLoadSuccess copyWith({
+    List<HistoryEntity>? historyList,
+    int? page,
     int? size,
-    String? query,
+    bool? isLoadMore,
+    bool? cannotLoadMore,
+    String? searchQuery,
   }) {
-    return HistoryLoaded(
-      historiesSucceed: historiesSucceed ?? this.historiesSucceed,
-      historiesCanceled: historiesCanceled ?? this.historiesCanceled,
-      pageSucceed: pageSucceed ?? this.pageSucceed,
-      pageCanceled: pageCanceled ?? this.pageCanceled,
-      isSucceedLoadMore: isSucceedLoadMore ?? this.isSucceedLoadMore,
-      isCanceledLoadMore: isCanceledLoadMore ?? this.isCanceledLoadMore,
-      cannotSucceedLoadMore:
-          cannotSucceedLoadMore ?? this.cannotSucceedLoadMore,
-      cannotCanceledLoadMore:
-          cannotCanceledLoadMore ?? this.cannotCanceledLoadMore,
+    return HistoryLoadSuccess(
+      historyList: historyList ?? this.historyList,
+      page: page ?? this.page,
       size: size ?? this.size,
-      query: query ?? this.query,
+      isLoadMore: isLoadMore ?? this.isLoadMore,
+      cannotLoadMore: cannotLoadMore ?? this.cannotLoadMore,
+      searchQuery: searchQuery ?? this.searchQuery,
     );
   }
 }
 
-class HistoryError extends HistoryState {
+class HistoryLoadFailure extends HistoryState {
   @override
   List<Object> get props => [];
 }
