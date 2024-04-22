@@ -15,6 +15,7 @@ class HistoryLoadInProcess extends HistoryState {
 }
 
 class HistoryLoadSuccess extends HistoryState {
+  final OrderStatus orderStatus;
   final List<HistoryEntity> historyList;
   final int page;
   final int size;
@@ -23,6 +24,7 @@ class HistoryLoadSuccess extends HistoryState {
   final String? searchQuery;
 
   const HistoryLoadSuccess({
+    required this.orderStatus,
     required this.historyList,
     required this.page,
     required this.size,
@@ -33,6 +35,7 @@ class HistoryLoadSuccess extends HistoryState {
 
   @override
   List<Object?> get props => [
+        orderStatus,
         historyList,
         page,
         size,
@@ -42,6 +45,7 @@ class HistoryLoadSuccess extends HistoryState {
       ];
 
   HistoryLoadSuccess copyWith({
+    OrderStatus? orderStatus,
     List<HistoryEntity>? historyList,
     int? page,
     int? size,
@@ -50,6 +54,7 @@ class HistoryLoadSuccess extends HistoryState {
     String? searchQuery,
   }) {
     return HistoryLoadSuccess(
+      orderStatus: orderStatus ?? this.orderStatus,
       historyList: historyList ?? this.historyList,
       page: page ?? this.page,
       size: size ?? this.size,

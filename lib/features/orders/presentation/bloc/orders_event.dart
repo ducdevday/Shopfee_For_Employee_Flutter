@@ -22,14 +22,19 @@ class OrderLoadInformation extends OrdersEvent {
 }
 
 class OrderLoadMoreInformation extends OrdersEvent {
-  final OrderType orderType;
-  final OrderStatus orderStatus;
+  @override
+  List<Object> get props => [];
+}
 
-  const OrderLoadMoreInformation({
-    required this.orderType,
-    required this.orderStatus,
+class OrderRefreshInformation extends OrdersEvent {
+  final initPage;
+  final initSize;
+
+  const OrderRefreshInformation({
+    required this.initPage,
+    required this.initSize,
   });
 
   @override
-  List<Object> get props => [orderType, orderStatus];
+  List<Object> get props => [initPage, initSize];
 }

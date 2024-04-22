@@ -2,8 +2,15 @@ part of orders;
 
 class OrderInformationItem extends StatelessWidget {
   final OrderInformationEntity order;
+  final int initPage;
+  final int initSize;
 
-  const OrderInformationItem({Key? key, required this.order}) : super(key: key);
+  const OrderInformationItem(
+      {Key? key,
+      required this.order,
+      required this.initPage,
+      required this.initSize})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +18,8 @@ class OrderInformationItem extends StatelessWidget {
       onTap: () {
         NavigationUtil.pushNamed(OrderDetailPage.route, arguments: order.id)
             .then((value) {
-          // context
-          //     .read<OrdersBloc>()
-          //     .add(OrderLoadInformation(orderStatus: order.statusLastEvent));
+          context.read<OrdersBloc>().add(
+              OrderRefreshInformation(initPage: initPage, initSize: initSize));
         });
       },
       child: Container(

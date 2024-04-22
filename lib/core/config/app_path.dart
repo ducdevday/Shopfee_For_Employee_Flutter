@@ -72,4 +72,11 @@ class AppPath {
   static const String icStoreMark = "assets/icons/ic_store_mark.png";
 
   static const String icClock = "assets/icons/ic_clock.png";
+
+  static const String icRequestPending =
+      "assets/icons/ic_consider_complain.png";
+
+  static const String icRequestAccepted = "assets/icons/ic_accept_complain.png";
+
+  static const String icRequestReject = "assets/icons/ic_reject_complain.png";
 }

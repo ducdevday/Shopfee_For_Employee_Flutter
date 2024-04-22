@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:shopfeeforemployee/core/common/enum/refund_request_status.dart';
 import 'package:shopfeeforemployee/core/common/models/order_type.dart';
+import 'package:shopfeeforemployee/features/order_detail/data/models/discount_information_model.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/models/order_product_model.dart';
 
 import 'branch_model.dart';
@@ -19,9 +21,13 @@ class OrderDetailModel {
   ReceiverInformationModel? receiverInformation;
   DateTime? createdAt;
   List<OrderProductModel>? itemList;
+  @JsonKey(name: "rewardInformation")
+  DiscountInformationModel? discountInformation;
   TransactionModel? transaction;
   BranchModel? branch;
   int? coin;
+  @JsonKey(name: "refundStatus")
+  RefundRequestStatus? refundRequestStatus;
 
   OrderDetailModel({
     this.id,
@@ -36,6 +42,7 @@ class OrderDetailModel {
     this.transaction,
     this.branch,
     this.coin,
+    this.refundRequestStatus
   });
 
   factory OrderDetailModel.fromJson(Map<String, dynamic> json) =>

@@ -10,13 +10,13 @@ class ValidateFieldUtil {
   }
 
   static bool validateName(String name) {
-    // final RegExp nameRegRxp = RegExp(r'^[a-zA-Z]{2,12}(?: [a-zA-Z]+){0,2}$');
-    final RegExp nameRegRxp = RegExp(r'^(?!.*\s{3,})(?!.*[^a-zA-Z\s]).{2,12}$');
-    if (!nameRegRxp.hasMatch(name)) {
+    final RegExp nameRegExp = RegExp(r'^(?!.*\s{5,})(?!.*[^a-zA-Z\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲÝỶỸỴĐ]).{2,30}$');
+    if (!nameRegExp.hasMatch(name)) {
       return false;
     }
     return true;
   }
+
 
   static bool validateEmail(String email) {
     final RegExp emailRegExp = RegExp(

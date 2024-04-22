@@ -32,7 +32,12 @@ OrderDetailModel _$OrderDetailModelFromJson(Map<String, dynamic> json) =>
           ? null
           : BranchModel.fromJson(json['branch'] as Map<String, dynamic>),
       coin: json['coin'] as int?,
-    );
+      refundRequestStatus: $enumDecodeNullable(
+          _$RefundRequestStatusEnumMap, json['refundStatus']),
+    )..discountInformation = json['rewardInformation'] == null
+        ? null
+        : DiscountInformationModel.fromJson(
+            json['rewardInformation'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$OrderDetailModelToJson(OrderDetailModel instance) =>
     <String, dynamic>{
@@ -45,12 +50,21 @@ Map<String, dynamic> _$OrderDetailModelToJson(OrderDetailModel instance) =>
       'receiverInformation': instance.receiverInformation,
       'createdAt': instance.createdAt?.toIso8601String(),
       'itemList': instance.itemList,
+      'rewardInformation': instance.discountInformation,
       'transaction': instance.transaction,
       'branch': instance.branch,
       'coin': instance.coin,
+      'refundStatus':
+          _$RefundRequestStatusEnumMap[instance.refundRequestStatus],
     };
 
 const _$OrderTypeEnumMap = {
   OrderType.SHIPPING: 'SHIPPING',
   OrderType.ONSITE: 'ONSITE',
+};
+
+const _$RefundRequestStatusEnumMap = {
+  RefundRequestStatus.CAN_REFUND: 'CAN_REFUND',
+  RefundRequestStatus.REFUNDED: 'REFUNDED',
+  RefundRequestStatus.NOT_REFUND: 'NOT_REFUND',
 };

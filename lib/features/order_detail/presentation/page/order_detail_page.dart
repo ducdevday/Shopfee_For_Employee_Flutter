@@ -17,7 +17,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   void initState() {
     super.initState();
     _bloc = ServiceLocator.sl<OrderDetailBloc>()
-      ..add(OrderDetailLoadInformation(orderId: widget.orderId));
+      ..add(OrderDetailLoadInformation(orderId: widget.orderId, haveChanged: false));
   }
 
   @override

@@ -57,55 +57,9 @@ class PaymentSummary extends StatelessWidget {
                     )
                   ],
                 ),
-                // SizedBox(
-                //   height: 8,
-                // ),
-                // Row(
-                //   mainAxisAlignment:
-                //   MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Text(
-                //       "Voucher",
-                //       style: AppStyle
-                //           .normalTextStyleDark
-                //           .copyWith(
-                //           fontWeight:
-                //           FontWeight.w400),
-                //     ),
-                //     Text(
-                //       "-30,000đ",
-                //       style: AppStyle
-                //           .normalTextStyleDark
-                //           .copyWith(
-                //           fontWeight:
-                //           FontWeight.w400),
-                //     )
-                //   ],
-                // ),
-                if (state.orderDetail.coin != null &&
-                    state.orderDetail.coin != 0)
-                  Column(
-                    children: [
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Applied Coin",
-                            style: AppStyle.normalTextStyleDark
-                                .copyWith(fontWeight: FontWeight.w400),
-                          ),
-                          Text(
-                            "- ${FormatUtil.formatMoney(state.orderDetail.coin)}",
-                            style: AppStyle.normalTextStyleDark
-                                .copyWith(fontWeight: FontWeight.w400),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
+                buildAppliedShippingCouponWidget(state),
+                buildAppliedOrderCouponWidget(state),
+                buildAppliedCoinWidget(state),
                 const SizedBox(
                   height: 8,
                 ),
@@ -158,28 +112,6 @@ class PaymentSummary extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Divider(
-                //   height: 1,
-                // ),
-                // Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       SizedBox(height: 10,),
-                //       Text(
-                //         "Schedule Delivery",
-                //         style: AppStyle.mediumTitleStyleDark.copyWith(
-                //             color: AppColor.headingColor,
-                //             fontWeight: FontWeight.w500),
-                //       ),
-                //       SizedBox(
-                //         height: 4,
-                //       ),
-                //       Text("05:15 PM", style: AppStyle.normalTextStyleDark),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           );
@@ -188,6 +120,105 @@ class PaymentSummary extends StatelessWidget {
         }
       },
     );
+  }
+
+  Widget buildAppliedShippingCouponWidget(OrderDetailLoadSuccess state) {
+    if (state.orderDetail.discountInformation?.shippingDiscount != null) {
+      return Column(
+        children: [
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  "Shipping Fee Discount",
+                  style: AppStyle.normalTextStyleDark
+                      .copyWith(fontWeight: FontWeight.w400),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  "- ${FormatUtil.formatMoney(state.orderDetail.discountInformation?.shippingDiscount)}",
+                  style: AppStyle.normalTextStyleDark
+                      .copyWith(fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.end,
+                ),
+              )
+            ],
+          ),
+        ],
+      );
+    }
+    return SizedBox();
+  }
+
+  Widget buildAppliedOrderCouponWidget(OrderDetailLoadSuccess state) {
+    if (state.orderDetail.discountInformation?.shippingDiscount != null) {
+      return Column(
+        children: [
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  "Order Discount",
+                  style: AppStyle.normalTextStyleDark
+                      .copyWith(fontWeight: FontWeight.w400),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  "- ${FormatUtil.formatMoney(state.orderDetail.discountInformation?.orderDiscount)}",
+                  style: AppStyle.normalTextStyleDark
+                      .copyWith(fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.end,
+                ),
+              )
+            ],
+          ),
+        ],
+      );
+    }
+    return SizedBox();
+  }
+
+  Widget buildAppliedCoinWidget(OrderDetailLoadSuccess state) {
+    if (state.orderDetail.coin != null && state.orderDetail.coin != 0) {
+      return Column(
+        children: [
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  "Applied Coin",
+                  style: AppStyle.normalTextStyleDark
+                      .copyWith(fontWeight: FontWeight.w400),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  "- ${FormatUtil.formatMoney(state.orderDetail.coin)}",
+                  style: AppStyle.normalTextStyleDark
+                      .copyWith(fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.end,
+                ),
+              )
+            ],
+          ),
+        ],
+      );
+    }
+    return SizedBox();
   }
 
   Widget buildPaymentStatus(PaymentStatus? paymentStatus) {

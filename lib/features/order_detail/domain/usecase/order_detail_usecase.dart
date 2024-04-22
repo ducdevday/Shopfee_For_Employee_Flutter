@@ -1,6 +1,6 @@
-import 'package:shopfeeforemployee/core/common/enum/cancel_request_action.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
+import 'package:shopfeeforemployee/core/common/enum/order_event_type.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_action_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/repositories/order_detail_repository.dart';
 
@@ -9,14 +9,19 @@ abstract class OrderDetailUseCase {
 
   Future<List<EventLogEntity>> getEventLogs(String orderId);
 
-  Future<void> addEventLog(String orderId, EventLogEntity eventLog);
-
-  Future<String> getFCMToken(String userId);
-
-  Future<void> sendOrderMessage(
-      OrderStatus status, String orderId, String fcmToken);
-
   Future<void> completeTransaction(String transactionId);
+
+  Future<void> acceptOrder(String orderId);
+
+  Future<void> refuseOrder(String orderId, String description);
+
+  Future<void> preparedOrder(String orderId);
+
+  Future<void> deliveryOrder(String orderId);
+
+  Future<void> fulfillOrder(String orderId);
+
+  Future<void> markBoomOrder(String orderId);
 
   Future<void> acceptRequestCancel(String orderId);
 
@@ -39,70 +44,63 @@ class OrderDetailUseCaseImpl extends OrderDetailUseCase {
   }
 
   @override
-  Future<void> addEventLog(String orderId, EventLogEntity eventLog) async {
-    return await _orderDetailRepository.addEventLog(orderId, eventLog);
-  }
-
-  @override
-  Future<String> getFCMToken(String userId) async {
-    return await _orderDetailRepository.getFCMToken(userId);
-  }
-
-  @override
-  Future<void> sendOrderMessage(
-      OrderStatus status, String orderId, String fcmToken) async {
-    final message = formatMessage(status, orderId);
-    return await _orderDetailRepository.sendOrderMessage(
-        message!["title"], message["body"], orderId, fcmToken);
-  }
-
-  Map<String, dynamic>? formatMessage(OrderStatus status, String orderId) {
-    late Map<String, dynamic> result;
-    if (status == OrderStatus.ACCEPTED) {
-      result = {
-        "title": "Shopfee Announce",
-        "body":
-            "Your order $orderId was accepted by employee. Please wait for us to process your order."
-      };
-      return result;
-    } else if (status == OrderStatus.DELIVERING) {
-      result = {
-        "title": "Shopfee Announce",
-        "body":
-            "Your order $orderId is delivering. Please pay attention to your phone in case the shipper call you."
-      };
-      return result;
-    } else if (status == OrderStatus.SUCCEED) {
-      result = {
-        "title": "Shopfee Announce",
-        "body":
-            "Your order $orderId was got by you. Thank you for choosing Shopfee."
-      };
-      return result;
-    } else if (status == OrderStatus.CANCELED) {
-      result = {
-        "title": "Shopfee Announce",
-        "body": "Your order $orderId was canceled. Please tap to see details."
-      };
-      return result;
-    }
-    return null;
-  }
-
-  @override
   Future<void> completeTransaction(String transactionId) async {
     return await _orderDetailRepository.completeTransaction(transactionId);
   }
 
   @override
   Future<void> acceptRequestCancel(String orderId) async {
-    return await _orderDetailRepository.handleRequestCancel(
-        orderId, CancelRequestAction.ACCEPTED);
+    final orderAction =
+        OrderActionEntity(orderEvent: OrderEventType.CANCEL_REQUEST_ACCEPT);
+    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
   }
 
   @override
   Future<void> refuseRequestCancel(String orderId) async {
-    return await _orderDetailRepository.handleRequestCancel(
-        orderId, CancelRequestAction.REFUSED);
+    final orderAction =
+        OrderActionEntity(orderEvent: OrderEventType.CANCEL_REQUEST_REFUSE);
+    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+  }
+
+  @override
+  Future<void> acceptOrder(String orderId) async {
+    final orderAction =
+        OrderActionEntity(orderEvent: OrderEventType.ORDER_ACCEPT);
+    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+  }
+
+  @override
+  Future<void> deliveryOrder(String orderId) async {
+    final orderAction =
+        OrderActionEntity(orderEvent: OrderEventType.START_SHIPPING);
+    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+  }
+
+  @override
+  Future<void> fulfillOrder(String orderId) async {
+    final orderAction =
+        OrderActionEntity(orderEvent: OrderEventType.ORDER_FULFILL);
+    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+  }
+
+  @override
+  Future<void> markBoomOrder(String orderId) async {
+    final orderAction =
+        OrderActionEntity(orderEvent: OrderEventType.ORDER_BOOM);
+    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+  }
+
+  @override
+  Future<void> preparedOrder(String orderId) async {
+    final orderAction =
+        OrderActionEntity(orderEvent: OrderEventType.READY_SHIPPING);
+    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+  }
+
+  @override
+  Future<void> refuseOrder(String orderId, String description) async {
+    final orderAction = OrderActionEntity(
+        orderEvent: OrderEventType.ORDER_REFUSE, description: description);
+    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
   }
 }

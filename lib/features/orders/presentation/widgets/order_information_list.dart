@@ -14,7 +14,8 @@ class OrderInformationList extends StatefulWidget {
 
 class _OrderInformationListState extends State<OrderInformationList> {
   late final OrdersBloc _bloc;
-  late final ScrollController scrollController;
+  late final ScrollController _scrollController;
+  late final RefreshController _refreshController;
   late bool isLoadingMore;
   late bool cannotLoadMore;
   late List<OrderInformationEntity> orderList;
@@ -31,23 +32,24 @@ class _OrderInformationListState extends State<OrderInformationList> {
           orderStatus: widget.orderStatus,
           initPage: initPage,
           initSize: initSize));
-    scrollController = ScrollController();
-    scrollController.addListener(_scrollListener);
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _refreshController = RefreshController(initialRefresh: false);
   }
 
   @override
   void dispose() {
     _bloc.close();
-    scrollController.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
     super.dispose();
   }
 
   void _scrollListener() {
     if (isLoadingMore || cannotLoadMore) return;
-    if (scrollController.position.pixels ==
-        scrollController.position.maxScrollExtent) {
-      _bloc.add(OrderLoadMoreInformation(
-          orderType: widget.orderType, orderStatus: widget.orderStatus));
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      _bloc.add(OrderLoadMoreInformation());
     }
   }
 
@@ -57,7 +59,7 @@ class _OrderInformationListState extends State<OrderInformationList> {
       create: (context) => _bloc,
       child: BlocConsumer<OrdersBloc, OrdersState>(
         listener: (context, state) {
-          if (state is ShippingOrderLoadSuccess) {
+          if (state is OrderLoadSuccess) {
             isLoadingMore = state.isLoadMore;
             cannotLoadMore = state.cannotLoadMore;
             orderList = state.orderList;
@@ -66,24 +68,29 @@ class _OrderInformationListState extends State<OrderInformationList> {
         builder: (context, state) {
           if (state is OrdersLoadInProcess) {
             return const OrderSkeletonList();
-          } else if (state is ShippingOrderLoadSuccess) {
+          } else if (state is OrderLoadSuccess) {
             if (orderList.isNotEmpty) {
-              return RefreshIndicator(
+              return SmartRefresher(
+                controller: _refreshController,
+                enablePullUp: false,
+                physics: BouncingScrollPhysics(),
                 onRefresh: () async {
-                  context.read<OrdersBloc>().add(OrderLoadInformation(
-                      orderType: widget.orderType,
-                      orderStatus: widget.orderStatus,
-                      initPage: initPage,
-                      initSize: initSize));
+                  _bloc.add(OrderRefreshInformation(
+                      initPage: initPage, initSize: initSize));
+                  _refreshController.refreshCompleted();
                 },
                 child: ListView.separated(
-                  controller: scrollController,
+                  controller: _scrollController,
                   padding: EdgeInsets.only(top: 10),
                   itemCount:
                       isLoadingMore ? orderList.length + 1 : orderList.length,
                   itemBuilder: (context, index) {
                     if (index < orderList.length) {
-                      return OrderInformationItem(order: orderList[index]);
+                      return OrderInformationItem(
+                        order: orderList[index],
+                        initPage: initPage,
+                        initSize: initSize,
+                      );
                     } else {
                       return const Padding(
                         padding: EdgeInsets.all(AppDimen.spacing),
@@ -126,8 +133,4 @@ class _OrderInformationListState extends State<OrderInformationList> {
       ),
     );
   }
-
-  // @override
-  // // TODO: implement wantKeepAlive
-  // bool get wantKeepAlive => throw UnimplementedError();
 }

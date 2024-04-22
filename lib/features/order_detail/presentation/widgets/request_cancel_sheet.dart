@@ -12,9 +12,9 @@ class RequestCancelSheet extends StatelessWidget {
             title: "Confirm",
             content: "Are you sure to Accept Cancel this order",
             callbackOK: () async {
-              context
-                  .read<OrderDetailBloc>()
-                  .add(OrderDetailAcceptRequestCancel(orderId: orderId));
+              context.read<OrderDetailBloc>().add(OrderDetailDoAction(
+                  orderEventType: OrderEventType.CANCEL_REQUEST_ACCEPT,
+                  orderId: orderId));
               Navigator.pop(contextDialog);
             },
             callbackCancel: () {
@@ -29,9 +29,9 @@ class RequestCancelSheet extends StatelessWidget {
             title: "Confirm",
             content: "Are you sure to Refuse Cancel this order",
             callbackOK: () async {
-              context
-                  .read<OrderDetailBloc>()
-                  .add(OrderDetailRefuseRequestCancel(orderId: orderId));
+              context.read<OrderDetailBloc>().add(OrderDetailDoAction(
+                  orderEventType: OrderEventType.CANCEL_REQUEST_REFUSE,
+                  orderId: orderId));
               Navigator.pop(contextDialog);
             },
             callbackCancel: () {

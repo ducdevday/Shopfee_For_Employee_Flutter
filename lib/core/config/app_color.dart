@@ -26,4 +26,6 @@ class AppColor {
   static Color completeColor = Color(0xff5ec792);
   static Color inProgressColor = Color(0xff5ec792);
   static Color todoColor = Color(0xffd1d2d7);
+
+  static Color greyColor = const Color(0xffF5F5F5);
 }

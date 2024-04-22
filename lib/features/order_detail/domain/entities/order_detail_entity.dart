@@ -1,5 +1,7 @@
+import 'package:shopfeeforemployee/core/common/enum/refund_request_status.dart';
 import 'package:shopfeeforemployee/core/common/models/order_type.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/models/order_detail_model.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/entities/discount_information_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/receiver_information_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/transaction_entity.dart';
 
@@ -16,10 +18,12 @@ class OrderDetailEntity {
   ReceiverInformationEntity? receiverInformation;
   DateTime? createdAt;
   List<OrderProductEntity>? itemList;
+  DiscountInformationEntity? discountInformation;
   TransactionEntity? transaction;
   DateTime? receiveTime;
   BranchEntity? branch;
   int? coin;
+  RefundRequestStatus? refundRequestStatus;
 
   OrderDetailEntity({
     this.id,
@@ -31,9 +35,11 @@ class OrderDetailEntity {
     this.receiverInformation,
     this.createdAt,
     this.itemList,
+    this.discountInformation,
     this.transaction,
     this.branch,
     this.coin,
+    this.refundRequestStatus
   });
 
   factory OrderDetailEntity.fromModel(OrderDetailModel model) {
@@ -51,11 +57,16 @@ class OrderDetailEntity {
         itemList: model.itemList
             ?.map((e) => OrderProductEntity.fromModel(e))
             .toList(),
+        discountInformation: model.discountInformation == null
+            ? null
+            : DiscountInformationEntity.fromModel(model.discountInformation!),
         transaction: model.transaction == null
             ? null
             : TransactionEntity.fromModel(model.transaction!),
         branch: model.branch == null ? null : BranchEntity.fromModel(model.branch!),
-        coin: model.coin);
+        coin: model.coin,
+        refundRequestStatus: model.refundRequestStatus
+    );
   }
 
 }

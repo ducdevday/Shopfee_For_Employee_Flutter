@@ -137,7 +137,7 @@ class _ProductListState extends State<ProductList> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          detail.size!,
+                          FormatUtil.formatSize(detail.size ?? ''),
                           style: AppStyle.normalTextStyleDark,
                         ),
                         if (detail.toppings != null &&
@@ -163,7 +163,22 @@ class _ProductListState extends State<ProductList> {
                       ],
                     ),
                   ),
-                  Text(FormatUtil.formatMoney(detail.total)),
+                  if (detail.productDiscount == null &&
+                      detail.productDiscount != 0.0)
+                    Text(FormatUtil.formatMoney(detail.total),
+                        style: AppStyle.normalTextStyleDark),
+                  if (detail.productDiscount == null &&
+                      detail.productDiscount != 0.0)
+                    Column(
+                      children: [
+                        Text(FormatUtil.formatMoney(detail.totalAfterDiscount)),
+                        Text(FormatUtil.formatMoney(detail.total),
+                            style: AppStyle.normalTextStyleDark.copyWith(
+                                color: AppColor.nonactiveColor,
+                                decoration: TextDecoration.lineThrough)),
+                      ],
+                    ),
+                  buildProductBoughtPrice(detail)
                 ],
               );
             },
@@ -173,5 +188,20 @@ class _ProductListState extends State<ProductList> {
             itemCount: product.itemDetailList!.length)
       ],
     );
+  }
+  Widget buildProductBoughtPrice(OrderProductDetailEntity detail) {
+    if (detail.productDiscount != null && detail.productDiscount != 0.0) {
+      return Column(
+        children: [
+          Text(FormatUtil.formatMoney(detail.totalAfterDiscount)),
+          Text(FormatUtil.formatMoney(detail.total),
+              style: AppStyle.normalTextStyleDark.copyWith(
+                  color: AppColor.nonactiveColor,
+                  decoration: TextDecoration.lineThrough)),
+        ],
+      );
+    }
+    return Text(FormatUtil.formatMoney(detail.total),
+        style: AppStyle.normalTextStyleDark);
   }
 }

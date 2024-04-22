@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:shopfeeforemployee/core/base/dio_service.dart';
 import 'package:shopfeeforemployee/core/base/fcm_service.dart';
-import 'package:shopfeeforemployee/core/common/enum/cancel_request_action.dart';
-import 'package:shopfeeforemployee/core/common/models/order_status.dart';
-import 'package:shopfeeforemployee/features/order_detail/data/models/event_log_model.dart';
+import 'package:shopfeeforemployee/features/order_detail/data/models/order_action_model.dart';
 
 class OrderDetailService {
   Future<Response> getOrderDetail(String orderId) async {
@@ -18,30 +16,15 @@ class OrderDetailService {
     return response;
   }
 
-  Future<Response> handleRequestCancel(
-      String orderId, CancelRequestAction action) async {
-    Map<String, dynamic> body = {
-      "status": action.name,
-    };
-    final response = await DioService.instance.patch(
-        "${DioService.orderPath}/$orderId/process-cancellation-request",
-        data: body);
-    return response;
-  }
-
-  Future<Response> addEventLog(String orderId, EventLogModel eventLog) async {
-    Map<String, dynamic> body = {
-      "orderStatus": eventLog.orderStatus?.name,
-      "description": eventLog.description
-    };
+  Future<Response> doActionsInOrder(String orderId, OrderActionModel orderActionModel) async {
     final response = await DioService.instance
-        .patch("${DioService.orderPath}/$orderId/employee/event", data: body);
+        .patch("${DioService.orderPath}/$orderId/employee/event", data: orderActionModel.toJson());
     return response;
   }
 
   Future<Response> completeTransaction(String transactionId) async {
     final response = await DioService.instance
-        .patch("${DioService.transactionPath}/complete/$transactionId");
+        .patch("${DioService.transactionPath}/$transactionId/complete");
     return response;
   }
 

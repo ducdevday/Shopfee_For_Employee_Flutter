@@ -8,29 +8,6 @@ class OrderDetailBottom extends StatelessWidget {
     required this.orderId,
   });
 
-  String eventLogDescription(OrderStatus orderStatus, String orderId) {
-    switch (orderStatus) {
-      case OrderStatus.CREATED:
-        return "Your order $orderId was created. If after 10 minutes, order hasn't accepted, please call the hotline: 0334901237.";
-      case OrderStatus.ACCEPTED:
-        return "Your order $orderId was accepted. Please wait for us to process your order.";
-      case OrderStatus.CANCELLATION_REQUEST:
-        return "Your request cancel order $orderId was send. Please wait for us to consider your reason.";
-      case OrderStatus.CANCELLATION_REQUEST_REFUSED:
-        return "Your request cancel order $orderId was refused.";
-      case OrderStatus.CANCELLATION_REQUEST_ACCEPTED:
-        return "Your request cancel order $orderId was accepted.";
-      case OrderStatus.DELIVERING:
-        return "Your order $orderId is delivering. Please pay attention to your phone in case the shipper call you.";
-      case OrderStatus.SUCCEED:
-        return "You have get your order. Thank you for choosing Shopfee.";
-      case OrderStatus.CANCELED:
-        return "Your order was canceled.";
-      default:
-        return "";
-    }
-  }
-
   Future<void> buildShowReasonCancelSheet(
       BuildContext context, String orderId) {
     return showModalBottomSheet<void>(
@@ -74,114 +51,24 @@ class OrderDetailBottom extends StatelessWidget {
     return BlocBuilder<OrderDetailBloc, OrderDetailState>(
       builder: (context, state) {
         if (state is OrderDetailLoadSuccess) {
+          final orderDetail = state.orderDetail;
           final orderStatus = state.lastEventLog.orderStatus;
-          if (orderStatus != null && !orderStatus.isInFinished()) {
-            final orderActionStatus = orderStatus.orderActionStatus();
-            final orderActionString = orderStatus.orderActionString();
+          final orderType = state.orderDetail.orderType!;
+          if (orderStatus != null &&
+              (!orderStatus.isInFinished() ||
+                  orderDetail.refundRequestStatus ==
+                      RefundRequestStatus.REFUNDED)) {
             return BottomAppBar(
                 child: Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: !orderStatus.isInCancelRequest()
-                        ? () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext contextDialog) =>
-                                    MyConfirmDialog(
-                                        title: "Confirm",
-                                        content:
-                                            "Are you sure to ${orderActionString} this order",
-                                        callbackOK: () async {
-                                          context.read<OrderDetailBloc>().add(
-                                              OrderDetailAddEventLog(
-                                                  orderId: orderId,
-                                                  eventLog: EventLogEntity(
-                                                      orderStatus:
-                                                          orderActionStatus,
-                                                      description:
-                                                          eventLogDescription(
-                                                              orderActionStatus!,
-                                                              orderId))));
-                                          Navigator.pop(contextDialog);
-                                        },
-                                        callbackCancel: () {
-                                          Navigator.pop(contextDialog);
-                                        }));
-                          }
-                        : null,
-                    style: AppStyle.elevatedButtonStylePrimary,
-                    child: Text("${orderActionString}"),
-                  ),
+                  child:
+                      buildOrderActionWidget(orderStatus, orderType, context),
                 ),
-                Builder(builder: (context) {
-                  if (orderStatus == OrderStatus.CREATED) {
-                    return GestureDetector(
-                      onTap: () {
-                        buildShowReasonCancelSheet(context, orderId);
-                      },
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.cancel,
-                                  color: AppColor.paragraphColor,
-                                ),
-                                Text(
-                                  "Cancel",
-                                  style: AppStyle.normalTextStyleDark,
-                                )
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if (orderStatus == OrderStatus.CANCELLATION_REQUEST) {
-                    return GestureDetector(
-                      onTap: () {
-                        buildShowRequestCancelSheet(context, orderId);
-                      },
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.info,
-                                  color: AppColor.paragraphColor,
-                                ),
-                                Text(
-                                  "Check Request Cancel",
-                                  style: AppStyle.normalTextStyleDark,
-                                )
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return SizedBox();
-                }),
+                buildOrderRefundRequestWidget(
+                    orderDetail, orderStatus, context),
+                buildOrderRefuseWidget(orderStatus, context),
+                buildOrderCancelRequestWidget(orderStatus, context),
               ],
             ));
           } else {
@@ -191,6 +78,188 @@ class OrderDetailBottom extends StatelessWidget {
           return SizedBox();
         }
       },
+    );
+  }
+
+  Widget buildOrderRefundRequestWidget(OrderDetailEntity orderDetail,
+      OrderStatus orderStatus, BuildContext context) {
+    if (orderStatus == OrderStatus.SUCCEED &&
+        orderDetail.refundRequestStatus == RefundRequestStatus.REFUNDED) {
+      return GestureDetector(
+        onTap: () {
+          NavigationUtil.pushNamed(RefundPage.route, arguments: orderId);
+        },
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.info,
+                    color: AppColor.paragraphColor,
+                  ),
+                  Text(
+                    "Check Request Refund",
+                    style: AppStyle.normalTextStyleDark,
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+          ],
+        ),
+      );
+    }
+    return SizedBox();
+  }
+
+  Widget buildOrderCancelRequestWidget(
+      OrderStatus orderStatus, BuildContext context) {
+    if (orderStatus == OrderStatus.CANCELLATION_REQUEST) {
+      return GestureDetector(
+        onTap: () {
+          buildShowRequestCancelSheet(context, orderId);
+        },
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.info,
+                    color: AppColor.paragraphColor,
+                  ),
+                  Text(
+                    "Check Request Cancel",
+                    style: AppStyle.normalTextStyleDark,
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+          ],
+        ),
+      );
+    }
+    return SizedBox();
+  }
+
+  Widget buildOrderRefuseWidget(OrderStatus orderStatus, BuildContext context) {
+    if (orderStatus == OrderStatus.CREATED) {
+      return GestureDetector(
+        onTap: () {
+          buildShowReasonCancelSheet(context, orderId);
+        },
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.cancel,
+                    color: AppColor.paragraphColor,
+                  ),
+                  Text(
+                    "Cancel",
+                    style: AppStyle.normalTextStyleDark,
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+          ],
+        ),
+      );
+    }
+    return SizedBox();
+  }
+
+  Row buildOrderActionWidget(
+      OrderStatus orderStatus, OrderType orderType, BuildContext context) {
+    final orderAction = orderType == OrderType.SHIPPING
+        ? orderStatus.orderShippingAction()
+        : orderStatus.orderOnsiteAction();
+    final orderAlternativeAction = orderType == OrderType.SHIPPING
+        ? orderStatus.orderShippingAction(isAlternative: true)
+        : orderStatus.orderOnsiteAction(isAlternative: true);
+    return Row(
+      children: [
+        if (orderAction != null)
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext contextDialog) => MyConfirmDialog(
+                        title: "Confirm",
+                        content:
+                            "Are you sure to ${orderAction.getFormattedString()} this order",
+                        callbackOK: () async {
+                          context.read<OrderDetailBloc>().add(
+                              OrderDetailDoAction(
+                                  orderEventType: orderAction,
+                                  orderId: orderId));
+                          Navigator.pop(contextDialog);
+                        },
+                        callbackCancel: () {
+                          Navigator.pop(contextDialog);
+                        }));
+              },
+              style: AppStyle.elevatedButtonStylePrimary,
+              child: Text("${orderAction.getFormattedString()}"),
+            ),
+          ),
+        if (orderAlternativeAction != null)
+          SizedBox(
+            width: AppDimen.spacing,
+          ),
+        if (orderAlternativeAction != null)
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext contextDialog) => MyConfirmDialog(
+                        title: "Confirm",
+                        content:
+                            "Are you sure to ${orderAlternativeAction.getFormattedString()} this order",
+                        callbackOK: () async {
+                          context.read<OrderDetailBloc>().add(
+                              OrderDetailDoAction(
+                                  orderEventType: orderAlternativeAction,
+                                  orderId: orderId));
+                          Navigator.pop(contextDialog);
+                        },
+                        callbackCancel: () {
+                          Navigator.pop(contextDialog);
+                        }));
+              },
+              style: AppStyle.elevatedButtonStyleSecondary,
+              child: Text("${orderAlternativeAction.getFormattedString()}"),
+            ),
+          ),
+      ],
     );
   }
 }

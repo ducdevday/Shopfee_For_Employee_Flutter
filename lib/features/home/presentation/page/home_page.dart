@@ -154,8 +154,8 @@ class HomePage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Navigator.pushNamed(
-                        //     context, AppRouter.shippingOrder);
+                        NavigationUtil.pushNamed(OrdersPage.route,
+                            arguments: OrderType.ONSITE);
                       },
                       child: Card(
                         shape: const RoundedRectangleBorder(

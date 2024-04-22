@@ -15,7 +15,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
           backgroundColor: const Color(0xffEFEBE9),
           appBar: AppBar(
@@ -58,6 +58,10 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                   HistoryListView(
                     orderStatus: OrderStatus.CANCELED,
+                    searchQuery: searchQuery,
+                  ),
+                  HistoryListView(
+                    orderStatus: OrderStatus.NOT_RECEIVED,
                     searchQuery: searchQuery,
                   ),
                 ],
