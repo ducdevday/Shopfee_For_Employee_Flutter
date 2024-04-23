@@ -15,6 +15,4 @@ abstract class OrderDetailRepository {
 
   Future<void> sendOrderMessage(
       String title, String body, String destinationId, String fcmToken);
-
-  Future<void> completeTransaction(String transactionId);
 }

@@ -69,10 +69,4 @@ class OrderDetailRepositoryImpl implements OrderDetailRepository {
     final fcmToken = data!["fcmToken"];
     return fcmToken;
   }
-
-  @override
-  Future<void> completeTransaction(String transactionId) async {
-    final response =
-        await _orderDetailService.completeTransaction(transactionId);
-  }
 }

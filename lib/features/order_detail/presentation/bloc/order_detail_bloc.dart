@@ -73,12 +73,6 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
           default:
             break;
         }
-        if (event.orderEventType == OrderEventType.ORDER_FULFILL &&
-            currentState.orderDetail.transaction!.status ==
-                PaymentStatus.UNPAID) {
-          final responseTransaction = await _orderDetailUseCase
-              .completeTransaction(currentState.orderDetail.transaction!.id!);
-        }
         EasyLoading.dismiss();
         //TODO: Reload Page
         add(OrderDetailLoadInformation(

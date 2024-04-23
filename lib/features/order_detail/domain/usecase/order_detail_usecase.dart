@@ -9,8 +9,6 @@ abstract class OrderDetailUseCase {
 
   Future<List<EventLogEntity>> getEventLogs(String orderId);
 
-  Future<void> completeTransaction(String transactionId);
-
   Future<void> acceptOrder(String orderId);
 
   Future<void> refuseOrder(String orderId, String description);
@@ -42,12 +40,6 @@ class OrderDetailUseCaseImpl extends OrderDetailUseCase {
   Future<List<EventLogEntity>> getEventLogs(String orderId) async {
     return await _orderDetailRepository.getEventLogs(orderId);
   }
-
-  @override
-  Future<void> completeTransaction(String transactionId) async {
-    return await _orderDetailRepository.completeTransaction(transactionId);
-  }
-
   @override
   Future<void> acceptRequestCancel(String orderId) async {
     final orderAction =

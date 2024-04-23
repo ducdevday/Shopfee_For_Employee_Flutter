@@ -22,12 +22,6 @@ class OrderDetailService {
     return response;
   }
 
-  Future<Response> completeTransaction(String transactionId) async {
-    final response = await DioService.instance
-        .patch("${DioService.transactionPath}/$transactionId/complete");
-    return response;
-  }
-
   Future<Response> sendOrderMessage(
       String title, String body, String destinationId, String fcmToken) async {
     Map<String, dynamic> data = {
