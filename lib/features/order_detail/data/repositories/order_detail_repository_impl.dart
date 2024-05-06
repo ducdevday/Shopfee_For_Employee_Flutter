@@ -5,8 +5,10 @@ import 'package:shopfeeforemployee/core/common/models/result.dart';
 import 'package:shopfeeforemployee/core/common/models/result_list.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/datasources/order_detail_service.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/models/event_log_model.dart';
+import 'package:shopfeeforemployee/features/order_detail/data/models/order_action_model.dart';
 import 'package:shopfeeforemployee/features/order_detail/data/models/order_detail_model.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_action_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/repositories/order_detail_repository.dart';
 
@@ -43,13 +45,25 @@ class OrderDetailRepositoryImpl implements OrderDetailRepository {
   }
 
   @override
-  Future<void> addEventLog(String orderId, EventLogEntity eventLog) async {
-    final response = await _orderDetailService.addEventLog(
-        orderId, EventLogModel.fromEntity(eventLog));
+  Future<void> doActionsInOrder(
+      String orderId, OrderActionEntity orderAction) async {
+    final response = await _orderDetailService.doActionsInOrder(
+        orderId, OrderActionModel.fromEntity(orderAction));
     final result = Result(
       success: response.data["success"],
       message: response.data["message"],
     );
+  }
+
+  @override
+  Future<String> getCancelRequestReason(String orderId) async {
+    final response = await _orderDetailService.getCancelRequestReason(orderId);
+    final result = Result(
+        success: response.data["success"],
+        message: response.data["message"],
+        data: response.data["data"]);
+    final reason = result.data!["reason"];
+    return reason;
   }
 
   @override
@@ -66,18 +80,5 @@ class OrderDetailRepositoryImpl implements OrderDetailRepository {
     final data = response.data();
     final fcmToken = data!["fcmToken"];
     return fcmToken;
-  }
-
-  @override
-  Future<void> completeTransaction(String transactionId) async {
-    final response =
-        await _orderDetailService.completeTransaction(transactionId);
-  }
-
-  @override
-  Future<void> handleRequestCancel(
-      String orderId, CancelRequestAction action) async {
-    final response =
-        await _orderDetailService.handleRequestCancel(orderId, action);
   }
 }

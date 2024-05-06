@@ -15,6 +15,7 @@ class HistoryListView extends StatefulWidget {
 class _HistoryListViewState extends State<HistoryListView> {
   late HistoryBloc _bloc;
   late ScrollController scrollController;
+  late RefreshController _refreshController;
   late bool isLoadingMore;
   late bool cannotLoadMore;
   late List<HistoryEntity> historyList;
@@ -33,12 +34,26 @@ class _HistoryListViewState extends State<HistoryListView> {
           searchQuery: widget.searchQuery));
     scrollController = ScrollController();
     scrollController.addListener(_scrollListener);
+    _refreshController = RefreshController(initialRefresh: false);
+  }
+
+  @override
+  void didUpdateWidget(covariant HistoryListView oldWidget) {
+    if (oldWidget.searchQuery != widget.searchQuery) {
+      _bloc.add(HistoryLoadInformation(
+          orderStatus: widget.orderStatus,
+          initPage: initPage,
+          initSize: initSize,
+          searchQuery: widget.searchQuery));
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
     _bloc.close();
     scrollController.dispose();
+    _refreshController.dispose();
     super.dispose();
   }
 
@@ -46,7 +61,7 @@ class _HistoryListViewState extends State<HistoryListView> {
     if (isLoadingMore || cannotLoadMore) return;
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      _bloc.add(HistoryLoadMoreInformation(orderStatus: widget.orderStatus));
+      _bloc.add(HistoryLoadMoreInformation());
     }
   }
 
@@ -63,13 +78,14 @@ class _HistoryListViewState extends State<HistoryListView> {
             cannotLoadMore = state.cannotLoadMore;
             historyList = state.historyList;
             if (historyList.isNotEmpty) {
-              return RefreshIndicator(
+              return SmartRefresher(
+                controller: _refreshController,
+                enablePullUp: false,
+                physics: BouncingScrollPhysics(),
                 onRefresh: () async {
-                  _bloc.add(HistoryLoadInformation(
-                      orderStatus: widget.orderStatus,
-                      initPage: initPage,
-                      initSize: initSize,
-                      searchQuery: widget.searchQuery));
+                  _bloc.add(HistoryRefreshInformation(
+                      initPage: initPage, initSize: initSize));
+                  _refreshController.refreshCompleted();
                 },
                 child: ListView.separated(
                   controller: scrollController,
@@ -117,7 +133,7 @@ class _HistoryListViewState extends State<HistoryListView> {
                 ),
               );
             }
-          } else if(state is HistoryLoadFailure) {
+          } else if (state is HistoryLoadFailure) {
             return const MyErrorWidget();
           }
           return const SizedBox();

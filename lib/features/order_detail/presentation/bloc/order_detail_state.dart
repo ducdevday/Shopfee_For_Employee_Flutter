@@ -18,13 +18,13 @@ class OrderDetailLoadSuccess extends OrderDetailState {
   final OrderDetailEntity orderDetail;
   final List<EventLogEntity> eventLogs;
   final ReasonCancelType? reasonCancel;
-  final bool isAddEventLogClicked;
+  final bool haveChanged;
 
   const OrderDetailLoadSuccess(
       {required this.orderDetail,
       required this.eventLogs,
       this.reasonCancel,
-      this.isAddEventLogClicked = false});
+      this.haveChanged = false});
 
   EventLogEntity get lastEventLog => eventLogs.first;
 
@@ -33,7 +33,7 @@ class OrderDetailLoadSuccess extends OrderDetailState {
         orderDetail,
         eventLogs,
         reasonCancel,
-        isAddEventLogClicked,
+        haveChanged,
       ];
 
   OrderDetailLoadSuccess copyWith({
@@ -41,13 +41,13 @@ class OrderDetailLoadSuccess extends OrderDetailState {
     List<EventLogEntity>? eventLogs,
     List<OrderStatus>? ordersTracking,
     ReasonCancelType? reasonCancel,
-    bool? isAddEventLogClicked,
+    bool? haveChanged,
   }) {
     return OrderDetailLoadSuccess(
       orderDetail: orderDetail ?? this.orderDetail,
       eventLogs: eventLogs ?? this.eventLogs,
       reasonCancel: reasonCancel ?? this.reasonCancel,
-      isAddEventLogClicked: isAddEventLogClicked ?? this.isAddEventLogClicked,
+      haveChanged: haveChanged ?? this.haveChanged,
     );
   }
 }

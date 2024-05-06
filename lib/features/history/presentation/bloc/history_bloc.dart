@@ -6,6 +6,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   HistoryBloc(this._historyUseCase) : super(HistoryInitial()) {
     on<HistoryLoadInformation>(_onHistoryLoadInformation);
     on<HistoryLoadMoreInformation>(_onHistoryLoadMoreInformation);
+    on<HistoryRefreshInformation>(_onHistoryRefreshInformation);
   }
 
   FutureOr<void> _onHistoryLoadInformation(
@@ -19,12 +20,12 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
           await _historyUseCase.getHistoryByStatus(params, event.orderStatus);
       EasyLoading.dismiss();
       emit(HistoryLoadSuccess(
+          orderStatus: event.orderStatus,
           historyList: historyList,
           page: event.initPage,
           size: event.initSize,
           searchQuery: event.searchQuery));
     } catch (e) {
-      ExceptionUtil.handle(e);
       emit(HistoryLoadFailure());
     }
   }
@@ -40,8 +41,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
             page: currentState.page + 1,
             size: currentState.size,
             key: currentState.searchQuery);
-        final historyList =
-            await _historyUseCase.getHistoryByStatus(params, event.orderStatus);
+        final historyList = await _historyUseCase.getHistoryByStatus(
+            params, currentState.orderStatus);
         if (historyList.isNotEmpty) {
           emit(currentState.copyWith(
               historyList: List.from(currentState.historyList)
@@ -51,6 +52,29 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
         } else {
           emit(currentState.copyWith(cannotLoadMore: true));
         }
+      }
+    } catch (e) {
+      ExceptionUtil.handle(e);
+    }
+  }
+
+  FutureOr<void> _onHistoryRefreshInformation(
+      HistoryRefreshInformation event, Emitter<HistoryState> emit) async {
+    try {
+      if (state is HistoryLoadSuccess) {
+        final currentState = state as HistoryLoadSuccess;
+        final params = HistoryParams(
+            page: event.initPage,
+            size: event.initSize,
+            key: currentState.searchQuery);
+        final historyList = await _historyUseCase.getHistoryByStatus(
+            params, currentState.orderStatus);
+        emit(currentState.copyWith(
+            historyList: historyList,
+            page: event.initPage,
+            size: event.initSize,
+            isLoadMore: false,
+            cannotLoadMore: false));
       }
     } catch (e) {
       ExceptionUtil.handle(e);

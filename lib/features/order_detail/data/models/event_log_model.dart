@@ -1,36 +1,41 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:shopfeeforemployee/core/common/enum/actor_type.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/event_log_entity.dart';
 
 part 'event_log_model.g.dart';
 
 @JsonSerializable()
-class EventLogModel{
+class EventLogModel {
   final OrderStatus? orderStatus;
   @JsonKey(name: "createdAt")
   final DateTime? time;
   final String? description;
-  @JsonKey(name: "employee")
-  final bool? makerByEmployee;
+  final String? note;
+  final ActorType? actor;
 
   const EventLogModel({
     this.orderStatus,
     this.time,
     this.description,
-    this.makerByEmployee,
+    this.note,
+    this.actor,
   });
 
-  factory EventLogModel.fromJson(Map<String, dynamic> json) =>
-      _$EventLogModelFromJson(json);
+  factory EventLogModel.fromJson( Map<String, dynamic> json) {
+    return _$EventLogModelFromJson(json);
+  }
 
-  Map<String, dynamic> toJson() => _$EventLogModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return _$EventLogModelToJson(this);
+  }
 
-  factory EventLogModel.fromEntity(EventLogEntity eventLogEntity) =>
-      EventLogModel(
-          orderStatus: eventLogEntity.orderStatus,
-          time: eventLogEntity.time,
-          description: eventLogEntity.description,
-          makerByEmployee: eventLogEntity.makerByEmployee);
-
-
+  factory EventLogModel.fromEntity(EventLogEntity entity) {
+    return EventLogModel(
+        orderStatus: entity.orderStatus,
+        time: entity.time,
+        description: entity.description,
+        note:entity.note,
+        actor: entity.actor);
+  }
 }

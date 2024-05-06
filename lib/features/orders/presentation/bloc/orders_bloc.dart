@@ -6,6 +6,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   OrdersBloc(this._ordersUseCase) : super(OrdersInitial()) {
     on<OrderLoadInformation>(_onOrderLoadInformation);
     on<OrderLoadMoreInformation>(_onOrderLoadMoreInformation);
+    on<OrderRefreshInformation>(_onOrderRefreshInformation);
   }
 
   FutureOr<void> _onOrderLoadInformation(
@@ -19,24 +20,27 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
           size: event.initSize);
       final orderList = await _ordersUseCase.getOrderListByStatus(orderParams);
       await Future.delayed(Duration(seconds: 1));
-      emit(ShippingOrderLoadSuccess(
-          orderList: orderList, page: event.initPage, size: event.initSize));
+      emit(OrderLoadSuccess(
+          orderList: orderList,
+          orderType: event.orderType,
+          orderStatus: event.orderStatus,
+          page: event.initPage,
+          size: event.initSize));
     } catch (e) {
-      emit(ShippingOrderLoadFailure());
-      ExceptionUtil.handle(e);
+      emit(OrderLoadFailure());
     }
   }
 
   FutureOr<void> _onOrderLoadMoreInformation(
       OrderLoadMoreInformation event, Emitter<OrdersState> emit) async {
     try {
-      if (state is ShippingOrderLoadSuccess) {
-        final currentState = state as ShippingOrderLoadSuccess;
+      if (state is OrderLoadSuccess) {
+        final currentState = state as OrderLoadSuccess;
         emit(currentState.copyWith(isLoadMore: true));
         await Future.delayed(Duration(milliseconds: 1000));
         final orderParams = OrderParamsEntity(
-            orderType: event.orderType,
-            orderStatus: event.orderStatus,
+            orderType: currentState.orderType,
+            orderStatus: currentState.orderStatus,
             page: currentState.page + 1,
             size: currentState.size);
         final orderList =
@@ -51,7 +55,30 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
         }
       }
     } catch (e) {
-      emit(ShippingOrderLoadFailure());
+      ExceptionUtil.handle(e);
+    }
+  }
+
+  FutureOr<void> _onOrderRefreshInformation(
+      OrderRefreshInformation event, Emitter<OrdersState> emit) async {
+    try {
+      if (state is OrderLoadSuccess) {
+        final currentState = state as OrderLoadSuccess;
+        final orderParams = OrderParamsEntity(
+            orderType: currentState.orderType,
+            orderStatus: currentState.orderStatus,
+            page: event.initPage,
+            size: event.initSize);
+        final orderList =
+            await _ordersUseCase.getOrderListByStatus(orderParams);
+        emit(currentState.copyWith(
+            orderList: orderList,
+            page: event.initPage,
+            size: event.initSize,
+            isLoadMore: false,
+            cannotLoadMore: false));
+      }
+    } catch (e) {
       ExceptionUtil.handle(e);
     }
   }

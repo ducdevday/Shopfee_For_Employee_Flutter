@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shopfeeforemployee/core/config/app_dimen.dart';
 import 'package:shopfeeforemployee/core/config/app_theme.dart';
 import 'package:shopfeeforemployee/core/di/service_locator.dart';
 import 'package:shopfeeforemployee/core/router/app_router.dart';
@@ -17,6 +20,7 @@ import 'package:shopfeeforemployee/features/home/presentation/home.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
 import 'package:shopfeeforemployee/features/notify_permission/presentation/notify_permission.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
+import 'package:shopfeeforemployee/features/pos/presentation/page/pos_page.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -85,18 +89,39 @@ class _MyAppState extends State<MyApp> {
             create: (context) => ServiceLocator.sl<EmployeeBloc>()
               ..add(EmployeeLoadInformation())),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.light,
-        theme: AppTheme.lightTheme,
-        navigatorKey: navigatorKey,
-        scaffoldMessengerKey: scaffoldKey,
-        onGenerateRoute: (settings) {
-          return AppRouter.onGenerateRoute(settings);
+      child: RefreshConfiguration(
+        footerTriggerDistance: 15,
+        dragSpeedRatio: 0.91,
+        headerBuilder: () => CustomHeader(
+          refreshStyle: RefreshStyle.Follow,
+          builder: (context, mode) {
+            return const Padding(
+              padding: EdgeInsets.all(AppDimen.spacing),
+              child: CupertinoActivityIndicator(),
+            );
+          },
+        ),
+        footerBuilder: () => ClassicFooter(),
+        enableLoadingWhenNoData: false,
+        enableRefreshVibrate: false,
+        enableLoadMoreVibrate: false,
+        shouldFooterFollowWhenNotFull: (state) {
+          // If you want load more with noMoreData state ,may be you should return false
+          return false;
         },
-        // home: OrderDetailPage(orderId: 'OB000000008',),
-        initialRoute: getStartRoute(),
-        builder: EasyLoading.init(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          themeMode: ThemeMode.light,
+          theme: AppTheme.lightTheme,
+          navigatorKey: navigatorKey,
+          scaffoldMessengerKey: scaffoldKey,
+          onGenerateRoute: (settings) {
+            return AppRouter.onGenerateRoute(settings);
+          },
+          // home: PosPage(),
+          initialRoute: getStartRoute(),
+          builder: EasyLoading.init(),
+        ),
       ),
     );
   }

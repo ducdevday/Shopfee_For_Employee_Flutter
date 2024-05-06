@@ -39,6 +39,11 @@ import 'package:shopfeeforemployee/features/personal_information/data/repositori
 import 'package:shopfeeforemployee/features/personal_information/domain/repositories/personnal_information_repository.dart';
 import 'package:shopfeeforemployee/features/personal_information/domain/usecase/personnal_information_usecase.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';
+import 'package:shopfeeforemployee/features/refund/data/datasources/refund_service.dart';
+import 'package:shopfeeforemployee/features/refund/data/repositories/refund_repository_impl.dart';
+import 'package:shopfeeforemployee/features/refund/domain/repositories/refund_repository.dart';
+import 'package:shopfeeforemployee/features/refund/domain/usecase/refund_usecase.dart';
+import 'package:shopfeeforemployee/features/refund/presentation/refund.dart';
 
 class ServiceLocator {
   static final sl = GetIt.instance;
@@ -52,12 +57,15 @@ class ServiceLocator {
     _ordersFeature();
     _orderDetailFeature();
     _historyDetailFeature();
+    _refundFeature();
   }
 
   void _notifyPermissionFeature() {
     sl.registerLazySingleton(() => NotifyPermissionService());
-    sl.registerLazySingleton<NotificationPermissionRepository>(() => NotificationPermissionRepositoryImpl(sl()));
-    sl.registerLazySingleton<NotificationPermissionUseCase>(() => NotificationPermissionUseCaseImpl(sl()));
+    sl.registerLazySingleton<NotificationPermissionRepository>(
+        () => NotificationPermissionRepositoryImpl(sl()));
+    sl.registerLazySingleton<NotificationPermissionUseCase>(
+        () => NotificationPermissionUseCaseImpl(sl()));
     sl.registerFactory(() => NotificationPermissionCubit(sl()));
   }
 
@@ -122,5 +130,13 @@ class ServiceLocator {
         () => EmployeeRepositoryImpl(sl()));
     sl.registerLazySingleton<EmployeeUseCase>(() => EmployeeUseCaseImpl(sl()));
     sl.registerFactory(() => EmployeeBloc(sl()));
+  }
+
+  void _refundFeature() {
+    sl.registerLazySingleton(() => RefundService());
+    sl.registerLazySingleton<RefundRepository>(
+        () => RefundRepositoryImpl(sl()));
+    sl.registerLazySingleton<RefundUseCase>(() => RefundUseCaseImpl(sl()));
+    sl.registerFactory(() => RefundBloc(sl()));
   }
 }

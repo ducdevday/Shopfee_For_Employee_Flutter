@@ -22,12 +22,19 @@ class HistoryLoadInformation extends HistoryEvent {
 }
 
 class HistoryLoadMoreInformation extends HistoryEvent {
-  final OrderStatus orderStatus;
+  @override
+  List<Object> get props => [];
+}
 
-  const HistoryLoadMoreInformation({
-    required this.orderStatus,
+class HistoryRefreshInformation extends HistoryEvent {
+  final int initPage;
+  final int initSize;
+
+  const HistoryRefreshInformation({
+    required this.initPage,
+    required this.initSize,
   });
 
   @override
-  List<Object> get props => [orderStatus];
+  List<Object> get props => [initPage, initSize];
 }

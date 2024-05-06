@@ -10,5 +10,5 @@ enum OrderStatus {
   DELIVERING,
   NOT_RECEIVED,
   CANCELED,
-  SUCCEED;
+  SUCCEED,
 }

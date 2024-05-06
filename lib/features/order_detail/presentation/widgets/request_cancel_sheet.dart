@@ -1,9 +1,29 @@
 part of order_detail;
 
-class RequestCancelSheet extends StatelessWidget {
+class RequestCancelSheet extends StatefulWidget {
   final String orderId;
 
   const RequestCancelSheet({Key? key, required this.orderId}) : super(key: key);
+
+  @override
+  State<RequestCancelSheet> createState() => _RequestCancelSheetState();
+}
+
+class _RequestCancelSheetState extends State<RequestCancelSheet> {
+  String reason = "";
+
+  @override
+  void initState() {
+    getReason();
+    super.initState();
+  }
+
+  void getReason() async {
+    reason = await context
+        .read<OrderDetailBloc>()
+        .getCancelRequestReason(widget.orderId);
+    setState(() {});
+  }
 
   void handleAcceptCancelRequest(BuildContext context) {
     showDialog(
@@ -12,9 +32,9 @@ class RequestCancelSheet extends StatelessWidget {
             title: "Confirm",
             content: "Are you sure to Accept Cancel this order",
             callbackOK: () async {
-              context
-                  .read<OrderDetailBloc>()
-                  .add(OrderDetailAcceptRequestCancel(orderId: orderId));
+              context.read<OrderDetailBloc>().add(OrderDetailDoAction(
+                  orderEventType: OrderEventType.CANCEL_REQUEST_ACCEPT,
+                  orderId: widget.orderId));
               Navigator.pop(contextDialog);
             },
             callbackCancel: () {
@@ -29,9 +49,9 @@ class RequestCancelSheet extends StatelessWidget {
             title: "Confirm",
             content: "Are you sure to Refuse Cancel this order",
             callbackOK: () async {
-              context
-                  .read<OrderDetailBloc>()
-                  .add(OrderDetailRefuseRequestCancel(orderId: orderId));
+              context.read<OrderDetailBloc>().add(OrderDetailDoAction(
+                  orderEventType: OrderEventType.CANCEL_REQUEST_REFUSE,
+                  orderId: widget.orderId));
               Navigator.pop(contextDialog);
             },
             callbackCancel: () {
@@ -79,7 +99,7 @@ class RequestCancelSheet extends StatelessWidget {
                 height: AppDimen.spacing,
               ),
               Text(
-                "${state.lastEventLog.description}",
+                "${reason}",
                 style: AppStyle.mediumTextStyleDark,
               ),
               SizedBox(

@@ -6,48 +6,29 @@ abstract class OrderDetailEvent extends Equatable {
 
 class OrderDetailLoadInformation extends OrderDetailEvent {
   final String orderId;
-
+  final bool haveChanged;
   const OrderDetailLoadInformation({
     required this.orderId,
+    required this.haveChanged
   });
 
   @override
-  List<Object> get props => [orderId];
+  List<Object> get props => [orderId, haveChanged];
 }
 
-class OrderDetailAddEventLog extends OrderDetailEvent {
+class OrderDetailDoAction extends OrderDetailEvent {
+  final OrderEventType orderEventType;
   final String orderId;
-  final EventLogEntity eventLog;
+  final String? description;
 
-  const OrderDetailAddEventLog({
+  const OrderDetailDoAction({
+    required this.orderEventType,
     required this.orderId,
-    required this.eventLog,
+    this.description,
   });
 
   @override
-  List<Object> get props => [orderId, eventLog];
-}
-
-class OrderDetailAcceptRequestCancel extends OrderDetailEvent {
-  final String orderId;
-
-  const OrderDetailAcceptRequestCancel({
-    required this.orderId,
-  });
-
-  @override
-  List<Object> get props => [orderId];
-}
-
-class OrderDetailRefuseRequestCancel extends OrderDetailEvent {
-  final String orderId;
-
-  const OrderDetailRefuseRequestCancel({
-    required this.orderId,
-  });
-
-  @override
-  List<Object> get props => [orderId];
+  List<Object?> get props => [orderEventType, orderId, description];
 }
 
 class OrderDetailChooseReasonCancel extends OrderDetailEvent {

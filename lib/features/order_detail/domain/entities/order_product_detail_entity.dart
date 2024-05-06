@@ -6,6 +6,7 @@ class OrderProductDetailEntity {
   int? quantity;
   String? size;
   double? price;
+  double? productDiscount;
   List<ToppingEntity>? toppings;
   String? note;
 
@@ -13,24 +14,24 @@ class OrderProductDetailEntity {
     this.quantity,
     this.size,
     this.price,
+    this.productDiscount,
     this.toppings,
     this.note,
   });
 
-  factory OrderProductDetailEntity.fromModel(
-      OrderProductDetailModel model) {
-    return OrderProductDetailEntity(
-      quantity: model.quantity,
-      size: model.size,
-      price: model.price,
-      toppings: model.toppings?.map((e) => ToppingEntity.fromModel(e)).toList(),
-      note: model.note,
-    );
-  }
-
   double get total =>
       quantity! * price! +
-          quantity! * (toppings == null ? 0 : toppings!.fold(0, (total, current) => total + current.price));
+      quantity! *
+          (toppings == null
+              ? 0
+              : toppings!.fold(0, (total, current) => total + current.price));
+
+  double get totalAfterDiscount =>
+      quantity! * (price! - productDiscount!) +
+      quantity! *
+          (toppings == null
+              ? 0
+              : toppings!.fold(0, (total, current) => total + current.price));
 
   String get toppingOrderString {
     List<String> results = [];
@@ -38,5 +39,16 @@ class OrderProductDetailEntity {
       results.add(name);
     });
     return results.join(", ");
+  }
+
+  factory OrderProductDetailEntity.fromModel(OrderProductDetailModel model) {
+    return OrderProductDetailEntity(
+      quantity: model.quantity,
+      size: model.size,
+      price: model.price,
+      productDiscount: model.productDiscount,
+      toppings: model.toppings?.map((e) => ToppingEntity.fromModel(e)).toList(),
+      note: model.note,
+    );
   }
 }

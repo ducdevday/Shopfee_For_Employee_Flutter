@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:shopfeeforemployee/core/common/enum/order_event_type.dart';
 import 'package:shopfeeforemployee/core/common/models/order_status.dart';
 import 'package:shopfeeforemployee/core/config/app_color.dart';
 
@@ -15,10 +16,17 @@ extension OrderStatusExtension on OrderStatus {
         "Prepared Order",
         "Request Cancel Order",
         "Delivering Order",
-        "Not Received Order"
       ];
 
-  static List<String> orderStatusFinished() => ["Succeed", "Canceled"];
+  static List<String> orderStatusOnSiteProcessing() => [
+        "New Order",
+        "Accepted Order",
+        "Prepared Order",
+        "Request Cancel Order",
+      ];
+
+  static List<String> orderStatusFinished() =>
+      ["Succeed", "Canceled", "Not Received"];
 
   bool isInCancelRequest() {
     switch (this) {
@@ -35,40 +43,76 @@ extension OrderStatusExtension on OrderStatus {
     switch (this) {
       case OrderStatus.SUCCEED:
       case OrderStatus.CANCELED:
+      case OrderStatus.NOT_RECEIVED:
         return true;
       default:
         return false;
     }
   }
 
-  String orderActionString() {
+  OrderEventType? orderShippingAction({bool isAlternative = false}) {
     switch (this) {
       case OrderStatus.CREATED:
-        return "Accept";
+        if (isAlternative == false) {
+          return OrderEventType.ORDER_ACCEPT;
+        } else {
+          return null;
+        }
       case OrderStatus.ACCEPTED:
-        return "Prepare";
-      case OrderStatus.PREPARED:
-      case OrderStatus.CANCELLATION_REQUEST:
+        if (isAlternative == false) {
+          return OrderEventType.READY_SHIPPING;
+        } else {
+          return null;
+        }
       case OrderStatus.CANCELLATION_REQUEST_REFUSED:
-      case OrderStatus.CANCELLATION_REQUEST_ACCEPTED:
-        return "Delivery";
+        if (isAlternative == false) {
+          return OrderEventType.READY_SHIPPING;
+        } else {
+          return null;
+        }
+      case OrderStatus.PREPARED:
+        if (isAlternative == false) {
+          return OrderEventType.START_SHIPPING;
+        } else {
+          return null;
+        }
       case OrderStatus.DELIVERING:
-        return "Finish";
+        if (isAlternative == false) {
+          return OrderEventType.ORDER_FULFILL;
+        } else {
+          return OrderEventType.ORDER_BOOM;
+        }
       default:
-        return "";
+        return null;
     }
   }
 
-  OrderStatus? orderActionStatus() {
+  OrderEventType? orderOnsiteAction({bool isAlternative = false}) {
     switch (this) {
       case OrderStatus.CREATED:
-        return OrderStatus.ACCEPTED;
+        if (isAlternative == false) {
+          return OrderEventType.ORDER_ACCEPT;
+        } else {
+          return null;
+        }
       case OrderStatus.ACCEPTED:
-        return OrderStatus.PREPARED;
+        if (isAlternative == false) {
+          return OrderEventType.READY_SHIPPING;
+        } else {
+          return null;
+        }
+      case OrderStatus.CANCELLATION_REQUEST_REFUSED:
+        if (isAlternative == false) {
+          return OrderEventType.READY_SHIPPING;
+        } else {
+          return null;
+        }
       case OrderStatus.PREPARED:
-        return OrderStatus.DELIVERING;
-      case OrderStatus.DELIVERING:
-        return OrderStatus.SUCCEED;
+        if (isAlternative == false) {
+          return OrderEventType.ORDER_FULFILL;
+        } else {
+          return OrderEventType.ORDER_BOOM;
+        }
       default:
         return null;
     }
