@@ -50,6 +50,9 @@ dependencies:
   calendar_date_picker2: ^0.5.3
   video_player: ^2.8.5
   speech_to_text: ^6.6.0
+#  bluetooth_thermal_printer: ^0.0.6
+  bluetooth_print: ^4.3.0
+  printing: ^5.12.0
 #  Firebase
   firebase_core: ^2.19.0
   firebase_messaging: ^14.7.3

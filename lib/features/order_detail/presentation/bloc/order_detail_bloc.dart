@@ -82,4 +82,13 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
       ExceptionUtil.handle(e);
     }
   }
+
+  Future<String> getCancelRequestReason(String orderId) async {
+    try {
+      return await _orderDetailUseCase.getCancelRequestReason(orderId);
+    } catch (e) {
+      ExceptionUtil.handle(e);
+      return "";
+    }
+  }
 }

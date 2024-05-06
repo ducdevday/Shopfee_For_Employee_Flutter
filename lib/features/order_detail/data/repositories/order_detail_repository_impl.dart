@@ -45,13 +45,25 @@ class OrderDetailRepositoryImpl implements OrderDetailRepository {
   }
 
   @override
-  Future<void> doActionsInOrder(String orderId, OrderActionEntity orderAction) async {
+  Future<void> doActionsInOrder(
+      String orderId, OrderActionEntity orderAction) async {
     final response = await _orderDetailService.doActionsInOrder(
         orderId, OrderActionModel.fromEntity(orderAction));
     final result = Result(
       success: response.data["success"],
       message: response.data["message"],
     );
+  }
+
+  @override
+  Future<String> getCancelRequestReason(String orderId) async {
+    final response = await _orderDetailService.getCancelRequestReason(orderId);
+    final result = Result(
+        success: response.data["success"],
+        message: response.data["message"],
+        data: response.data["data"]);
+    final reason = result.data!["reason"];
+    return reason;
   }
 
   @override

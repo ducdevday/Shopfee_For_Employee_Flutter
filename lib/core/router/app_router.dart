@@ -12,6 +12,7 @@ import 'package:shopfeeforemployee/features/notify_permission/presentation/notif
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
 import 'package:shopfeeforemployee/features/orders/presentation/orders.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';
+import 'package:shopfeeforemployee/features/pos/presentation/page/pos_page.dart';
 import 'package:shopfeeforemployee/features/refund/presentation/refund.dart';
 
 class AppRouter {
@@ -61,6 +62,8 @@ class AppRouter {
               orderId: settings.arguments as String,
             ),
             type: PageTransitionType.bottomToTop);
+      case PosPage.route:
+        return MaterialPageRoute(builder: (context) => const PosPage());
       default:
         return _errorRoute();
     }

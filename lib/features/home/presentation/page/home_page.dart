@@ -65,10 +65,14 @@ class HomePage extends StatelessWidget {
             },
           ),
         ),
-        actions: const [
+        actions: [
           Padding(
             padding: EdgeInsets.only(right: 8.0),
-            child: Icon(Icons.notifications_none_outlined),
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, PosPage.route);
+                },
+                child: Icon(Icons.notifications_none_outlined)),
           )
         ],
         automaticallyImplyLeading: false,

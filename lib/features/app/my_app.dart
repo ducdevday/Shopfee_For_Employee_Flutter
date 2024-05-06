@@ -20,6 +20,7 @@ import 'package:shopfeeforemployee/features/home/presentation/home.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
 import 'package:shopfeeforemployee/features/notify_permission/presentation/notify_permission.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
+import 'package:shopfeeforemployee/features/pos/presentation/page/pos_page.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -117,7 +118,7 @@ class _MyAppState extends State<MyApp> {
           onGenerateRoute: (settings) {
             return AppRouter.onGenerateRoute(settings);
           },
-          // home: OrderDetailPage(orderId: 'OB000000008',),
+          // home: PosPage(),
           initialRoute: getStartRoute(),
           builder: EasyLoading.init(),
         ),

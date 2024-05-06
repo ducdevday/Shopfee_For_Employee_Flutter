@@ -24,6 +24,8 @@ abstract class OrderDetailUseCase {
   Future<void> acceptRequestCancel(String orderId);
 
   Future<void> refuseRequestCancel(String orderId);
+
+  Future<String> getCancelRequestReason(String orderId);
 }
 
 class OrderDetailUseCaseImpl extends OrderDetailUseCase {
@@ -40,6 +42,7 @@ class OrderDetailUseCaseImpl extends OrderDetailUseCase {
   Future<List<EventLogEntity>> getEventLogs(String orderId) async {
     return await _orderDetailRepository.getEventLogs(orderId);
   }
+
   @override
   Future<void> acceptRequestCancel(String orderId) async {
     final orderAction =
@@ -94,5 +97,11 @@ class OrderDetailUseCaseImpl extends OrderDetailUseCase {
     final orderAction = OrderActionEntity(
         orderEvent: OrderEventType.ORDER_REFUSE, description: description);
     return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+  }
+
+  @override
+  Future<String> getCancelRequestReason(String orderId) async {
+    final reason = await _orderDetailRepository.getCancelRequestReason(orderId);
+    return reason;
   }
 }

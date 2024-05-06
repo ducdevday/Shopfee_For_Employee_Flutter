@@ -15,4 +15,6 @@ abstract class OrderDetailRepository {
 
   Future<void> sendOrderMessage(
       String title, String body, String destinationId, String fcmToken);
+
+  Future<String> getCancelRequestReason(String orderId);
 }

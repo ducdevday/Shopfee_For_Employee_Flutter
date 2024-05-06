@@ -64,6 +64,12 @@ extension OrderStatusExtension on OrderStatus {
         } else {
           return null;
         }
+      case OrderStatus.CANCELLATION_REQUEST_REFUSED:
+        if (isAlternative == false) {
+          return OrderEventType.READY_SHIPPING;
+        } else {
+          return null;
+        }
       case OrderStatus.PREPARED:
         if (isAlternative == false) {
           return OrderEventType.START_SHIPPING;
@@ -90,6 +96,12 @@ extension OrderStatusExtension on OrderStatus {
           return null;
         }
       case OrderStatus.ACCEPTED:
+        if (isAlternative == false) {
+          return OrderEventType.READY_SHIPPING;
+        } else {
+          return null;
+        }
+      case OrderStatus.CANCELLATION_REQUEST_REFUSED:
         if (isAlternative == false) {
           return OrderEventType.READY_SHIPPING;
         } else {

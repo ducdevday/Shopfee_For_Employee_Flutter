@@ -8,6 +8,7 @@ part 'order_action_model.g.dart';
 class OrderActionModel{
   @JsonKey(name: "event")
   final String orderEvent;
+  @JsonKey(name: "note")
   final String? description;
 
   const OrderActionModel({

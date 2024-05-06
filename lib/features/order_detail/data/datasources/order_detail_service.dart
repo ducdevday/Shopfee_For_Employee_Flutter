@@ -16,9 +16,17 @@ class OrderDetailService {
     return response;
   }
 
-  Future<Response> doActionsInOrder(String orderId, OrderActionModel orderActionModel) async {
-    final response = await DioService.instance
-        .patch("${DioService.orderPath}/$orderId/employee/event", data: orderActionModel.toJson());
+  Future<Response> doActionsInOrder(
+      String orderId, OrderActionModel orderActionModel) async {
+    final response = await DioService.instance.patch(
+        "${DioService.orderPath}/$orderId/employee/event",
+        data: orderActionModel.toJson());
+    return response;
+  }
+
+  Future<Response> getCancelRequestReason(String orderId) async {
+    final response = await DioService.instance.get(
+        "${DioService.orderPath}/$orderId/cancellation-request");
     return response;
   }
 

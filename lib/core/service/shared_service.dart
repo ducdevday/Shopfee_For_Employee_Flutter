@@ -71,7 +71,6 @@ class SharedService {
   static void clearToken() {
     removeEmployeeId();
     removeAccessToken();
-    removeFCMTokenId();
   }
 
   static Future<void> initAppDocPath() async {
