@@ -44,6 +44,11 @@ import 'package:shopfeeforemployee/features/refund/data/repositories/refund_repo
 import 'package:shopfeeforemployee/features/refund/domain/repositories/refund_repository.dart';
 import 'package:shopfeeforemployee/features/refund/domain/usecase/refund_usecase.dart';
 import 'package:shopfeeforemployee/features/refund/presentation/refund.dart';
+import 'package:shopfeeforemployee/features/statistics/data/datasources/statistics_service.dart';
+import 'package:shopfeeforemployee/features/statistics/data/repositories/statistics_repository_impl.dart';
+import 'package:shopfeeforemployee/features/statistics/domain/repositories/statistics_repository.dart';
+import 'package:shopfeeforemployee/features/statistics/domain/usecase/statistics_usecase.dart';
+import 'package:shopfeeforemployee/features/statistics/presentation/statistics.dart';
 
 class ServiceLocator {
   static final sl = GetIt.instance;
@@ -58,6 +63,7 @@ class ServiceLocator {
     _orderDetailFeature();
     _historyDetailFeature();
     _refundFeature();
+    _statisticFeature();
   }
 
   void _notifyPermissionFeature() {
@@ -138,5 +144,14 @@ class ServiceLocator {
         () => RefundRepositoryImpl(sl()));
     sl.registerLazySingleton<RefundUseCase>(() => RefundUseCaseImpl(sl()));
     sl.registerFactory(() => RefundBloc(sl()));
+  }
+
+  void _statisticFeature() {
+    sl.registerLazySingleton(() => StatisticsService());
+    sl.registerLazySingleton<StatisticsRepository>(
+        () => StatisticsRepositoryImpl(sl()));
+    sl.registerLazySingleton<StatisticsUseCase>(
+        () => StatisticsUseCaseImpl(sl()));
+    sl.registerFactory(() => StatisticBloc(sl()));
   }
 }

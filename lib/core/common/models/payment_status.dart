@@ -4,7 +4,9 @@ import 'package:shopfeeforemployee/core/config/app_color.dart';
 enum PaymentStatus {
   PAID,
   UNPAID,
-  REFUNDED;
+  REFUNDED,
+  FAILED
+  ;
 
   String toJson() => name;
 
@@ -18,6 +20,8 @@ enum PaymentStatus {
         return "Unpaid";
       case PaymentStatus.REFUNDED:
         return "Refunded";
+      case PaymentStatus.FAILED:
+        return "Failed";
     }
   }
 
@@ -29,6 +33,8 @@ enum PaymentStatus {
         return AppColor.warning;
       case PaymentStatus.REFUNDED:
         return AppColor.info;
+      case PaymentStatus.FAILED:
+        return AppColor.error;
     }
   }
 }

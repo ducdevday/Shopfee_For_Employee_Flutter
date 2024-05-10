@@ -14,6 +14,7 @@ import 'package:shopfeeforemployee/features/orders/presentation/orders.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';
 import 'package:shopfeeforemployee/features/pos/presentation/page/pos_page.dart';
 import 'package:shopfeeforemployee/features/refund/presentation/refund.dart';
+import 'package:shopfeeforemployee/features/statistics/presentation/statistics.dart';
 
 class AppRouter {
   static onGenerateRoute(RouteSettings settings) {
@@ -64,6 +65,8 @@ class AppRouter {
             type: PageTransitionType.bottomToTop);
       case PosPage.route:
         return MaterialPageRoute(builder: (context) => const PosPage());
+      case StatisticsPage.route:
+        return MaterialPageRoute(builder: (context) => const StatisticsPage());
       default:
         return _errorRoute();
     }

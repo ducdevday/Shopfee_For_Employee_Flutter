@@ -15,6 +15,13 @@ class FormatUtil {
     return DateFormat('dd/MM/yyyy').format(dateTime.toLocal());
   }
 
+  static String formatDate3(DateTime? dateTime) {
+    if (dateTime == null) {
+      return "";
+    }
+    return DateFormat('dd/MM').format(dateTime.toLocal());
+  }
+
   static String formatTime(DateTime? dateTime) {
     if (dateTime == null) {
       return "";
@@ -66,23 +73,16 @@ class FormatUtil {
     if (price == null) {
       return "";
     }
-    return '${NumberFormat.decimalPattern().format(price)}đ';
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+    return formatter.format(price);
   }
 
   static String formatCoin(num? coin) {
     if (coin == null) {
       return "";
     }
-    return '${NumberFormat.decimalPattern().format(coin)} ${coin > 1 ? "coins" : "coin"}';
-  }
-
-  static String formatMoneyByK(num? price) {
-    if (price == null) {
-      return "";
-    }
-    String formattedPrice = NumberFormat.decimalPattern().format(price);
-    formattedPrice = formattedPrice.replaceAll(RegExp(r'(?<=\d)0{3}\b'), '');
-    return '${formattedPrice}k';
+    final formatter = NumberFormat('#,##0.###', 'vi_VN');
+    return '${formatter.format(coin)} ${coin > 1 ? "coins" : "coin"}';
   }
 
   static String formattedArrayString(List<String> arr) {
@@ -114,5 +114,19 @@ class FormatUtil {
     String secondsStr = remainingSeconds.toString().padLeft(2, '0');
 
     return '$minutesStr:$secondsStr';
+  }
+
+  static String formattedStatisticDatetimeToString(DateTime? dateTime) {
+    if (dateTime == null) {
+      return "";
+    }
+    return DateFormat('yyyy-MM-dd').format(dateTime);
+  }
+
+  static DateTime? formattedStatisticStringToDatetime(String? dateString) {
+    if (dateString == null) {
+      return null;
+    }
+    return DateTime.parse(dateString);
   }
 }
