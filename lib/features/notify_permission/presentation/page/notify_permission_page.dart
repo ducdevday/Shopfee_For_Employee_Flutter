@@ -23,11 +23,9 @@ class _NotifyPermissionPageState extends State<NotifyPermissionPage> {
     bool isGrantedNotification =
         await PushNotificationService.requestPermission();
     if (isGrantedNotification) {
-      print("User granted permission");
       SharedService.setIsFirstTime(false);
       NavigationUtil.pushNamed(LoginPage.route);
     } else {
-      print("User denied permission");
       AlertUtil.showToast("You denied permission");
     }
   }

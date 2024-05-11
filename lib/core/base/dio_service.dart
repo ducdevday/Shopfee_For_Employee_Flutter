@@ -7,6 +7,7 @@ import 'package:shopfeeforemployee/core/service/shared_service.dart';
 
 class DioService {
   static const String BACKEND_PATH = "http://10.0.2.2:8080/api/";
+  // static const String BACKEND_PATH = "http://172.16.0.13:8080/api/";
 
   //api route
   static const String authPath = "auth/employee";

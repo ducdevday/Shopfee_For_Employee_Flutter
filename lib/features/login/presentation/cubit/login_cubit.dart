@@ -18,6 +18,7 @@ class LoginCubit extends Cubit<LoginState> {
     if (checkValidField(account: account, password: password) == false) return;
     try {
       EasyLoading.show(maskType: EasyLoadingMaskType.black);
+      final result = SharedService.getFCMTokenId();
       final response = await _loginUseCase.login(LoginEntity(
           account: account,
           password: password,

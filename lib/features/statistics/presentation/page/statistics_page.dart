@@ -125,16 +125,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                     activationMode: ActivationMode.singleTap,
                                     enable: true,
                                   ),
+                                  zoomPanBehavior: ZoomPanBehavior(
+                                    enablePinching: true,
+                                    zoomMode: ZoomMode.x,
+                                    enablePanning: true,
+                                    enableDoubleTapZooming: true,
+                                  ),
                                   series: <CartesianSeries>[
                                     // Renders line chart
                                     LineSeries<ChartLineData, DateTime>(
-                                      markerSettings:  MarkerSettings(
-                                          isVisible: true,
-                                          height: 4,
-                                          width: 4,
-                                          shape: DataMarkerType.circle,
-                                          borderWidth: 3,
-                                          borderColor: AppColor.primaryColor),
                                       dataSource:
                                           state.saleData.chartOrderCountData,
                                       xValueMapper: (ChartLineData data, _) =>
@@ -175,17 +174,23 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                     activationMode: ActivationMode.singleTap,
                                     enable: true,
                                   ),
+                                  zoomPanBehavior: ZoomPanBehavior(
+                                    enablePinching: true,
+                                    zoomMode: ZoomMode.x,
+                                    enablePanning: true,
+                                    enableDoubleTapZooming: true,
+                                  ),
                                   series: <CartesianSeries>[
                                     // Renders line chart
                                     LineSeries<ChartLineData, DateTime>(
                                       //TODO: Marker
-                                      markerSettings:  MarkerSettings(
-                                          isVisible: true,
-                                          height: 4,
-                                          width: 4,
-                                          shape: DataMarkerType.circle,
-                                          borderWidth: 3,
-                                          borderColor: AppColor.primaryColor),
+                                      // markerSettings:  MarkerSettings(
+                                      //     isVisible: true,
+                                      //     height: 4,
+                                      //     width: 4,
+                                      //     shape: DataMarkerType.circle,
+                                      //     borderWidth: 3,
+                                      //     borderColor: AppColor.primaryColor),
                                       //TODO: Marker Label
                                       // dataLabelSettings:
                                       //     const DataLabelSettings(
