@@ -70,7 +70,6 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.only(right: 8.0),
             child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, PosPage.route);
                 },
                 child: Icon(Icons.notifications_none_outlined)),
           )
@@ -101,27 +100,27 @@ class HomePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        NavigationUtil.pushNamed(OrdersPage.route,
-                            arguments: OrderType.SHIPPING);
-                      },
-                      child: Card(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                            side:
-                                BorderSide(color: Color(0xfff5f5f5), width: 2)),
-                        elevation: 0.25,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          NavigationUtil.pushNamed(OrdersPage.route,
+                              arguments: OrderType.SHIPPING);
+                        },
+                        child: Card(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                              side: BorderSide(
+                                  color: Color(0xfff5f5f5), width: 2)),
+                          elevation: 0.25,
+                          child: Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
                                   width: 120,
                                   height: 120,
+                                  margin: EdgeInsets.all(16),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: AppColor.primaryColor,
@@ -139,14 +138,14 @@ class HomePage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
                                 Text("Delivery Order",
                                     style: AppStyle.mediumTextStyleDark
                                         .copyWith(
                                             color: AppColor.headingColor,
                                             height: 1.2)),
+                                SizedBox(
+                                  height: 16,
+                                )
                               ],
                             ),
                           ),
@@ -156,27 +155,27 @@ class HomePage extends StatelessWidget {
                     const SizedBox(
                       width: 16,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        NavigationUtil.pushNamed(OrdersPage.route,
-                            arguments: OrderType.ONSITE);
-                      },
-                      child: Card(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                            side:
-                                BorderSide(color: Color(0xfff5f5f5), width: 2)),
-                        elevation: 0.25,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          NavigationUtil.pushNamed(OrdersPage.route,
+                              arguments: OrderType.ONSITE);
+                        },
+                        child: Card(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                              side: BorderSide(
+                                  color: Color(0xfff5f5f5), width: 2)),
+                          elevation: 0.25,
+                          child: Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
                                   width: 120,
                                   height: 120,
+                                  margin: EdgeInsets.all(16),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: AppColor.primaryColor,
@@ -194,14 +193,14 @@ class HomePage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
                                 Text("Take Away Order",
                                     style: AppStyle.mediumTextStyleDark
                                         .copyWith(
                                             color: AppColor.headingColor,
                                             height: 1.2)),
+                                const SizedBox(
+                                  height: 16,
+                                ),
                               ],
                             ),
                           ),
@@ -216,26 +215,26 @@ class HomePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, HistoryPage.route);
-                      },
-                      child: Card(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                            side:
-                                BorderSide(color: Color(0xfff5f5f5), width: 2)),
-                        elevation: 0.25,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, HistoryPage.route);
+                        },
+                        child: Card(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                              side: BorderSide(
+                                  color: Color(0xfff5f5f5), width: 2)),
+                          elevation: 0.25,
+                          child: Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
                                   width: 120,
                                   height: 120,
+                                  margin: EdgeInsets.all(16.0),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: AppColor.primaryColor,
@@ -251,14 +250,14 @@ class HomePage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
                                 Text("History",
                                     style: AppStyle.mediumTextStyleDark
                                         .copyWith(
                                             color: AppColor.headingColor,
                                             height: 1.2)),
+                                const SizedBox(
+                                  height: 16,
+                                ),
                               ],
                             ),
                           ),
@@ -268,26 +267,26 @@ class HomePage extends StatelessWidget {
                     const SizedBox(
                       width: 16,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, AccountPage.route);
-                      },
-                      child: Card(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                            side:
-                                BorderSide(color: Color(0xfff5f5f5), width: 2)),
-                        elevation: 0.25,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, AccountPage.route);
+                        },
+                        child: Card(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                              side: BorderSide(
+                                  color: Color(0xfff5f5f5), width: 2)),
+                          elevation: 0.25,
+                          child: Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
                                   width: 120,
                                   height: 120,
+                                  margin: const EdgeInsets.all(16.0),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: AppColor.primaryColor,
@@ -305,14 +304,14 @@ class HomePage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
                                 Text("Profile",
                                     style: AppStyle.mediumTextStyleDark
                                         .copyWith(
                                             color: AppColor.headingColor,
                                             height: 1.2)),
+                                const SizedBox(
+                                  height: 16,
+                                ),
                               ],
                             ),
                           ),

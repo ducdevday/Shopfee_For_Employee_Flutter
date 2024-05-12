@@ -77,6 +77,14 @@ class FormatUtil {
     return formatter.format(price);
   }
 
+  static String formatDecimal(num? price) {
+    if (price == null) {
+      return "";
+    }
+    final formatter = NumberFormat('#,##0.###', 'vi_VN');
+    return formatter.format(price);
+  }
+
   static String formatCoin(num? coin) {
     if (coin == null) {
       return "";

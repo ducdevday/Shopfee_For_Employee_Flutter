@@ -1,13 +1,17 @@
-import 'package:shopfeeforemployee/features/employee/domain/entities/employee_entity.dart';
+import 'dart:typed_data';
 
-// class GlobalData{
-//   static final ins = GlobalData._();
-//   GlobalData._();
-//
-//   String? employeeId;
-//   EmployeeEntity? employeeEntity;
-//   String? accessToken;
-//   String? refreshToken;
-//   bool isFirstTime = true;
-//
-// }
+import 'package:flutter/services.dart';
+import 'package:pdf/widgets.dart';
+
+class GlobalData {
+  static final ins = GlobalData._();
+
+  GlobalData._();
+
+  Font? font;
+
+  Future<void> createFont() async {
+    final data = await rootBundle.load("assets/fonts/OpenSans-Regular.ttf");
+    font = Font.ttf(data);
+  }
+}

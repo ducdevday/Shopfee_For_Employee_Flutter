@@ -22,7 +22,7 @@ class OrderInformation extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "ID Transaction",
+                      "ID Order",
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(

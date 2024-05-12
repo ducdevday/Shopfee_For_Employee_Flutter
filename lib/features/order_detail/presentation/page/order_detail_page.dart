@@ -17,7 +17,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   void initState() {
     super.initState();
     _bloc = ServiceLocator.sl<OrderDetailBloc>()
-      ..add(OrderDetailLoadInformation(orderId: widget.orderId, haveChanged: false));
+      ..add(OrderDetailLoadInformation(
+          orderId: widget.orderId, haveChanged: false));
   }
 
   @override
@@ -43,6 +44,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     preferredSize: Size.fromHeight(1),
                     child: Divider(height: 1),
                   ),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: AppDimen.spacing),
+                      child: InkWell(onTap: () {
+                          NavigationUtil.pushNamed(PosPage.route, arguments: state.orderDetail);
+                      }, child: Icon(Icons.print_outlined)),
+                    )
+                  ],
                 ),
                 body: SingleChildScrollView(
                   child: Column(
@@ -74,7 +83,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     ],
                   ),
                 ),
-                bottomNavigationBar: OrderDetailBottom(orderId: widget.orderId));
+                bottomNavigationBar:
+                    OrderDetailBottom(orderId: widget.orderId));
           } else if (state is OrderDetailLoadFailure) {
             return MyError();
           } else {

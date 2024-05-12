@@ -1,221 +1,106 @@
-import 'package:bluetooth_print/bluetooth_print.dart';
-import 'package:bluetooth_print/bluetooth_print_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:shopfeeforemployee/core/config/app_color.dart';
+import 'package:shopfeeforemployee/core/config/app_dimen.dart';
+import 'package:shopfeeforemployee/core/config/app_style.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
+import 'package:shopfeeforemployee/features/pos/presentation/cubit/pos_cubit.dart';
 
 class PosPage extends StatefulWidget {
   static const String route = "/pos";
+  final OrderDetailEntity orderDetail;
 
-  const PosPage({Key? key}) : super(key: key);
+  const PosPage({Key? key, required this.orderDetail}) : super(key: key);
 
   @override
   State<PosPage> createState() => _PosPageState();
 }
 
 class _PosPageState extends State<PosPage> {
-  BluetoothPrint bluetoothPrint = BluetoothPrint.instance;
-
-  bool _connected = false;
-  BluetoothDevice _device = BluetoothDevice();
-  String tips = 'Không có thiết bị được kết nối';
+  late PosCubit _cubit;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    if (_connected)
-      tips =
-          'Đã kết nối'; // Khi vào trang sẽ check xem đã kết nối trước đó hay chưa
-    WidgetsBinding.instance.addPostFrameCallback((_) => initBluetooth());
+    _cubit = PosCubit()..getOrderBillPdf(widget.orderDetail);
   }
 
-  Future<void> initBluetooth() async {
-    bluetoothPrint.startScan(
-        timeout: Duration(seconds: 4)); // scan trong 4s, tìm device
-
-    bool? isConnected = await bluetoothPrint.isConnected;
-
-    bluetoothPrint.state.listen((state) {
-      print('cur device status: $state');
-
-      switch (state) {
-        case BluetoothPrint.CONNECTED:
-          setState(() {
-            _connected = true;
-            tips = 'Kết nối thành công';
-          });
-          break;
-        case BluetoothPrint.DISCONNECTED:
-          setState(() {
-            _connected = false;
-            tips = 'Ngắt kết nối thành công';
-          });
-          break;
-        default:
-          break;
-      }
-    });
-
-    if (!mounted) return; // nếu chưa kết nối thì không làm gì
-
-    if (isConnected != null && isConnected == true) {
-      setState(() {
-        _connected = true;
-      });
-    }
-  }
-
-  void _onConnect() async {
-    // chỗ này đọc lệnh chắc mọi người cũng hiểu được :v
-    try{
-      if (_device.address != null) {
-        await bluetoothPrint.connect(_device);
-      } else {
-        setState(() {
-          tips = 'Vui lòng chọn thiết bị';
-        });
-        print('please select device');
-      }
-    }
-    catch(e){
-      print(e.toString());
-    }
-
-  }
-
-  void _onDisconnect() async {
-    await bluetoothPrint.disconnect();
-  }
-
-  void _sendData() async {
-    Map<String, dynamic> config = Map();
-    List<LineText> list = [];
-    list.add(LineText(
-        type: LineText.TYPE_TEXT,
-        content: 'MAY IN EXAMPLE',
-        weight: 1,
-        align: LineText.ALIGN_CENTER,
-        linefeed: 1));
-    list.add(LineText(
-        type: LineText.TYPE_TEXT,
-        content: 'Dia chi: Da Nang',
-        weight: 0,
-        align: LineText.ALIGN_CENTER,
-        linefeed: 1));
-    list.add(LineText(linefeed: 1));
-    list.add(LineText(
-        type: LineText.TYPE_TEXT,
-        content: 'HOA DON',
-        align: LineText.ALIGN_CENTER,
-        weight: 1,
-        linefeed: 1));
-    final DateTime now = DateTime.now();
-    list.add(LineText(
-        type: LineText.TYPE_TEXT,
-        content: 'Ngay in: ' + now.toString(),
-        align: LineText.ALIGN_LEFT,
-        linefeed: 1));
-    list.add(LineText(linefeed: 1));
-    list.add(LineText(type: LineText.TYPE_TEXT, content: 'In cho vui'));
-
-    await bluetoothPrint.printReceipt(config, list);
+  @override
+  void dispose() {
+    _cubit;
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Máy in')),
-      body: RefreshIndicator(
-        onRefresh: () =>
-            bluetoothPrint.startScan(timeout: Duration(seconds: 4)),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Text(tips),
-                  ),
-                ],
-              ),
-              Divider(),
-              StreamBuilder<List<BluetoothDevice>>(
-                stream: bluetoothPrint.scanResults,
-                initialData: [],
-                builder: (c, snapshot) => Column(
-                  children: snapshot.data != null
-                      ? snapshot.data!
-                          .map((d) => ListTile(
-                                title: Text(d.name ?? ''),
-                                subtitle: Text("${d.address}"),
-                                onTap: () async {
-                                  setState(() {
-                                    _device = d;
-                                    bluetoothPrint.connect(_device);
-                                  });
-                                },
-                                trailing: _device != null &&
-                                        _device.address == d.address
-                                    ? Icon(
-                                        Icons.check,
-                                        color: Colors.green,
-                                      )
-                                    : null,
-                              ))
-                          .toList()
-                      : [],
-                ),
-              ),
-              Divider(),
-              Container(
-                padding: EdgeInsets.fromLTRB(20, 5, 20, 10),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ElevatedButton(
-                          child: Text('Kết nối'),
-                          onPressed: _connected ? null : _onConnect,
-                        ),
-                        SizedBox(width: 10.0),
-                        ElevatedButton(
-                          child: Text('Ngắt kết nối'),
-                          onPressed: _connected ? _onDisconnect : null,
-                        ),
-                      ],
-                    ),
-                    ElevatedButton(
-                      child: Text('In hóa đơn'),
-                      onPressed: _connected ? _sendData : null,
-                    ),
-                  ],
-                ),
-              )
-            ],
+    return BlocProvider(
+      create: (context) => _cubit,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text("Preview"),
+            centerTitle: true,
+            bottom: const PreferredSize(
+              preferredSize: Size.fromHeight(1),
+              child: Divider(height: 1),
+            ),
           ),
-        ),
-      ),
-      // phần dưới là button scan để tìm kiếm device
-      floatingActionButton: StreamBuilder<bool>(
-        stream: bluetoothPrint.isScanning,
-        initialData: false,
-        builder: (c, snapshot) {
-          if (snapshot.data != null) {
-            return FloatingActionButton(
-              child: Icon(Icons.stop),
-              onPressed: () => bluetoothPrint.stopScan(),
-              backgroundColor: Colors.red,
-            );
-          } else {
-            return FloatingActionButton(
-                child: Icon(Icons.search),
-                onPressed: () =>
-                    bluetoothPrint.startScan(timeout: Duration(seconds: 4)));
-          }
-        },
-      ),
+          body: BlocBuilder<PosCubit, PosState>(
+            builder: (context, state) {
+              if (state is PosLoadSuccess) {
+                return Column(
+                  children: [
+                    Expanded(
+                      child: PDFView(
+                        filePath: state.orderBillPdf.path,
+                        enableSwipe: true,
+                        autoSpacing: false,
+                        pageFling: false,
+                        onRender: (_pages) {
+                          // setState(() {
+                          //   pages = _pages;
+                          //   isReady = true;
+                          // });
+                        },
+                        onError: (error) {
+                          print(error.toString());
+                        },
+                        onPageError: (page, error) {
+                          print('$page: ${error.toString()}');
+                        },
+                        onViewCreated: (PDFViewController pdfViewController) {
+                          // _controller.complete(pdfViewController);
+                        },
+                        onPageChanged: (int? page, int? total) {
+                          // print('page change: $page/$total');
+                        },
+                      ),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.all(AppDimen.spacing),
+                        child: ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.print_outlined),
+                          label: Text("Print"),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 24),
+                            disabledBackgroundColor: const Color(0xffCACACA),
+                            disabledForegroundColor: AppColor.lightColor,
+                            textStyle: AppStyle.mediumTextStyleDark,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ))
+                  ],
+                );
+              }
+              return SizedBox();
+            },
+          )),
     );
   }
 }

@@ -20,7 +20,6 @@ class OrderDetailEntity {
   List<OrderProductEntity>? itemList;
   DiscountInformationEntity? discountInformation;
   TransactionEntity? transaction;
-  DateTime? receiveTime;
   BranchEntity? branch;
   int? coin;
   RefundRequestStatus? refundRequestStatus;
