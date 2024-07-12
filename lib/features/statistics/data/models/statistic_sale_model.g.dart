@@ -8,7 +8,7 @@ part of 'statistic_sale_model.dart';
 
 StatisticSaleModel _$StatisticSaleModelFromJson(Map<String, dynamic> json) =>
     StatisticSaleModel(
-      totalOrderCount: json['totalOrderCount'] as int,
+      totalOrderCount: (json['totalOrderCount'] as num).toInt(),
       totalItemPrice: (json['totalItemPrice'] as num).toDouble(),
       statistics: (json['statistics'] as List<dynamic>)
           .map((e) =>

@@ -31,7 +31,7 @@ OrderDetailModel _$OrderDetailModelFromJson(Map<String, dynamic> json) =>
       branch: json['branch'] == null
           ? null
           : BranchModel.fromJson(json['branch'] as Map<String, dynamic>),
-      coin: json['coin'] as int?,
+      coin: (json['coin'] as num?)?.toInt(),
       refundRequestStatus: $enumDecodeNullable(
           _$RefundRequestStatusEnumMap, json['refundStatus']),
     )..discountInformation = json['rewardInformation'] == null

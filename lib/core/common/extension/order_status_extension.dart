@@ -54,33 +54,33 @@ extension OrderStatusExtension on OrderStatus {
     switch (this) {
       case OrderStatus.CREATED:
         if (isAlternative == false) {
-          return OrderEventType.ORDER_ACCEPT;
+          return OrderEventType.ACCEPT_ORDER;
         } else {
           return null;
         }
       case OrderStatus.ACCEPTED:
         if (isAlternative == false) {
-          return OrderEventType.READY_SHIPPING;
+          return OrderEventType.PREPARED;
         } else {
           return null;
         }
       case OrderStatus.CANCELLATION_REQUEST_REFUSED:
         if (isAlternative == false) {
-          return OrderEventType.READY_SHIPPING;
+          return OrderEventType.PREPARED;
         } else {
           return null;
         }
-      case OrderStatus.PREPARED:
+      case OrderStatus.PENDING_PICK_UP:
         if (isAlternative == false) {
           return OrderEventType.START_SHIPPING;
         } else {
           return null;
         }
-      case OrderStatus.DELIVERING:
+      case OrderStatus.IN_DELIVERY:
         if (isAlternative == false) {
-          return OrderEventType.ORDER_FULFILL;
+          return OrderEventType.FULFILL;
         } else {
-          return OrderEventType.ORDER_BOOM;
+          return OrderEventType.BOOM;
         }
       default:
         return null;
@@ -91,27 +91,27 @@ extension OrderStatusExtension on OrderStatus {
     switch (this) {
       case OrderStatus.CREATED:
         if (isAlternative == false) {
-          return OrderEventType.ORDER_ACCEPT;
+          return OrderEventType.ACCEPT_ORDER;
         } else {
           return null;
         }
       case OrderStatus.ACCEPTED:
         if (isAlternative == false) {
-          return OrderEventType.READY_SHIPPING;
+          return OrderEventType.PREPARED;
         } else {
           return null;
         }
       case OrderStatus.CANCELLATION_REQUEST_REFUSED:
         if (isAlternative == false) {
-          return OrderEventType.READY_SHIPPING;
+          return OrderEventType.PREPARED;
         } else {
           return null;
         }
-      case OrderStatus.PREPARED:
+      case OrderStatus.PENDING_PICK_UP:
         if (isAlternative == false) {
-          return OrderEventType.ORDER_FULFILL;
+          return OrderEventType.FULFILL;
         } else {
-          return OrderEventType.ORDER_BOOM;
+          return OrderEventType.BOOM;
         }
       default:
         return null;
@@ -130,9 +130,9 @@ extension OrderStatusExtension on OrderStatus {
         return "REQUEST CANCEL REFUSED";
       case OrderStatus.CANCELLATION_REQUEST_ACCEPTED:
         return "REQUEST CANCEL ACCEPTED";
-      case OrderStatus.PREPARED:
+      case OrderStatus.PENDING_PICK_UP:
         return "PREPARED";
-      case OrderStatus.DELIVERING:
+      case OrderStatus.IN_DELIVERY:
         return "DELIVERING";
       case OrderStatus.NOT_RECEIVED:
         return "NOT RECEIVED";
@@ -166,9 +166,9 @@ extension OrderStatusExtension on OrderStatus {
         return "No Refused Request Cancel Yet";
       case OrderStatus.CANCELLATION_REQUEST_ACCEPTED:
         return "No Refused Request Accept Orders Yet";
-      case OrderStatus.PREPARED:
+      case OrderStatus.PENDING_PICK_UP:
         return "No Prepared Orders Yet";
-      case OrderStatus.DELIVERING:
+      case OrderStatus.IN_DELIVERY:
         return "No Delivering Orders Yet";
       case OrderStatus.NOT_RECEIVED:
         return "NOT RECEIVED";

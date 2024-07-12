@@ -10,7 +10,7 @@ StatisticSaleDetailModel _$StatisticSaleDetailModelFromJson(
         Map<String, dynamic> json) =>
     StatisticSaleDetailModel(
       time: json['time'] as String,
-      orderCount: json['orderCount'] as int,
+      orderCount: (json['orderCount'] as num).toInt(),
       totalItemPrice: (json['totalItemPrice'] as num).toDouble(),
     );
 

@@ -12,6 +12,7 @@ class OrderDetailPage extends StatefulWidget {
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   late final OrderDetailBloc _bloc;
+  final _socketMethod = ServiceLocator.sl<SocketMethod>();
 
   @override
   void initState() {
@@ -19,6 +20,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     _bloc = ServiceLocator.sl<OrderDetailBloc>()
       ..add(OrderDetailLoadInformation(
           orderId: widget.orderId, haveChanged: false));
+
+    _socketMethod.userUpdateOrderListener((data) => {
+          if (data["branchId"] == SharedService.getBranchId() && !_bloc.isClosed)
+            {_bloc.add(OrderDetailRefreshInformation(orderId: widget.orderId))}
+        });
   }
 
   @override
@@ -47,40 +53,51 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   actions: [
                     Padding(
                       padding: const EdgeInsets.only(right: AppDimen.spacing),
-                      child: InkWell(onTap: () {
-                          NavigationUtil.pushNamed(PosPage.route, arguments: state.orderDetail);
-                      }, child: Icon(Icons.print_outlined)),
+                      child: InkWell(
+                          onTap: () {
+                            NavigationUtil.pushNamed(PosPage.route,
+                                arguments: state.orderDetail);
+                          },
+                          child: Icon(Icons.print_outlined)),
                     )
                   ],
                 ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const OrderInformation(),
-                      Container(
-                        height: 4,
-                        color: const Color(0xffEFEBE9),
-                      ),
-                      const TrackingInformation(),
-                      Container(
-                        height: 4,
-                        color: const Color(0xffEFEBE9),
-                      ),
-                      const DeliveryInformation(),
-                      const TakeAwayInformation(),
-                      Container(
-                        height: 4,
-                        color: const Color(0xffEFEBE9),
-                      ),
-                      const Note(),
-                      const ProductList(),
-                      Container(
-                        height: 4,
-                        color: const Color(0xffEFEBE9),
-                      ),
-                      const PaymentSummary(),
-                      const CancelDetail(),
-                    ],
+                body: RefreshIndicator(
+                  onRefresh: () async {
+                    if (!_bloc.isClosed) {
+                      _bloc.add(
+                        OrderDetailRefreshInformation(orderId: widget.orderId));
+                    }
+                  },
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const OrderInformation(),
+                        Container(
+                          height: 4,
+                          color: const Color(0xffEFEBE9),
+                        ),
+                        const TrackingInformation(),
+                        Container(
+                          height: 4,
+                          color: const Color(0xffEFEBE9),
+                        ),
+                        const DeliveryInformation(),
+                        const TakeAwayInformation(),
+                        Container(
+                          height: 4,
+                          color: const Color(0xffEFEBE9),
+                        ),
+                        const Note(),
+                        const ProductList(),
+                        Container(
+                          height: 4,
+                          color: const Color(0xffEFEBE9),
+                        ),
+                        const PaymentSummary(),
+                        const CancelDetail(),
+                      ],
+                    ),
                   ),
                 ),
                 bottomNavigationBar:

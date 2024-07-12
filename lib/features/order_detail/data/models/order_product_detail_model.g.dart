@@ -9,7 +9,7 @@ part of 'order_product_detail_model.dart';
 OrderProductDetailModel _$OrderProductDetailModelFromJson(
         Map<String, dynamic> json) =>
     OrderProductDetailModel(
-      quantity: json['quantity'] as int?,
+      quantity: (json['quantity'] as num?)?.toInt(),
       size: json['size'] as String?,
       price: (json['price'] as num?)?.toDouble(),
       productDiscount: (json['productDiscount'] as num?)?.toDouble(),

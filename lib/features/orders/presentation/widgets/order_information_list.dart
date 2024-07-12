@@ -19,6 +19,7 @@ class _OrderInformationListState extends State<OrderInformationList> {
   late bool isLoadingMore;
   late bool cannotLoadMore;
   late List<OrderInformationEntity> orderList;
+  final _socketMethod = ServiceLocator.sl<SocketMethod>();
 
   int initPage = 1;
   int initSize = 8;
@@ -35,6 +36,30 @@ class _OrderInformationListState extends State<OrderInformationList> {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     _refreshController = RefreshController(initialRefresh: false);
+
+    switch (widget.orderStatus) {
+      case OrderStatus.CREATED:
+        _socketMethod.userCreateOrderListener((data) => {
+              if (!_bloc.isClosed)
+                _bloc.add(OrderRefreshInformation(
+                    initPage: initPage, initSize: initSize))
+            });
+        _socketMethod.userUpdateOrderListener((data) => {
+              if (!_bloc.isClosed)
+                _bloc.add(OrderRefreshInformation(
+                    initPage: initPage, initSize: initSize))
+            });
+        break;
+      case OrderStatus.ACCEPTED:
+      case OrderStatus.CANCELLATION_REQUEST:
+        _socketMethod.userUpdateOrderListener((data) => {
+              if (!_bloc.isClosed)
+                _bloc.add(OrderRefreshInformation(
+                    initPage: initPage, initSize: initSize))
+            });
+      default:
+        break;
+    }
   }
 
   @override
@@ -49,7 +74,9 @@ class _OrderInformationListState extends State<OrderInformationList> {
     if (isLoadingMore || cannotLoadMore) return;
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      _bloc.add(OrderLoadMoreInformation());
+      if (!_bloc.isClosed) {
+        _bloc.add(OrderLoadMoreInformation());
+      }
     }
   }
 
@@ -75,9 +102,11 @@ class _OrderInformationListState extends State<OrderInformationList> {
                 enablePullUp: false,
                 physics: BouncingScrollPhysics(),
                 onRefresh: () async {
-                  _bloc.add(OrderRefreshInformation(
-                      initPage: initPage, initSize: initSize));
-                  _refreshController.refreshCompleted();
+                  if (!_bloc.isClosed) {
+                    _bloc.add(OrderRefreshInformation(
+                        initPage: initPage, initSize: initSize));
+                    _refreshController.refreshCompleted();
+                  }
                 },
                 child: ListView.separated(
                   controller: _scrollController,

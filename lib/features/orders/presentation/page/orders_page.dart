@@ -37,20 +37,27 @@ class OrdersPage extends StatelessWidget {
             body: TabBarView(
               children: [
                 OrderInformationList(
-                    orderType: orderType, orderStatus: OrderStatus.CREATED),
+                    key: UniqueKey(),
+                    orderType: orderType,
+                    orderStatus: OrderStatus.CREATED),
                 OrderInformationList(
+                  key: UniqueKey(),
                   orderType: orderType,
                   orderStatus: OrderStatus.ACCEPTED,
                 ),
                 OrderInformationList(
+                  key: UniqueKey(),
                   orderType: orderType,
-                  orderStatus: OrderStatus.PREPARED,
+                  orderStatus: OrderStatus.PENDING_PICK_UP,
                 ),
                 OrderInformationList(
+                    key: UniqueKey(),
                     orderType: orderType,
                     orderStatus: OrderStatus.CANCELLATION_REQUEST),
                 OrderInformationList(
-                    orderType: orderType, orderStatus: OrderStatus.DELIVERING),
+                    key: UniqueKey(),
+                    orderType: orderType,
+                    orderStatus: OrderStatus.IN_DELIVERY),
               ],
             ),
           ),
@@ -83,16 +90,21 @@ class OrdersPage extends StatelessWidget {
             body: TabBarView(
               children: [
                 OrderInformationList(
-                    orderType: orderType, orderStatus: OrderStatus.CREATED),
+                    key: UniqueKey(),
+                    orderType: orderType,
+                    orderStatus: OrderStatus.CREATED),
                 OrderInformationList(
+                  key: UniqueKey(),
                   orderType: orderType,
                   orderStatus: OrderStatus.ACCEPTED,
                 ),
                 OrderInformationList(
+                  key: UniqueKey(),
                   orderType: orderType,
-                  orderStatus: OrderStatus.PREPARED,
+                  orderStatus: OrderStatus.PENDING_PICK_UP,
                 ),
                 OrderInformationList(
+                    key: UniqueKey(),
                     orderType: orderType,
                     orderStatus: OrderStatus.CANCELLATION_REQUEST),
               ],

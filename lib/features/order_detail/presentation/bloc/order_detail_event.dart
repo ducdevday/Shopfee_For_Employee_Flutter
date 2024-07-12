@@ -16,6 +16,16 @@ class OrderDetailLoadInformation extends OrderDetailEvent {
   List<Object> get props => [orderId, haveChanged];
 }
 
+class OrderDetailRefreshInformation extends OrderDetailEvent {
+  final String orderId;
+  const OrderDetailRefreshInformation({
+    required this.orderId,
+  });
+
+  @override
+  List<Object> get props => [orderId];
+}
+
 class OrderDetailDoAction extends OrderDetailEvent {
   final OrderEventType orderEventType;
   final String orderId;

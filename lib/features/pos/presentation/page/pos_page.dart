@@ -81,7 +81,9 @@ class _PosPageState extends State<PosPage> {
                         width: MediaQuery.of(context).size.width,
                         margin: EdgeInsets.all(AppDimen.spacing),
                         child: ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            _cubit.printOrderBillPdf();
+                          },
                           icon: Icon(Icons.print_outlined),
                           label: Text("Print"),
                           style: ElevatedButton.styleFrom(

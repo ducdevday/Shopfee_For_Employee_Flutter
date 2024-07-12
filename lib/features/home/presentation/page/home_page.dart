@@ -1,10 +1,21 @@
 part of home;
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const String route = "/home";
 
   const HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _socketMethod = ServiceLocator.sl<SocketMethod>();
+  @override
+  void initState() {
+    super.initState();
+    _socketMethod.joinBranch(branchId: SharedService.getBranchId()!);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,13 +77,13 @@ class HomePage extends StatelessWidget {
           ),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 8.0),
-            child: GestureDetector(
-                onTap: () {
-                },
-                child: Icon(Icons.notifications_none_outlined)),
-          )
+          // Padding(
+          //   padding: EdgeInsets.only(right: 8.0),
+          //   child: GestureDetector(
+          //       onTap: () {
+          //       },
+          //       child: Icon(Icons.notifications_none_outlined)),
+          // )
         ],
         automaticallyImplyLeading: false,
       ),

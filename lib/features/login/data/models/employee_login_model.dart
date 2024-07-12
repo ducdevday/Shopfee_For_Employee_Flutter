@@ -8,10 +8,12 @@ part 'employee_login_model.g.dart';
 class EmployeeLoginModel{
   final String employeeId;
   final String accessToken;
+  final String branchId;
 
   const EmployeeLoginModel({
     required this.employeeId,
     required this.accessToken,
+    required this.branchId
   });
 
   factory EmployeeLoginModel.fromJson(Map<String, dynamic> json) {
@@ -21,6 +23,4 @@ class EmployeeLoginModel{
   Map<String, dynamic> toJson() {
     return _$EmployeeLoginModelToJson(this);
   }
-
-
 }

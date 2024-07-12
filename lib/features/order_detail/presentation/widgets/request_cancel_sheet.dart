@@ -33,7 +33,7 @@ class _RequestCancelSheetState extends State<RequestCancelSheet> {
             content: "Are you sure to Accept Cancel this order",
             callbackOK: () async {
               context.read<OrderDetailBloc>().add(OrderDetailDoAction(
-                  orderEventType: OrderEventType.CANCEL_REQUEST_ACCEPT,
+                  orderEventType: OrderEventType.ACCEPT_ORDER_CANCELLATION,
                   orderId: widget.orderId));
               Navigator.pop(contextDialog);
             },
@@ -50,7 +50,7 @@ class _RequestCancelSheetState extends State<RequestCancelSheet> {
             content: "Are you sure to Refuse Cancel this order",
             callbackOK: () async {
               context.read<OrderDetailBloc>().add(OrderDetailDoAction(
-                  orderEventType: OrderEventType.CANCEL_REQUEST_REFUSE,
+                  orderEventType: OrderEventType.REFUSE_ORDER_CANCELLATION,
                   orderId: widget.orderId));
               Navigator.pop(contextDialog);
             },

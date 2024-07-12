@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:shopfeeforemployee/core/socket/socket_method.dart';
 import 'package:shopfeeforemployee/features/change_password/data/datasources/change_password_service.dart';
 import 'package:shopfeeforemployee/features/change_password/data/repositories/change_password_repository_impl.dart';
 import 'package:shopfeeforemployee/features/change_password/domain/repositories/change_password_repository.dart';
@@ -54,6 +55,7 @@ class ServiceLocator {
   static final sl = GetIt.instance;
 
   Future<void> init() async {
+    _socket();
     _notifyPermissionFeature();
     _loginFeature();
     _employeeFeature();
@@ -118,7 +120,7 @@ class ServiceLocator {
     sl.registerLazySingleton<OrderDetailRepository>(
         () => OrderDetailRepositoryImpl(sl()));
     sl.registerLazySingleton<OrderDetailUseCase>(
-        () => OrderDetailUseCaseImpl(sl()));
+        () => OrderDetailUseCaseImpl(sl(), sl()));
     sl.registerFactory<OrderDetailBloc>(() => OrderDetailBloc(sl()));
   }
 
@@ -153,5 +155,9 @@ class ServiceLocator {
     sl.registerLazySingleton<StatisticsUseCase>(
         () => StatisticsUseCaseImpl(sl()));
     sl.registerFactory(() => StatisticBloc(sl()));
+  }
+
+  void _socket() {
+    sl.registerLazySingleton(() => SocketMethod());
   }
 }
