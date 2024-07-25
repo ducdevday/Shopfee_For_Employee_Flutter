@@ -47,76 +47,72 @@ class OrderDetailUseCaseImpl extends OrderDetailUseCase {
 
   @override
   Future<void> acceptRequestCancel(String userId, String orderId) async {
-    _socketMethod.updateOrder(userId: userId, orderId: orderId);
     final orderAction =
         OrderActionEntity(orderEvent: OrderEventType.ACCEPT_ORDER_CANCELLATION);
-    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    _socketMethod.updateOrder(userId: userId, orderId: orderId);
+    return;
   }
 
   @override
   Future<void> refuseRequestCancel(String userId, String orderId) async {
-    _socketMethod.updateOrder(userId: userId, orderId: orderId);
     final orderAction =
         OrderActionEntity(orderEvent: OrderEventType.REFUSE_ORDER_CANCELLATION);
-    return await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    _socketMethod.updateOrder(userId: userId, orderId: orderId);
+    return;
   }
 
   @override
   Future<void> acceptOrder(String userId, String orderId) async {
     final orderAction =
         OrderActionEntity(orderEvent: OrderEventType.ACCEPT_ORDER);
-    final result =
-        await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
     _socketMethod.updateOrder(userId: userId, orderId: orderId);
-    return result;
+    return;
   }
 
   @override
   Future<void> deliveryOrder(String userId, String orderId) async {
     final orderAction =
         OrderActionEntity(orderEvent: OrderEventType.START_SHIPPING);
-    final result =
-        await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
     _socketMethod.updateOrder(userId: userId, orderId: orderId);
-    return result;
+    return;
   }
 
   @override
   Future<void> fulfillOrder(String userId, String orderId) async {
     final orderAction = OrderActionEntity(orderEvent: OrderEventType.FULFILL);
-    final result =
-        await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
     _socketMethod.updateOrder(userId: userId, orderId: orderId);
-    return result;
+    return;
   }
 
   @override
   Future<void> markBoomOrder(String userId, String orderId) async {
     final orderAction = OrderActionEntity(orderEvent: OrderEventType.BOOM);
-    final result =
-        await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
     _socketMethod.updateOrder(userId: userId, orderId: orderId);
-    return result;
+    return;
   }
 
   @override
   Future<void> preparedOrder(String userId, String orderId) async {
     final orderAction = OrderActionEntity(orderEvent: OrderEventType.PREPARED);
-    final result =
-        await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+    await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
     _socketMethod.updateOrder(userId: userId, orderId: orderId);
-    return result;
+    return;
   }
 
   @override
   Future<void> refuseOrder(
       String userId, String orderId, String description) async {
     final orderAction = OrderActionEntity(
-        orderEvent: OrderEventType.EMPLOYEE_REFUSE, description: description);
-    final result =
-        await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
+        orderEvent: OrderEventType.EMPLOYEE_ORDER_REFUSE, description: description);
+    await _orderDetailRepository.doActionsInOrder(orderId, orderAction);
     _socketMethod.updateOrder(userId: userId, orderId: orderId);
-    return result;
+    return;
   }
 
   @override

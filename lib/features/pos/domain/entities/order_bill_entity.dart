@@ -1,5 +1,6 @@
 import 'package:shopfeeforemployee/core/common/models/order_type.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/branch_entity.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/entities/cashier_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_product_detail_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/receiver_information_entity.dart';
@@ -21,6 +22,7 @@ class OrderBillEntity {
   TransactionEntity transaction;
   BranchEntity branch;
   int coin;
+  CashierEntity? employee;
 
   OrderBillEntity({
     required this.id,
@@ -37,6 +39,7 @@ class OrderBillEntity {
     required this.transaction,
     required this.branch,
     required this.coin,
+    required this.employee,
   });
 
   factory OrderBillEntity.fromOrderDetailEntity(OrderDetailEntity orderDetail) {
@@ -79,20 +82,21 @@ class OrderBillEntity {
     itemList.addAll(giftList);
 
     return OrderBillEntity(
-      id: orderDetail.id ?? "",
-      note: orderDetail.note ?? "",
-      totalPayment: orderDetail.totalPayment ?? 0,
-      shippingFee: orderDetail.shippingFee ?? 0,
-      totalItemPrice: orderDetail.totalItemPrice ?? 0,
-      orderType: orderDetail.orderType!,
-      receiverInformation: orderDetail.receiverInformation!,
-      createdAt: orderDetail.createdAt!,
-      itemList: itemList,
-      orderDiscount: orderDetail.discountInformation?.orderDiscount ?? 0,
-      shippingDiscount: orderDetail.discountInformation?.shippingDiscount ?? 0,
-      transaction: orderDetail.transaction!,
-      branch: orderDetail.branch!,
-      coin: orderDetail.coin ?? 0,
-    );
+        id: orderDetail.id ?? "",
+        note: orderDetail.note ?? "",
+        totalPayment: orderDetail.totalPayment ?? 0,
+        shippingFee: orderDetail.shippingFee ?? 0,
+        totalItemPrice: orderDetail.totalItemPrice ?? 0,
+        orderType: orderDetail.orderType!,
+        receiverInformation: orderDetail.receiverInformation!,
+        createdAt: orderDetail.createdAt!,
+        itemList: itemList,
+        orderDiscount: orderDetail.discountInformation?.orderDiscount ?? 0,
+        shippingDiscount:
+            orderDetail.discountInformation?.shippingDiscount ?? 0,
+        transaction: orderDetail.transaction!,
+        branch: orderDetail.branch!,
+        coin: orderDetail.coin ?? 0,
+        employee: orderDetail.employee);
   }
 }

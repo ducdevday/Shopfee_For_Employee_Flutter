@@ -45,6 +45,11 @@ class _PosPageState extends State<PosPage> {
               preferredSize: Size.fromHeight(1),
               child: Divider(height: 1),
             ),
+            actions: [
+              IconButton(onPressed: (){
+                _cubit.shareOrderBillPdf(widget.orderDetail.id ?? "");
+              }, icon: Icon(Icons.share))
+            ],
           ),
           body: BlocBuilder<PosCubit, PosState>(
             builder: (context, state) {

@@ -7,7 +7,7 @@ class PersonalInformationService {
       String employeeId, EmployeeModel employee) async {
     Map<String, dynamic> body = employee.toJson();
     final response = await DioService.instance
-        .put("${DioService.employeePath}/$employeeId", data: body);
+        .patch("${DioService.employeePath}/$employeeId/profile", data: body);
     return response;
   }
 }

@@ -14,6 +14,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    context.read<EmployeeBloc>().add(EmployeeLoadInformation());
     _socketMethod.joinBranch(branchId: SharedService.getBranchId()!);
   }
   @override

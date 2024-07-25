@@ -46,10 +46,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     String text,
     FieldType type,
   ) {
-    _cubit.checkValidField(
-        firstName: firstNameTextController.text,
-        lastName: lastNameTextController.text,
-        phoneNumber: phoneTextController.text);
+    checkAllField();
     if (type == FieldType.firstName && !ValidateFieldUtil.validateName(text)) {
       return "First name is not valid";
     } else if (type == FieldType.lastName &&
@@ -60,6 +57,13 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       return "Phone number is not valid";
     }
     return null;
+  }
+
+  void checkAllField(){
+    _cubit.checkValidField(
+        firstName: firstNameTextController.text,
+        lastName: lastNameTextController.text,
+        phoneNumber: phoneTextController.text);
   }
 
   @override
@@ -109,21 +113,21 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                                             "assets/images/img_default_user.png",
                                           ))),
                                 ),
-                                Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 85, left: 75),
-                                    padding: const EdgeInsets.all(4),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                        border: Border.fromBorderSide(
-                                            BorderSide(
-                                                color:
-                                                    AppColor.nonactiveColor))),
-                                    child: const Icon(
-                                      Icons.camera_alt,
-                                      size: 16,
-                                    )),
+                                // Container(
+                                //     margin: const EdgeInsets.only(
+                                //         top: 85, left: 75),
+                                //     padding: const EdgeInsets.all(4),
+                                //     decoration: BoxDecoration(
+                                //         color: Colors.white,
+                                //         shape: BoxShape.circle,
+                                //         border: Border.fromBorderSide(
+                                //             BorderSide(
+                                //                 color:
+                                //                     AppColor.nonactiveColor))),
+                                //     child: const Icon(
+                                //       Icons.camera_alt,
+                                //       size: 16,
+                                //     )),
                               ],
                             ),
                           ),
@@ -208,6 +212,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                             valueListenable: birthDayListener,
                             builder: (BuildContext context, DateTime? birthDate,
                                 Widget? child) {
+                              checkAllField();
                               return Column(
                                 children: [
                                   Align(
@@ -259,6 +264,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                             valueListenable: genderListener,
                             builder: (BuildContext context, Gender? gender,
                                 Widget? child) {
+                              checkAllField();
                               return Column(
                                 children: [
                                   Align(

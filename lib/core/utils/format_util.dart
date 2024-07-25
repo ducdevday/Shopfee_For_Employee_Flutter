@@ -137,4 +137,8 @@ class FormatUtil {
     }
     return DateTime.parse(dateString);
   }
+
+  static DateTime addOneDay(DateTime dateTime){
+    return dateTime.add(Duration(days: 1));
+  }
 }

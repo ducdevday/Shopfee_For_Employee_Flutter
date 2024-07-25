@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:shopfeeforemployee/core/utils/alert_util.dart';
 import 'package:shopfeeforemployee/core/utils/exception_util.dart';
 import 'package:shopfeeforemployee/core/utils/pdf_util.dart';
 import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
@@ -32,6 +34,21 @@ class PosCubit extends Cubit<PosState> {
       if (state is PosLoadSuccess) {
         final currentState = state as PosLoadSuccess;
         await PdfUtil.printDocument(file: currentState.orderBillPdf);
+      }
+    } catch (e) {
+      ExceptionUtil.handle(e);
+    }
+  }
+
+  void shareOrderBillPdf(String id) async {
+    try {
+      if (state is PosLoadSuccess) {
+        final currentState = state as PosLoadSuccess;
+        final result = await Share.shareXFiles([XFile(currentState.orderBillPdf.path)],
+            text: "Order Bill Id: $id");
+        if (result.status == ShareResultStatus.success) {
+          AlertUtil.showToast("Share Succress");
+        }
       }
     } catch (e) {
       ExceptionUtil.handle(e);

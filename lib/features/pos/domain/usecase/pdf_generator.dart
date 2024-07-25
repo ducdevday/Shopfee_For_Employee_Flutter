@@ -31,7 +31,7 @@ class PdfGenerator {
       footer: (context) => buildFooter(orderBill),
     ));
 
-    return PdfUtil.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+    return PdfUtil.saveDocument(name: 'order_${orderBill.id}.pdf', pdf: pdf);
   }
 
   // static Widget buildHeader(Invoice invoice) => Column(
@@ -92,7 +92,7 @@ class PdfGenerator {
     final data = <String>[
       orderBill.id,
       "${FormatUtil.formatTime(orderBill.createdAt)} - ${FormatUtil.formatDate2(orderBill.createdAt)}",
-      "Nguyen Thuc Thuy Tien",
+      "${orderBill.employee?.id ?? ""}-${orderBill.employee?.name ?? ""}",
     ];
 
     return Column(

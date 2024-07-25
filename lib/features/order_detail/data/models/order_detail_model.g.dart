@@ -34,6 +34,9 @@ OrderDetailModel _$OrderDetailModelFromJson(Map<String, dynamic> json) =>
       coin: (json['coin'] as num?)?.toInt(),
       refundRequestStatus: $enumDecodeNullable(
           _$RefundRequestStatusEnumMap, json['refundStatus']),
+      employee: json['employee'] == null
+          ? null
+          : CashierModel.fromJson(json['employee'] as Map<String, dynamic>),
     )..discountInformation = json['rewardInformation'] == null
         ? null
         : DiscountInformationModel.fromJson(
@@ -56,6 +59,7 @@ Map<String, dynamic> _$OrderDetailModelToJson(OrderDetailModel instance) =>
       'coin': instance.coin,
       'refundStatus':
           _$RefundRequestStatusEnumMap[instance.refundRequestStatus],
+      'employee': instance.employee,
     };
 
 const _$OrderTypeEnumMap = {

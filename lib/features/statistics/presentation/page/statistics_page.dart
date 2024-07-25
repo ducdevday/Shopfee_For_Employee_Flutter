@@ -16,7 +16,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   void initState() {
     super.initState();
-    dateTimes = [CalculateUtil.getDateTime7DaysAgo(), DateTime.now()];
+    dateTimes = [
+      CalculateUtil.getDateTime7DaysAgo(),
+      FormatUtil.addOneDay(DateTime.now())
+    ];
 
     _bloc = ServiceLocator.sl<StatisticBloc>()
       ..add(StatisticLoadInformationByDate(dateTimes: dateTimes));
@@ -71,13 +74,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                               AppColor.secondaryColor,
                                           selectedDayHighlightColor:
                                               AppColor.primaryColor,
-                                          dayBorderRadius:
-                                              BorderRadius
-                                                  .all(
-                                                      Radius
-                                                          .circular(
-                                                              AppDimen
-                                                                  .smallRadius)),
+                                          dayBorderRadius: BorderRadius.all(
+                                              Radius.circular(
+                                                  AppDimen.smallRadius)),
                                           // firstDate: CalculateUtil
                                           //     .getDateTime31DaysAgo(),
                                           lastDate: DateTime.now(),

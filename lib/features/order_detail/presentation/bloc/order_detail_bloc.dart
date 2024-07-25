@@ -71,7 +71,7 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
         final currentState = state as OrderDetailLoadSuccess;
         EasyLoading.show();
         switch (event.orderEventType) {
-          case OrderEventType.EMPLOYEE_REFUSE:
+          case OrderEventType.EMPLOYEE_ORDER_REFUSE:
             await _orderDetailUseCase.refuseOrder(
                 currentState.orderDetail.receiverInformation!.userId!,
                 event.orderId,
@@ -125,9 +125,17 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
     }
   }
 
-  Future<String> getCancelRequestReason(String orderId) async {
+  Future<String> getCancelRequestReason() async {
     try {
-      return await _orderDetailUseCase.getCancelRequestReason(orderId);
+      if(state is OrderDetailLoadSuccess){
+        final currentState = state as OrderDetailLoadSuccess;
+        final cancelRequest = currentState.eventLogs.firstWhere((e) => e.orderStatus == OrderStatus.CANCELLATION_REQUEST);
+        if(cancelRequest != null){
+          return cancelRequest.note ?? "";
+        }
+        return "";
+      }
+      return "";
     } catch (e) {
       ExceptionUtil.handle(e);
       return "";

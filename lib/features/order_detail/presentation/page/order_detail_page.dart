@@ -94,6 +94,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           height: 4,
                           color: const Color(0xffEFEBE9),
                         ),
+                        const GiftList(),
                         const PaymentSummary(),
                         const CancelDetail(),
                       ],

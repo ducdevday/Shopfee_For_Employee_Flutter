@@ -21,7 +21,7 @@ class _RequestCancelSheetState extends State<RequestCancelSheet> {
   void getReason() async {
     reason = await context
         .read<OrderDetailBloc>()
-        .getCancelRequestReason(widget.orderId);
+        .getCancelRequestReason();
     setState(() {});
   }
 
