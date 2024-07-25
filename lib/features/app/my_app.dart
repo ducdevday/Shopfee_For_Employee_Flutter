@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shopfeeforemployee/core/config/app_dimen.dart';
 import 'package:shopfeeforemployee/core/config/app_theme.dart';
@@ -20,7 +17,6 @@ import 'package:shopfeeforemployee/features/home/presentation/home.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
 import 'package:shopfeeforemployee/features/notify_permission/presentation/notify_permission.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
-import 'package:shopfeeforemployee/features/pos/presentation/page/pos_page.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -118,7 +114,7 @@ class _MyAppState extends State<MyApp> {
           onGenerateRoute: (settings) {
             return AppRouter.onGenerateRoute(settings);
           },
-          // home: PosPage(),
+          // home: ReceiptPage(),
           initialRoute: getStartRoute(),
           builder: EasyLoading.init(),
         ),

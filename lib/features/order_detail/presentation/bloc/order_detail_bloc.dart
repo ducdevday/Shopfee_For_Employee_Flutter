@@ -5,6 +5,7 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
 
   OrderDetailBloc(this._orderDetailUseCase) : super(OrderDetailInitial()) {
     on<OrderDetailLoadInformation>(_onOrderDetailLoadInformation);
+    on<OrderDetailRefreshInformation>(_onOrderDetailRefreshInformation);
     on<OrderDetailDoAction>(_onOrderDetailDoAction);
     on<OrderDetailChooseReasonCancel>(_onOrderDetailChooseReasonCancel);
   }
@@ -30,6 +31,31 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
     }
   }
 
+  FutureOr<void> _onOrderDetailRefreshInformation(
+      OrderDetailRefreshInformation event,
+      Emitter<OrderDetailState> emit) async {
+    try {
+      if (state is OrderDetailLoadSuccess) {
+        final currentState = state as OrderDetailLoadSuccess;
+        EasyLoading.show();
+        final response = await Future.wait([
+          _orderDetailUseCase.getOrderDetail(event.orderId),
+          _orderDetailUseCase.getEventLogs(event.orderId)
+        ]);
+        EasyLoading.dismiss();
+        final OrderDetailEntity orderDetail = response[0] as OrderDetailEntity;
+        final List<EventLogEntity> eventLogs =
+            response[1] as List<EventLogEntity>;
+        emit(OrderDetailLoadSuccess(
+            orderDetail: orderDetail,
+            eventLogs: eventLogs,
+            haveChanged: currentState.haveChanged));
+      }
+    } catch (e) {
+      ExceptionUtil.handle(e);
+    }
+  }
+
   FutureOr<void> _onOrderDetailChooseReasonCancel(
       OrderDetailChooseReasonCancel event, Emitter<OrderDetailState> emit) {
     if (state is OrderDetailLoadSuccess) {
@@ -45,30 +71,46 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
         final currentState = state as OrderDetailLoadSuccess;
         EasyLoading.show();
         switch (event.orderEventType) {
-          case OrderEventType.ORDER_REFUSE:
+          case OrderEventType.EMPLOYEE_ORDER_REFUSE:
             await _orderDetailUseCase.refuseOrder(
-                event.orderId, event.description!);
+                currentState.orderDetail.receiverInformation!.userId!,
+                event.orderId,
+                event.description!);
             break;
-          case OrderEventType.ORDER_ACCEPT:
-            await _orderDetailUseCase.acceptOrder(event.orderId);
+          case OrderEventType.ACCEPT_ORDER:
+            await _orderDetailUseCase.acceptOrder(
+                currentState.orderDetail.receiverInformation!.userId!,
+                event.orderId);
             break;
-          case OrderEventType.CANCEL_REQUEST_REFUSE:
-            await _orderDetailUseCase.refuseRequestCancel(event.orderId);
+          case OrderEventType.REFUSE_ORDER_CANCELLATION:
+            await _orderDetailUseCase.refuseRequestCancel(
+                currentState.orderDetail.receiverInformation!.userId!,
+                event.orderId);
             break;
-          case OrderEventType.CANCEL_REQUEST_ACCEPT:
-            await _orderDetailUseCase.acceptRequestCancel(event.orderId);
+          case OrderEventType.ACCEPT_ORDER_CANCELLATION:
+            await _orderDetailUseCase.acceptRequestCancel(
+                currentState.orderDetail.receiverInformation!.userId!,
+                event.orderId);
             break;
-          case OrderEventType.READY_SHIPPING:
-            await _orderDetailUseCase.preparedOrder(event.orderId);
+          case OrderEventType.PREPARED:
+            await _orderDetailUseCase.preparedOrder(
+                currentState.orderDetail.receiverInformation!.userId!,
+                event.orderId);
             break;
           case OrderEventType.START_SHIPPING:
-            await _orderDetailUseCase.deliveryOrder(event.orderId);
+            await _orderDetailUseCase.deliveryOrder(
+                currentState.orderDetail.receiverInformation!.userId!,
+                event.orderId);
             break;
-          case OrderEventType.ORDER_FULFILL:
-            await _orderDetailUseCase.fulfillOrder(event.orderId);
+          case OrderEventType.FULFILL:
+            await _orderDetailUseCase.fulfillOrder(
+                currentState.orderDetail.receiverInformation!.userId!,
+                event.orderId);
             break;
-          case OrderEventType.ORDER_BOOM:
-            await _orderDetailUseCase.markBoomOrder(event.orderId);
+          case OrderEventType.BOOM:
+            await _orderDetailUseCase.markBoomOrder(
+                currentState.orderDetail.receiverInformation!.userId!,
+                event.orderId);
             break;
           default:
             break;
@@ -83,9 +125,17 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
     }
   }
 
-  Future<String> getCancelRequestReason(String orderId) async {
+  Future<String> getCancelRequestReason() async {
     try {
-      return await _orderDetailUseCase.getCancelRequestReason(orderId);
+      if(state is OrderDetailLoadSuccess){
+        final currentState = state as OrderDetailLoadSuccess;
+        final cancelRequest = currentState.eventLogs.firstWhere((e) => e.orderStatus == OrderStatus.CANCELLATION_REQUEST);
+        if(cancelRequest != null){
+          return cancelRequest.note ?? "";
+        }
+        return "";
+      }
+      return "";
     } catch (e) {
       ExceptionUtil.handle(e);
       return "";

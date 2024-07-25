@@ -8,16 +8,24 @@ class ExceptionUtil {
   static void handle(e) {
     print(e.toString());
     EasyLoading.dismiss();
-    if (e is DioException) {
+    if(e is DioException){
       if (e.type == DioExceptionType.connectionError) {
         NavigationUtil.push(const NoNetWorkPage());
-      } else {
-        EasyLoading.showError("Something went wrong. Please try again!");
       }
-    } else if (e is AppException) {
-      EasyLoading.showError(
-          e.message ?? "Something went wrong. Please try again!");
-    } else {
+      else if(e.response?.data?["error"]?["subErrorCode"] != null){
+        EasyLoading.showError(e.response?.data?["error"]?["subErrorMessage"]);
+      }
+      // else if(e.response?.data?["error"]?["errorCode"] != null){
+      //   EasyLoading.showError(e.response?.data?["error"]?["errorMessage"]);
+      // }
+      else{
+        EasyLoading.showError("Server Error. Please try again!");
+      }
+    }
+    else if(e is AppException){
+      EasyLoading.showError(e.message ?? "Something went wrong. Please try again!");
+    }
+    else{
       EasyLoading.showError("Something went wrong. Please try again!");
     }
   }

@@ -1,6 +1,5 @@
 part of order_detail;
 
-
 class OrderInformation extends StatelessWidget {
   const OrderInformation({
     super.key,
@@ -22,7 +21,7 @@ class OrderInformation extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "ID Transaction",
+                      "ID Order",
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(
@@ -42,8 +41,7 @@ class OrderInformation extends StatelessWidget {
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(
-                      FormatUtil.formatDate(
-                          state.orderDetail.createdAt!),
+                      FormatUtil.formatDate(state.orderDetail.createdAt!),
                       style: AppStyle.normalTextStyleDark,
                     )
                   ],
@@ -59,12 +57,32 @@ class OrderInformation extends StatelessWidget {
                       style: AppStyle.mediumTitleStyleDark,
                     ),
                     Text(
-                      FormatUtil.formatTime(
-                          state.orderDetail.createdAt!),
+                      FormatUtil.formatTime(state.orderDetail.createdAt!),
                       style: AppStyle.normalTextStyleDark,
                     )
                   ],
                 ),
+                if (state.orderDetail.employee != null)
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Cashier",
+                            style: AppStyle.mediumTitleStyleDark,
+                          ),
+                          Text(
+                            "${state.orderDetail.employee!.id}-${state.orderDetail.employee!.name}",
+                            style: AppStyle.normalTextStyleDark,
+                          )
+                        ],
+                      ),
+                    ],
+                  )
               ],
             );
           } else {

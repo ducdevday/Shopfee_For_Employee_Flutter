@@ -18,8 +18,10 @@ class OrderInformationItem extends StatelessWidget {
       onTap: () {
         NavigationUtil.pushNamed(OrderDetailPage.route, arguments: order.id)
             .then((value) {
-          context.read<OrdersBloc>().add(
-              OrderRefreshInformation(initPage: initPage, initSize: initSize));
+          if (context.mounted) {
+            context.read<OrdersBloc>().add(OrderRefreshInformation(
+                initPage: initPage, initSize: initSize));
+          }
         });
       },
       child: Container(

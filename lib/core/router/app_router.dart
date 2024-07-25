@@ -9,11 +9,13 @@ import 'package:shopfeeforemployee/features/history/presentation/history.dart';
 import 'package:shopfeeforemployee/features/home/presentation/home.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
 import 'package:shopfeeforemployee/features/notify_permission/presentation/notify_permission.dart';
+import 'package:shopfeeforemployee/features/order_detail/domain/entities/order_detail_entity.dart';
 import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
 import 'package:shopfeeforemployee/features/orders/presentation/orders.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';
 import 'package:shopfeeforemployee/features/pos/presentation/page/pos_page.dart';
 import 'package:shopfeeforemployee/features/refund/presentation/refund.dart';
+import 'package:shopfeeforemployee/features/statistics/presentation/statistics.dart';
 
 class AppRouter {
   static onGenerateRoute(RouteSettings settings) {
@@ -63,7 +65,11 @@ class AppRouter {
             ),
             type: PageTransitionType.bottomToTop);
       case PosPage.route:
-        return MaterialPageRoute(builder: (context) => const PosPage());
+        return MaterialPageRoute(
+            builder: (context) =>
+                PosPage(orderDetail: settings.arguments as OrderDetailEntity));
+      case StatisticsPage.route:
+        return MaterialPageRoute(builder: (context) => const StatisticsPage());
       default:
         return _errorRoute();
     }

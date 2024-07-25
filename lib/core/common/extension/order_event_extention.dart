@@ -3,21 +3,21 @@ import 'package:shopfeeforemployee/core/common/enum/order_event_type.dart';
 extension OrderEventExtension on OrderEventType {
   String getFormattedString() {
     switch (this) {
-      case OrderEventType.ORDER_REFUSE:
+      case OrderEventType.EMPLOYEE_ORDER_REFUSE:
         return "Cancel Order";
-      case OrderEventType.ORDER_ACCEPT:
+      case OrderEventType.ACCEPT_ORDER:
         return "Accept Order";
-      case OrderEventType.CANCEL_REQUEST_REFUSE:
+      case OrderEventType.REFUSE_ORDER_CANCELLATION:
         return "Refuse Request";
-      case OrderEventType.CANCEL_REQUEST_ACCEPT:
+      case OrderEventType.ACCEPT_ORDER_CANCELLATION:
         return "Accept Request";
-      case OrderEventType.READY_SHIPPING:
+      case OrderEventType.PREPARED:
         return "Prepared Order";
       case OrderEventType.START_SHIPPING:
         return "Delivery";
-      case OrderEventType.ORDER_FULFILL:
+      case OrderEventType.FULFILL:
         return "Finish";
-      case OrderEventType.ORDER_BOOM:
+      case OrderEventType.BOOM:
         return "Mark Boom";
     }
   }

@@ -96,7 +96,7 @@ class ReasonCancelSheet extends StatelessWidget {
                                     context.read<OrderDetailBloc>().add(
                                         OrderDetailDoAction(
                                             orderEventType:
-                                                OrderEventType.ORDER_REFUSE,
+                                                OrderEventType.EMPLOYEE_ORDER_REFUSE,
                                             orderId: orderId,
                                             description:
                                                 ReasonCancelType.getString(

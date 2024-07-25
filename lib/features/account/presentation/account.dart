@@ -12,6 +12,7 @@ import 'package:shopfeeforemployee/features/change_password/presentation/change_
 import 'package:shopfeeforemployee/features/employee/presentation/employee.dart';
 import 'package:shopfeeforemployee/features/login/presentation/login.dart';
 import 'package:shopfeeforemployee/features/personal_information/presentation/personal_information.dart';
+import 'package:shopfeeforemployee/features/statistics/presentation/statistics.dart';
 
 part 'page/account_page.dart';
 part 'widgets/setting_item.dart';

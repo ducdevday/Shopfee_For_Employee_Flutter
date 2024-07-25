@@ -19,6 +19,7 @@ void main() async {
   await SharedService.init();
   await ServiceLocator().init();
   await SharedService.initAppDocPath();
+  await GlobalData.ins.createFont();
   await PushNotificationService.setUpPushNotification();
   Bloc.observer = BlocObserverUtil();
 

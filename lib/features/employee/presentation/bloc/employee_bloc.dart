@@ -31,6 +31,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
       EasyLoading.show(maskType: EasyLoadingMaskType.black);
       await _employeeUseCase.logout(SharedService.getFCMTokenId()!);
       SharedService.clearToken();
+      emit(EmployeeInitial());
       EasyLoading.dismiss();
     } catch (e) {
       ExceptionUtil.handle(e);

@@ -10,8 +10,8 @@ OrderParamsModel _$OrderParamsModelFromJson(Map<String, dynamic> json) =>
     OrderParamsModel(
       orderType: json['orderType'] as String,
       orderStatus: json['orderStatus'] as String,
-      page: json['page'] as int,
-      size: json['size'] as int,
+      page: (json['page'] as num).toInt(),
+      size: (json['size'] as num).toInt(),
     );
 
 Map<String, dynamic> _$OrderParamsModelToJson(OrderParamsModel instance) =>

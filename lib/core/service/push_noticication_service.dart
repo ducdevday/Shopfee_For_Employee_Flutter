@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shopfeeforemployee/core/utils/navigation_util.dart';
+import 'package:shopfeeforemployee/features/order_detail/presentation/order_detail.dart';
 
 class PushNotificationService {
   static final _firebaseMessaging = FirebaseMessaging.instance;
@@ -14,16 +15,17 @@ class PushNotificationService {
   static Future localNotificationInit() async {
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/launcher_icon');
+        AndroidInitializationSettings('@mipmap/launcher_icon');
     const initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: _onForegroundNotificationTap,
-        onDidReceiveBackgroundNotificationResponse: _onBackgroundNotificationTap);
+        onDidReceiveBackgroundNotificationResponse:
+            _onBackgroundNotificationTap);
   }
 
-  static Future<void> setUpPushNotification() async{
+  static Future<void> setUpPushNotification() async {
     localNotificationInit();
     //Todo for handling in foreground state
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -88,14 +90,27 @@ class PushNotificationService {
   }
 
   // on tap local notification in foreground
-  static void _onForegroundNotificationTap(NotificationResponse notificationResponse) {
-    NavigationUtil.pushNamed("/message", arguments: notificationResponse);
+  static void _onForegroundNotificationTap(
+      NotificationResponse notificationResponse) {
+    // Parse the JSON string
+    Map<String, dynamic> parsedJson = jsonDecode(notificationResponse.payload ??"");
+    // Extract the order_id
+    String orderId = parsedJson['order_id'];
+    NavigationUtil.pushNamed(OrderDetailPage.route,
+        arguments: orderId);
   }
 
   // on tap local notification in background
   @pragma('vm:entry-point')
-  static void _onBackgroundNotificationTap(NotificationResponse notificationResponse) {
-    NavigationUtil.pushNamed("/message", arguments: notificationResponse);
+  static void _onBackgroundNotificationTap(
+      NotificationResponse notificationResponse) {
+    // Parse the JSON string
+    Map<String, dynamic> parsedJson = jsonDecode(notificationResponse.payload ??"");
+
+    // Extract the order_id
+    String orderId = parsedJson['order_id'];
+    NavigationUtil.pushNamed(OrderDetailPage.route,
+        arguments:orderId);
   }
 
   // show a simple notification
@@ -119,8 +134,7 @@ class PushNotificationService {
   }
 }
 
-Future<void> _firebaseMessagingBackgroundHandler(
-    RemoteMessage message) async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Got a message in onBackgroundMessage");
   // String payloadData = jsonEncode(message.data);
   // if (message.notification != null) {

@@ -14,6 +14,7 @@ class AppColor {
   static Color disableColor = const Color(0xffCACACA);
   static Color dividerColor = const Color(0xffBDBDBD);
   static Color bottomColorBackground = const Color(0xffF0F2F6);
+  static Color scaffoldColorBackground = const Color(0xffF0F0F0);
 
   static Color lightColor = const Color(0xffFEFEFE);
   static Color success = const Color(0xff43936c);

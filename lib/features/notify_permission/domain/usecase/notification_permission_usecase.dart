@@ -10,8 +10,8 @@ class NotificationPermissionUseCaseImpl extends NotificationPermissionUseCase {
   NotificationPermissionUseCaseImpl(this._notificationPermissionRepository);
 
   @override
-  Future<String> saveFCMTokenToDB(String? employeeId, String? fcmToken) {
-    return _notificationPermissionRepository.saveFCMTokenToDB(
+  Future<String> saveFCMTokenToDB(String? employeeId, String? fcmToken) async{
+    return await _notificationPermissionRepository.saveFCMTokenToDB(
         employeeId, fcmToken);
   }
 }

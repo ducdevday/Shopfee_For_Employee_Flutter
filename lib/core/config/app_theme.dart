@@ -6,7 +6,7 @@ import 'app_style.dart';
 
 class AppTheme {
   static final ThemeData lightTheme = ThemeData.light().copyWith(
-    textTheme: ThemeData.light().textTheme.apply(fontFamily: "Poppins"),
+    textTheme: ThemeData.light().textTheme.apply(fontFamily: "OpenSans"),
     colorScheme: ColorScheme.light(primary: AppColor.primaryColor),
     appBarTheme: AppBarTheme(
         elevation: 0,

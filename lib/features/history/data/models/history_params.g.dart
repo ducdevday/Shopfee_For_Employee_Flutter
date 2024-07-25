@@ -8,8 +8,8 @@ part of 'history_params.dart';
 
 HistoryParams _$HistoryParamsFromJson(Map<String, dynamic> json) =>
     HistoryParams(
-      page: json['page'] as int,
-      size: json['size'] as int,
+      page: (json['page'] as num).toInt(),
+      size: (json['size'] as num).toInt(),
       key: json['key'] as String?,
     );
 

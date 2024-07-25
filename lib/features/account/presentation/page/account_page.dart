@@ -140,6 +140,37 @@ class AccountPage extends StatelessWidget {
                         const SizedBox(
                           height: 12,
                         ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Text(
+                          "Activity",
+                          style: AppStyle.mediumTitleStyleDark,
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Column(
+                            children: [
+                              SettingItem(
+                                iconData: Icons.show_chart,
+                                content: "Statistics",
+                                callback: () {
+                                  NavigationUtil.pushNamed(
+                                      StatisticsPage.route);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
                       ],
                     ),
                     const Spacer(

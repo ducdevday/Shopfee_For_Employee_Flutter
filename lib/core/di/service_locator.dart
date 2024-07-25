@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:shopfeeforemployee/core/socket/socket_method.dart';
 import 'package:shopfeeforemployee/features/change_password/data/datasources/change_password_service.dart';
 import 'package:shopfeeforemployee/features/change_password/data/repositories/change_password_repository_impl.dart';
 import 'package:shopfeeforemployee/features/change_password/domain/repositories/change_password_repository.dart';
@@ -44,11 +45,17 @@ import 'package:shopfeeforemployee/features/refund/data/repositories/refund_repo
 import 'package:shopfeeforemployee/features/refund/domain/repositories/refund_repository.dart';
 import 'package:shopfeeforemployee/features/refund/domain/usecase/refund_usecase.dart';
 import 'package:shopfeeforemployee/features/refund/presentation/refund.dart';
+import 'package:shopfeeforemployee/features/statistics/data/datasources/statistics_service.dart';
+import 'package:shopfeeforemployee/features/statistics/data/repositories/statistics_repository_impl.dart';
+import 'package:shopfeeforemployee/features/statistics/domain/repositories/statistics_repository.dart';
+import 'package:shopfeeforemployee/features/statistics/domain/usecase/statistics_usecase.dart';
+import 'package:shopfeeforemployee/features/statistics/presentation/statistics.dart';
 
 class ServiceLocator {
   static final sl = GetIt.instance;
 
   Future<void> init() async {
+    _socket();
     _notifyPermissionFeature();
     _loginFeature();
     _employeeFeature();
@@ -58,6 +65,7 @@ class ServiceLocator {
     _orderDetailFeature();
     _historyDetailFeature();
     _refundFeature();
+    _statisticFeature();
   }
 
   void _notifyPermissionFeature() {
@@ -112,7 +120,7 @@ class ServiceLocator {
     sl.registerLazySingleton<OrderDetailRepository>(
         () => OrderDetailRepositoryImpl(sl()));
     sl.registerLazySingleton<OrderDetailUseCase>(
-        () => OrderDetailUseCaseImpl(sl()));
+        () => OrderDetailUseCaseImpl(sl(), sl()));
     sl.registerFactory<OrderDetailBloc>(() => OrderDetailBloc(sl()));
   }
 
@@ -138,5 +146,18 @@ class ServiceLocator {
         () => RefundRepositoryImpl(sl()));
     sl.registerLazySingleton<RefundUseCase>(() => RefundUseCaseImpl(sl()));
     sl.registerFactory(() => RefundBloc(sl()));
+  }
+
+  void _statisticFeature() {
+    sl.registerLazySingleton(() => StatisticsService());
+    sl.registerLazySingleton<StatisticsRepository>(
+        () => StatisticsRepositoryImpl(sl()));
+    sl.registerLazySingleton<StatisticsUseCase>(
+        () => StatisticsUseCaseImpl(sl()));
+    sl.registerFactory(() => StatisticBloc(sl()));
+  }
+
+  void _socket() {
+    sl.registerLazySingleton(() => SocketMethod());
   }
 }

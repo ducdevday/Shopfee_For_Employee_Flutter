@@ -22,7 +22,7 @@ class LoginCubit extends Cubit<LoginState> {
           account: account,
           password: password,
           fcmTokenId: SharedService.getFCMTokenId()!));
-      SharedService.setToken(response.employeeId, response.accessToken);
+      SharedService.setToken(response.employeeId, response.accessToken, response.branchId);
       EasyLoading.dismiss();
       EasyLoading.showSuccess("Login Success");
       emit(LoginSuccess());

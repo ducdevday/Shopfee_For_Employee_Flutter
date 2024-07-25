@@ -50,6 +50,18 @@ class SharedService {
     _pref.remove("accessToken");
   }
 
+  static String? getBranchId() {
+    return _pref.getString("branchId");
+  }
+
+  static void setBranchId(String branchId) {
+    _pref.setString("branchId", branchId);
+  }
+
+  static void removeBranchId() {
+    _pref.remove("branchId");
+  }
+
   static String? getFCMTokenId(){
     return _pref.getString("fcmTokenId");
   }
@@ -63,14 +75,16 @@ class SharedService {
   }
 
   static void setToken(
-      String employeeId, String accessToken) {
+      String employeeId, String accessToken, String branchId) {
     setEmployeeId(employeeId);
     setAccessToken(accessToken);
+    setBranchId(branchId);
   }
 
   static void clearToken() {
     removeEmployeeId();
     removeAccessToken();
+    removeBranchId();
   }
 
   static Future<void> initAppDocPath() async {
