@@ -22,7 +22,7 @@ Shopfee - Food And Beverage Order App For Employee Using Flutter.
 Email: ducdevday@gmail.com
 
 # 6. Demo Video
-https://drive.google.com/file/d/13KbPxiWOQLpeU753WPsRvKPK0plYY1uQ/view?usp=sharing
+https://drive.google.com/file/d/1pDh4fRHjO_gkLVebWVCZALJddpoB-LUw/view?usp=sharing
 
 # 7. App Image
 <img src="https://github.com/user-attachments/assets/3f389b1b-57b8-4cd1-a313-518bc031fddf" width="200" />
